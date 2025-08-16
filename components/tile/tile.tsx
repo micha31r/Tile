@@ -59,8 +59,8 @@ export function Tile({
   }
 
   return (
-    <div className={cn(`relative w-full aspect-square`, className)} style={{
-      maxWidth: `${maxWidth}px`,
+    <div className={cn(`relative max-w-full aspect-square`, className)} style={{
+      width: `${maxWidth}px`,
     }}>
       <div className={cn(`${tileCommonClasses} w-1/2 h-1/2 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`, {
         [foregroundClass]: count > 2 || (data.tl && data.br) || (data.tr && data.bl)
