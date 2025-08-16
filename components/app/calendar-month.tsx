@@ -86,11 +86,11 @@ export function CalendarMonth({ month, year, showLabel = false }: { month: Month
   });
 
   const partialColor = "bg-neutral-300";
-  const allCompletedColor = "bg-foreground";
+  const allCompletedColor = "bg-slate-700";
   const backgroundColor = "bg-neutral-100";
 
   return (
-    <div className="grid grid-cols-7 gap-1 text-center font-medium text-muted-foreground">
+    <div className="grid grid-cols-7 gap-1 text-center font-medium text-sm text-muted-foreground">
       {showLabel && (
         <>
           <div className="">Mon</div>
