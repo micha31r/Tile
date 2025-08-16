@@ -5,6 +5,7 @@ import { FriendCard, FriendGallery } from "@/components/app/friend-gallery";
 import { Tile } from "@/components/tile/tile";
 import { cn } from "@/lib/utils";
 import { PlusIcon } from "lucide-react";
+import { Countdown } from "@/components/app/countdown";
 
 export default async function AppHomePage() {
   const supabase = await createClient();
@@ -16,6 +17,20 @@ export default async function AppHomePage() {
 
   return (
     <div className="space-y-8">
+      <div className="space-y-4">
+        <h3 className="font-medium">Today</h3>
+        <div className="space-y-2 p-4 bg-blue-50 rounded-3xl">
+          <h4 className="font-medium">Daily goals</h4>
+          <p className="text-sm">Plan your day before the timer runs out to maintain your streak. You will review these goals at the end of the day.</p>
+          <div className="flex w-full justify-center p-4 py-4">
+            <Countdown target={new Date("2025-08-18T12:00:00")} />
+          </div>
+          <button type="submit" className="bg-blue-700 disabled:opacity-80 text-background rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform">
+            Record today&apos;s goals
+          </button>
+        </div>
+      </div>
+
       <div className="space-y-4">
         <h3 className="font-medium">August</h3>
         <CalendarMonth month={10} year={2025} showLabel={true} />
