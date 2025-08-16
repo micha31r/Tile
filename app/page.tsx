@@ -22,7 +22,7 @@ export default function Home() {
         A simple app designed to help you focus on outcomes, while giving you the freedom to breathe.
       </p>
 
-      <Link href="/login" className="text-center rounded-full bg-foreground text-background px-8 py-4 w-full text-md font-medium hover:scale-95 transition-transform">
+      <Link href="/auth/login" className="text-center rounded-full bg-foreground text-background px-8 py-4 w-full text-md font-medium hover:scale-95 transition-transform">
         Continue with email
       </Link>
     </div>
