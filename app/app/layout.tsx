@@ -6,7 +6,7 @@ export default function AppLayout({
   children?: React.ReactNode;
 }) {
   return (
-    <div>
+    <div className="space-y-6">
       <Header />
       {children}
     </div>
