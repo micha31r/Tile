@@ -7,7 +7,7 @@ export function Logo({ className, tileWidth = 24 }: { className?: string, tileWi
   const radiusClass = `rounded`;
 
   return (
-    <div className={cn(`flex gap-0.5`, className)}>
+    <div className={cn(`flex w-max h-max gap-0.5`, className)}>
       {/* T */}
       <Tile data={{ tl: true, tr: true, bl: false, br: true }} maxWidth={tileWidth} backgroundClass={backgroundClass} foregroundClass={foregroundClass} radiusClass={radiusClass} />
       
