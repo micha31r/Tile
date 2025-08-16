@@ -34,6 +34,7 @@ export default function LoginPage() {
     const { error } = await signInWithEmail(email)
     if (error) {
       setStatus('error')
+      return
     }
 
     setStatus('success')
