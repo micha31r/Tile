@@ -12,14 +12,16 @@ function boolToInt(bool: boolean): number {
 }
 
 export function Tile({ 
+  className,
   data, 
-  size,
+  maxWidth = 40,
   radiusClass = "rounded-sm",
   backgroundClass = "bg-background",
   foregroundClass = "bg-foreground"
 }: { 
+  className?: string,
   data: TileData, 
-  size: number, 
+  maxWidth?: number, 
   radiusClass?: string,
   backgroundClass?: string,
   foregroundClass?: string
@@ -57,7 +59,9 @@ export function Tile({
   }
 
   return (
-    <div className={`relative w-${size} aspect-square`}>
+    <div className={cn(`relative w-full aspect-square`, className)} style={{
+      maxWidth: `${maxWidth}px`,
+    }}>
       <div className={cn(`${tileCommonClasses} w-1/2 h-1/2 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`, {
         [foregroundClass]: count > 2 || (data.tl && data.br) || (data.tr && data.bl)
       })}></div>
