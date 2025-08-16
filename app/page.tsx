@@ -1,9 +1,9 @@
-import TileDemo from "@/components/tile/tile-demo";
+import { Logo } from "@/components/logo";
 
 export default function Home() {
   return (
     <div className="space-y-5">
-      <TileDemo />
+      <Logo />
     </div>
   );
 }
