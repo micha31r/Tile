@@ -18,8 +18,8 @@ export default async function AppHomePage() {
 
   return (
     <div className="space-y-8">
-      <div className="space-y-4">
-        <h3 className="font-medium">Today</h3>
+      {/* <div className="space-y-4"> */}
+        {/* <h3 className="font-medium">Today</h3> */}
         <div className="space-y-2 p-4 bg-blue-50 rounded-3xl">
           <h4 className="font-medium">Daily goals</h4>
           <p className="text-sm">Plan your day before the timer runs out to maintain your streak. You will review these goals at the end of the day.</p>
@@ -28,7 +28,7 @@ export default async function AppHomePage() {
           </div>
           <RecordGoalButton />
         </div>
-      </div>
+      {/* </div> */}
 
       <div className="space-y-4">
         <h3 className="font-medium">Today</h3>
