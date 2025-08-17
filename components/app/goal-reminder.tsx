@@ -36,7 +36,11 @@ export function GoalReminder() {
     }
   });
 
-  if (!loaded || goals.length >= 4) {
+  if (!loaded) {
+    return <div className="h-28 animate-pulse space-y-2 p-4 bg-secondary rounded-3xl"></div>;
+  }
+
+  if (goals.length >= 4) {
     return (
       <div className="space-y-2 p-4 bg-secondary rounded-3xl">
         <h4 className="font-medium">All set!</h4>
@@ -47,7 +51,17 @@ export function GoalReminder() {
   
   const now = new Date();
   const hour = now.getHours();
-  if (hour < 7 || hour >= 9) {
+
+  if (hour < 7) {
+    return (
+      <div className="space-y-2 p-4 bg-secondary rounded-3xl">
+        <h4 className="font-medium">Snoozing</h4>
+        <p className="text-sm">You cannot set goals before 7am. Try again later.</p>
+      </div>
+    );
+  }
+
+  if (hour >= 9) {
     return (
       <div className="space-y-2 p-4 bg-secondary rounded-3xl">
         <h4 className="font-medium">You are missing {4 - goals.length} goals</h4>
