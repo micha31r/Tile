@@ -9,6 +9,17 @@ export function getDateString(date: Date): string {
   return date.toISOString().slice(0, 10);
 }
 
+export function getDisplayName(firstName?: string, lastName?: string) {
+  let displayName = ''
+  if (firstName) {
+    displayName += firstName
+  }
+  if (lastName) {
+    displayName += ' ' + lastName
+  }
+  return displayName
+}
+
 export const hasEnvVars =
   process.env.NEXT_PUBLIC_SUPABASE_URL &&
   process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY;

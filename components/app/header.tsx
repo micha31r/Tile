@@ -2,6 +2,9 @@ import { createClient } from '@/lib/supabase/server';
 import Avatar from './avatar'
 import { redirect } from 'next/navigation';
 import { ShareIcon } from 'lucide-react';
+import { UserDetailPopup } from './user-detail-popup';
+import { getProfile } from '@/lib/data/profile';
+import { getDisplayName } from '@/lib/utils';
 
 export async function Header() {
   const supabase = await createClient();
@@ -11,12 +14,24 @@ export async function Header() {
     redirect("/auth/login");
   }
 
-  const user = data.claims;
+  const profile = await getProfile(data.claims.sub);
+
+  // Try get display name
+  const displayName = getDisplayName(profile?.first_name, profile?.last_name)
+
+  // Try get initial
+  const initials = profile?.first_name && profile?.last_name
+    ? profile.first_name.charAt(0) + profile.last_name.charAt(0)
+    : undefined;
 
   return (
     <div className="sticky z-10 top-0 bg-background shadow-[0_-32px_0_48px_rgb(255,255,255)] flex justify-between gap-4 items-center">
-      <Avatar size={32} email={user.email + 3} />
-      <p className="font-medium">{user.email.split("@")[0]}</p>
+      <div>
+        <UserDetailPopup>
+          <Avatar size={32} value={displayName || data.claims.email} displayValue={initials} />
+        </UserDetailPopup>
+      </div>
+      <p className="font-medium">{profile?.first_name ? profile?.first_name : "Home"}</p>
       <button className="flex items-center justify-center rounded-full w-8 aspect-square bg-secondary text-muted-foreground">
         <ShareIcon className="w-4 h-4" />
       </button>

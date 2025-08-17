@@ -7,7 +7,7 @@ export function FriendCard({ email, name, children }: { email: string; name: str
         {children}
       </div>
       <div className="flex items-center flex-wrap gap-2">
-        <Avatar email={email} />
+        <Avatar value={email} />
         <p className="font-medium text-sm">{name}</p>
       </div>
     </div>
