@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { CheckIcon } from "lucide-react";
 import { useRealtime } from "../use-realtime";
 import { GoalDetailPopup } from "./goal-detail-popup";
+import { getTodayDateString } from "@/lib/utils";
 
 function CompleteIcon() {
   return (
@@ -36,7 +37,7 @@ function GoalItem({ goal, priority }: { goal: Goal, priority: number }) {
 }
 
 export function GoalList() {
-  const day = new Date().toISOString().split('T')[0];
+  const day = getTodayDateString();
 
   const [goals] = useRealtime<Goal>({
     channelName: 'goal-list', 

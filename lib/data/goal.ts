@@ -7,7 +7,7 @@ export interface Goal {
   name: string;
   details?: string | null;
   created_at: Date;
-  created_date: Date;
+  created_date: Date | string;
   completed: boolean;
   reflection?: string | null;
   user_id: string;

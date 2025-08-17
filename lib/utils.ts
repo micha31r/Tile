@@ -25,6 +25,10 @@ export function getInitials(firstName?: string, lastName?: string): string | und
   return firstName.charAt(0).toUpperCase() + lastName.charAt(0).toUpperCase();
 }
 
+export function getTodayDateString(): string {
+  return new Date().toLocaleDateString('en-CA');
+}
+
 export const hasEnvVars =
   process.env.NEXT_PUBLIC_SUPABASE_URL &&
   process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY;

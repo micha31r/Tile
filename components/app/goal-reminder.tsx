@@ -7,12 +7,13 @@ import { getGoalsByDate, Goal } from "@/lib/data/goal";
 import { useRealtime } from "../use-realtime";
 import { createClient } from "@/lib/supabase/client";
 import { useState } from "react";
+import { getTodayDateString } from "@/lib/utils";
 
 export function GoalReminder() {
   const router = useRouter()
   const [loaded, setLoaded] = useState<boolean>(false)
 
-  const day = new Date().toISOString().split('T')[0];
+  const day = getTodayDateString();
 
   const [goals] = useRealtime<Goal>({
     channelName: 'goal-reminder',

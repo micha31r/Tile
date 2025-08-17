@@ -1,14 +1,13 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { CalendarMonth } from "@/components/app/calendar-month";
 import { FriendCard, FriendGallery } from "@/components/app/friend-gallery";
 import { Tile } from "@/components/tile/tile";
 import { cn } from "@/lib/utils";
-import { EyeIcon, ListIcon, MenuIcon, PlusIcon } from "lucide-react";
 import { GoalList } from "@/components/app/goal-list";
 import { GoalReminder } from "@/components/app/goal-reminder";
 import { StatusMessagePopup } from "@/components/app/status-message-popup";
 import { FriendListPopup } from "@/components/app/friend-list-popup";
+import { CalendarClientWrapper } from "@/components/app/calendar-client-wrapper";
 
 export default async function AppHomePage() {
   const supabase = await createClient();
@@ -21,15 +20,9 @@ export default async function AppHomePage() {
   return (
     <div className="space-y-8">
       <StatusMessagePopup />
-
       <GoalReminder />
-
       <GoalList />
-
-      <div className="space-y-4">
-        <h3 className="font-medium">August</h3>
-        <CalendarMonth month={8} year={2025} showLabel={true} />
-      </div>
+      <CalendarClientWrapper />
 
       <div className="space-y-4">
         <div className="flex items-center justify-between">
