@@ -94,8 +94,8 @@ export function FriendListPopup({ children }: { children?: React.ReactNode }) {
           return <div className="cursor-pointer hover:scale-95 transition-transform" onClick={callback}>{children}</div>;
         }}
       >
-        {profile && (
-          <div className="space-y-4">
+        <div className="space-y-4">
+          <div className="space-y-2">
             {friends.map((friend, index) => (
               <div key={index} className="flex flex-row gap-3 items-center rounded-xl p-3 bg-secondary font-medium">
                 <Avatar size={32} firstName={friend.first_name} lastName={friend.last_name} email={friend.email} />
@@ -106,11 +106,17 @@ export function FriendListPopup({ children }: { children?: React.ReactNode }) {
               </div>
             ))}
 
-            <button onClick={() => popupTriggerRef.current?.()} className="bg-foreground disabled:opacity-80 text-background rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform">
-              Close
-            </button>
+            {friends.length === 0 && (
+              <>
+                <div className="w-full h-14 rounded-xl p-3 bg-secondary animate-pulse"></div>
+              </>
+            )}
           </div>
-        )}
+
+          <button onClick={() => popupTriggerRef.current?.()} className="bg-foreground disabled:opacity-80 text-background rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform">
+            Close
+          </button>
+        </div>
       </Popup>
 
       {items}
