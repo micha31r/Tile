@@ -3,7 +3,6 @@
 import { Goal } from "@/lib/data/goal";
 import { createClient } from "@/lib/supabase/client";
 import { CheckIcon } from "lucide-react";
-import { useEffect, useState } from "react";
 import { useRealtime } from "../use-realtime";
 
 function CompleteIcon() {
@@ -40,6 +39,7 @@ export function GoalList() {
     const { data, error } = await supabase
       .from('goal')
       .select('*')
+      .order('created_at', { ascending: true })
 
     if (error) {
       console.error('Error fetching goals:', error);
