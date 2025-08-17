@@ -19,7 +19,6 @@ export function UserDetailPopup({ children }: { children?: React.ReactNode }) {
       }
 
       const profile = await getOrCreateProfile(data.claims.sub);
-      console.log(profile)
       setProfile(profile || null);
     })();
   }, []);

@@ -4,10 +4,11 @@ import { CalendarMonth } from "@/components/app/calendar-month";
 import { FriendCard, FriendGallery } from "@/components/app/friend-gallery";
 import { Tile } from "@/components/tile/tile";
 import { cn } from "@/lib/utils";
-import { PlusIcon } from "lucide-react";
+import { EyeIcon, ListIcon, MenuIcon, PlusIcon } from "lucide-react";
 import { GoalList } from "@/components/app/goal-list";
 import { GoalReminder } from "@/components/app/goal-reminder";
 import { StatusMessagePopup } from "@/components/app/status-message-popup";
+import { FriendListPopup } from "@/components/app/friend-list-popup";
 
 export default async function AppHomePage() {
   const supabase = await createClient();
@@ -33,10 +34,13 @@ export default async function AppHomePage() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="font-medium">Friends</h3>
-          <button className="flex items-center justify-center gap-1 rounded-full w-max h-8 p-2 pl-3 bg-secondary text-sm font-medium text-muted-foreground">
-            <span>Add</span>
-            <PlusIcon className="w-4 h-4" />
-          </button>
+          <div>
+            <FriendListPopup>
+              <button className="flex items-center justify-center gap-1 rounded-full w-max h-8 p-2 px-3 bg-secondary text-sm font-medium text-muted-foreground">
+                See all
+              </button>
+            </FriendListPopup>
+          </div>
         </div>
         <FriendGallery>
           <FriendCard email="tes@test.com" name="Michael">

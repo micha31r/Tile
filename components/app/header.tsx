@@ -4,7 +4,6 @@ import { redirect } from 'next/navigation';
 import { ShareIcon } from 'lucide-react';
 import { UserDetailPopup } from './user-detail-popup';
 import { getProfile } from '@/lib/data/profile';
-import { getDisplayName } from '@/lib/utils';
 import { ShareProfilePopup } from './share-profile-popup';
 
 export async function Header() {
@@ -17,19 +16,11 @@ export async function Header() {
 
   const profile = await getProfile(data.claims.sub);
 
-  // Try get display name
-  const displayName = getDisplayName(profile?.first_name, profile?.last_name)
-
-  // Try get initial
-  const initials = profile?.first_name && profile?.last_name
-    ? profile.first_name.charAt(0) + profile.last_name.charAt(0)
-    : undefined;
-
   return (
     <div className="sticky z-10 top-0 bg-background shadow-[0_-32px_0_48px_rgb(255,255,255)] flex justify-between gap-4 items-center">
       <div>
         <UserDetailPopup>
-          <Avatar size={32} value={displayName || data.claims.email} displayValue={initials} />
+          <Avatar size={32} firstName={profile?.first_name} lastName={profile?.last_name} email={data.claims.email} />
         </UserDetailPopup>
       </div>
       

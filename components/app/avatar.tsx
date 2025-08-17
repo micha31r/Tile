@@ -1,19 +1,21 @@
 "use client"
 
-import { cn } from "@/lib/utils";
+import { cn, getDisplayName, getInitials } from "@/lib/utils";
 import Avvvatars from "avvvatars-react"
 import { useEffect, useState } from "react";
 
 export default function Avatar({ 
   size, 
-  value, 
+  firstName, 
+  lastName,
+  email,
   style = "character", 
-  displayValue 
 }: { 
   size?: number, 
-  value: string, 
+  firstName?: string,
+  lastName?: string,
+  email: string,
   style?: 'character' | 'shape', 
-  displayValue?: string 
 }) {
   const [loaded, setLoaded] = useState(false);
 
@@ -25,11 +27,14 @@ export default function Avatar({
     return () => clearTimeout(id);
   }, []);
 
+  const displayName = getDisplayName(firstName, lastName)
+  const initials = getInitials(firstName, lastName)
+
   return (
     <div className={cn("transition-opacity opacity-0", {
       "opacity-100": loaded
     })} style={{ width: size, height: size }}>
-      <Avvvatars size={size} style={style} value={value} displayValue={displayValue} />
+      <Avvvatars size={size} style={style} value={displayName ?? email} displayValue={initials} />
     </div>
   )
 }

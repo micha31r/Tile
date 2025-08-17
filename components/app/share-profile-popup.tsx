@@ -33,7 +33,9 @@ export function ShareProfilePopup({ children }: { children?: React.ReactNode }) 
       setProfile(profile);
       setInvite(invite);
 
-      console.log(`${window.location.origin}/add/?id=${profile!.user_id}&code=${invite.code}`)
+      if (process.env.NODE_ENV === "development") {
+        console.log(`${window.location.origin}/add/?id=${profile!.user_id}&code=${invite.code}`)
+      }
     })();
   }, []);
 
