@@ -6,7 +6,7 @@ import { Tile } from "@/components/tile/tile";
 import { cn } from "@/lib/utils";
 import { CheckIcon, Goal, PlusIcon } from "lucide-react";
 import { Countdown } from "@/components/app/countdown";
-import { RecordGoalButton } from "@/components/app/record-goal-button";
+import { RecordGoalPopup } from "@/components/app/record-goal-popup";
 
 export default async function AppHomePage() {
   const supabase = await createClient();
@@ -26,7 +26,7 @@ export default async function AppHomePage() {
           <div className="flex w-full justify-center p-4 py-4">
             <Countdown target={new Date("2025-08-18T12:00:00")} />
           </div>
-          <RecordGoalButton />
+          <RecordGoalPopup />
         </div>
       {/* </div> */}
 

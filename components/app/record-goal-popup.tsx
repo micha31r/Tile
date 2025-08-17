@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { GoalForm } from "./goal-form";
 import { Popup } from "./popup";
 
-export function RecordGoalButton() {
+export function RecordGoalPopup() {
   const popupTriggerRef = useRef<(() => void) | null>(null);
 
   return (
