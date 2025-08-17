@@ -44,3 +44,19 @@ export async function getTodayGoals(userId: string, date: Date): Promise<Goal[]>
 
   return data;
 }
+
+export async function markGoalAsCompleted(goalId: string, reflection: string | null): Promise<boolean> {
+  const supabase = await createClient()
+
+  const { error } = await supabase
+    .from('goal')
+    .update({ completed: true, reflection })
+    .eq('id', goalId)
+
+  if (error) {
+    console.error(`Failed to mark goal as completed: ${error.message}`)
+    return false
+  }
+
+  return true
+}

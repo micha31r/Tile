@@ -1,6 +1,6 @@
 export function DangerAlert({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex flex-row gap-2 items-center rounded-xl bg-red-100 text-red-600 font-medium p-3 text-sm">
+    <div className="grid grid-cols-[max-content,1fr] gap-2 rounded-xl bg-red-100 text-red-600 font-medium p-3 text-sm [&_svg]:h-4 [&_svg]:w-4 [&_svg]:mt-0.5">
       {children}
     </div>
   );
