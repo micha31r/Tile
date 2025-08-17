@@ -36,12 +36,15 @@ function GoalItem({ goal, priority }: { goal: Goal, priority: number }) {
 }
 
 export function GoalList() {
-  const [goals] = useRealtime<Goal>('public', 'goal', undefined, async () => {
+  const day = new Date().toISOString().split('T')[0];
+
+  const [goals] = useRealtime<Goal>('goal-list', 'public', 'goal', `created_date=eq.${day}`, async () => {
     const supabase = createClient();
     
     const { data, error } = await supabase
       .from('goal')
       .select('*')
+      .eq('created_date', day)
       .order('created_at', { ascending: true })
 
     if (error) {

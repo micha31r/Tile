@@ -8,10 +8,11 @@ export interface EntryWithUUID {
 }
 
 export function useRealtime<T extends EntryWithUUID>(
+  channelName: string,
   schema: string, 
   table: string, 
   filter?: string, 
-  getInitialData?: () => Promise<T[]>
+  getInitialData?: () => Promise<T[]>,
 ) {
   const [entries, setEntries] = useState<T[]>([])
 
@@ -26,7 +27,7 @@ export function useRealtime<T extends EntryWithUUID>(
     fetchInitial()
 
     const channel = supabase
-     .channel('table-db-changes', {
+     .channel(channelName, {
         config: { private: true },
      })
       .on(

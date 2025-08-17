@@ -8,6 +8,7 @@ import { CheckIcon, Goal, PlusIcon } from "lucide-react";
 import { Countdown } from "@/components/app/countdown";
 import { RecordGoalPopup } from "@/components/app/record-goal-popup";
 import { GoalList } from "@/components/app/goal-list";
+import { GoalReminder } from "@/components/app/goal-reminder";
 
 export default async function AppHomePage() {
   const supabase = await createClient();
@@ -19,17 +20,7 @@ export default async function AppHomePage() {
 
   return (
     <div className="space-y-8">
-      {/* <div className="space-y-4"> */}
-        {/* <h3 className="font-medium">Today</h3> */}
-        <div className="space-y-2 p-4 bg-blue-50 rounded-3xl">
-          <h4 className="font-medium">Daily goals</h4>
-          <p className="text-sm">Plan your day before the timer runs out to maintain your streak. You will review these goals at the end of the day.</p>
-          <div className="flex w-full justify-center p-4 py-4">
-            <Countdown target={new Date("2025-08-18T12:00:00")} />
-          </div>
-          <RecordGoalPopup />
-        </div>
-      {/* </div> */}
+      <GoalReminder />
 
       <GoalList />
 

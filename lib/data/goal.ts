@@ -29,12 +29,14 @@ export async function createGoal(goal: Omit<Goal, 'id' | 'created_at' | 'user_id
 }
 
 export async function getTodayGoals(userId: string, date: Date): Promise<Goal[]> {
+  const day = date.toISOString().split('T')[0]
+
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('goal')
     .select('*')
     .eq('user_id', userId)
-    .eq('created_at', date.toISOString().split('T')[0])
+    .eq('created_date', day)
     .limit(4)
 
   if (error) {
