@@ -37,7 +37,23 @@ export function GoalReminder() {
   });
 
   if (!loaded || goals.length >= 4) {
-    return null;
+    return (
+      <div className="space-y-2 p-4 bg-secondary rounded-3xl">
+        <h4 className="font-medium">All set!</h4>
+        <p className="text-sm">Check off all 4 goals before 11:59pm today to earn your daily streak.</p>
+      </div>
+    );
+  }
+  
+  const now = new Date();
+  const hour = now.getHours();
+  if (hour < 7 || hour >= 9) {
+    return (
+      <div className="space-y-2 p-4 bg-secondary rounded-3xl">
+        <h4 className="font-medium">You are missing {4 - goals.length} goals</h4>
+        <p className="text-sm">You cannot set goals outside of the designated time (7am - 9am). Try again tomorrow.</p>
+      </div>
+    );
   }
 
   return (
@@ -45,7 +61,7 @@ export function GoalReminder() {
       <h4 className="font-medium">Daily goals</h4>
       <p className="text-sm">Don&apos;t forget to set your four daily goals before the timer runs out. Finish all your goals to keep your streak going.</p>
       <div className="flex w-full justify-center p-4 py-4">
-        <Countdown target={new Date("2025-08-18T12:00:00")} />
+        <Countdown target={new Date(`${day}T09:00:00`)} />
       </div>
       <RecordGoalPopup />
     </div>
