@@ -5,8 +5,12 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function getDateString(date: Date): string {
+export function getISODateString(date: Date): string {
   return date.toISOString().slice(0, 10);
+}
+
+export function getDateString(date: Date): string {
+  return date.toLocaleDateString('en-CA');
 }
 
 export function getDisplayName(firstName?: string, lastName?: string) {
@@ -26,7 +30,7 @@ export function getInitials(firstName?: string, lastName?: string): string | und
 }
 
 export function getTodayDateString(): string {
-  return new Date().toLocaleDateString('en-CA');
+  return getDateString(new Date());
 }
 
 export const hasEnvVars =

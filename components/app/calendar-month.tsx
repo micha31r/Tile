@@ -1,6 +1,6 @@
 "use client"
 
-import { cn, getDateString } from "@/lib/utils";
+import { cn, getDateString, getTodayDateString } from "@/lib/utils";
 import { Tile } from "../tile/tile";
 import { getGoalsByDate, Goal } from "@/lib/data/goal";
 import { useRealtime } from "../use-realtime";
@@ -91,7 +91,7 @@ export function CalendarCell({ entry }: { entry: DayEntry }) {
 
 export function CalendarCellToday({ entry }: { entry: DayEntry }) {
   const [cell, setCell] = useState<CellData>(getCellData(entry));
-  const todayDateString = getDateString(new Date());
+  const todayDateString = getTodayDateString();
 
   // Track today's goals for live changes
   const [goals] = useRealtime<Goal>({
