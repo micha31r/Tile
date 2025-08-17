@@ -1,6 +1,9 @@
 "use server"
 
+import { get } from "http";
 import { createClient } from "../supabase/server";
+
+export type GoalPriority = 1 | 2 | 3 | 4;
 
 export interface Goal {
   id: string;
@@ -10,37 +13,57 @@ export interface Goal {
   created_date: Date | string;
   completed: boolean;
   reflection?: string | null;
+  priority: GoalPriority;
   user_id: string;
 }
 
-export async function createGoal(goal: Omit<Goal, 'id' | 'created_at' | 'user_id' | 'completed'>): Promise<Goal | null> {
+export async function getGoalsByDate(userId: string, date: Date | string): Promise<Goal[]> {
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('goal')
-    .insert(goal)
+    .select('*')
+    .eq('user_id', userId)
+    .eq('created_date', date)
+    .limit(4)
+
+  if (error) {
+    console.error(`Failed to retrieve goals: ${error.message}`)
+    return []
+  }
+
+  return data;
+}
+
+export async function createGoal(goal: Omit<Goal, 'id' | 'created_at' | 'user_id' | 'completed' | 'priority'>): Promise<Goal | null> {
+  const supabase = await createClient()
+
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    console.error(`User not found`)
+    return null
+  }
+
+  const goals = await getGoalsByDate(user.id, goal.created_date);
+
+  if (goals.length >= 4) {
+    console.error(`Cannot create more than 4 goals for the same date`)
+    return null
+  }
+
+  const { data, error } = await supabase
+    .from('goal')
+    .insert({ 
+      ...goal,
+      created_at: new Date(),
+      priority: goals.length + 1,
+    })
     .select('*')
     .single()
 
   if (error) {
    console.error(`Failed to create goal: ${error.message}`)
    return null;
-  }
-
-  return data;
-}
-
-export async function getGoalsByDate(userId: string, dateString: string): Promise<Goal[]> {
-  const supabase = await createClient()
-  const { data, error } = await supabase
-    .from('goal')
-    .select('*')
-    .eq('user_id', userId)
-    .eq('created_date', dateString)
-    .limit(4)
-
-  if (error) {
-    console.error(`Failed to retrieve goals: ${error.message}`)
-    return []
   }
 
   return data;

@@ -21,7 +21,7 @@ export function GoalDetailPopup({ goal, children }: { goal: Goal, children?: Rea
           <p className="text-muted-foreground text-sm">{goal.details}</p>
         )}
 
-        <ReflectionForm goalId={goal.id} onSuccess={() => {
+        <ReflectionForm goal={goal} onSuccess={() => {
           popupTriggerRef.current?.();
         }} />
       </div>

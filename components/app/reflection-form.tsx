@@ -5,9 +5,10 @@ import { DangerAlert } from "../danger-alert";
 import TextArea from "../textarea";
 import { useRef, useState } from "react";
 import { WarningAlert } from "../warning-alert";
-import { markGoalAsCompleted } from "@/lib/data/goal";
+import { Goal, markGoalAsCompleted } from "@/lib/data/goal";
+import { completeGoalBroadcast } from "@/lib/data/broadcast";
 
-export function ReflectionForm({ goalId, onSuccess }: { goalId: string, onSuccess?: () => void }) {
+export function ReflectionForm({ goal, onSuccess }: { goal: Goal, onSuccess?: () => void }) {
   const [error, setError] = useState<string | null>(null);
   const [disabled, setDisabled] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
@@ -21,7 +22,10 @@ export function ReflectionForm({ goalId, onSuccess }: { goalId: string, onSucces
 
     setDisabled(true);
 
-    const data = await markGoalAsCompleted(goalId, reflection?.toString() || null);
+    const data = await markGoalAsCompleted(goal.id, reflection?.toString() || null);
+
+    // Broadcast changes
+    await completeGoalBroadcast(goal);
 
     if (!data) {
       setError("Failed to mark goal as completed.");
