@@ -1,8 +1,9 @@
 "use server"
 
 import { dangerCreateServerRoleClient } from "../supabase/server-role";
-import { getFriends } from "./friend";
+import { getFriendsWithUser } from "./friend";
 import { Goal } from "./goal";
+import { Profile } from "./profile";
 
 export interface BroadcastPayload {
   completed_goal_ids: Array<number>;
@@ -10,8 +11,12 @@ export interface BroadcastPayload {
 
 export interface Broadcast {
   user_id: string;
-  payload: object;
+  payload: BroadcastPayload;
   updated_at: Date;
+}
+
+export interface BroadcastWithUser extends Profile, Broadcast {
+  email: string;
 }
 
 export async function createBroadcast(userId: string, payload: BroadcastPayload): Promise<Broadcast | null> {
@@ -101,16 +106,15 @@ export async function getBroadcast(userId: string): Promise<Broadcast | null> {
   return data
 }
 
-export async function getFriendBroadcast(userId: string): Promise<Broadcast[]> {
+export async function getFriendBroadcastsWithUser(userId: string): Promise<BroadcastWithUser[]> {
   const supabase = await dangerCreateServerRoleClient()
-  const friends = await getFriends(userId)
+  const friends = await getFriendsWithUser(userId)
   const friendIds = friends?.map((f) => f.user_a_id === userId ? f.user_b_id : f.user_a_id) ?? []
 
   const { data, error } = await supabase
     .from("broadcast")
     .select()
     .in("user_id", friendIds)
-    .order("created_at", { ascending: false })
 
   if (error) {
     console.error(`Failed to get friend broadcast: ${error.message}`)
@@ -118,4 +122,9 @@ export async function getFriendBroadcast(userId: string): Promise<Broadcast[]> {
   }
 
   return data
+    .map((broadcast) => ({
+      ...broadcast,
+      ...friends.find((f) => f.user_id === broadcast.user_id),
+    }))
+    .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
 }

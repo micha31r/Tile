@@ -9,7 +9,7 @@ export interface Friend {
   created_at: Date,
 }
 
-export interface FriendDetails extends Profile, Friend {
+export interface FriendWithUser extends Profile, Friend {
   email: string;
 }
 
@@ -66,7 +66,7 @@ export async function getFriends(userId: string): Promise<Friend[]> {
   return friends as Friend[];
 }
 
-export async function getFriendsWithDetails(userId: string): Promise<FriendDetails[]> {
+export async function getFriendsWithUser(userId: string): Promise<FriendWithUser[]> {
   const friends = await getFriends(userId);
   const friendIds = friends.map(friend => friend.user_a_id === userId ? friend.user_b_id : friend.user_a_id);
 

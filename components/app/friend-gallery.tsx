@@ -1,14 +1,29 @@
+import { cn, getDisplayName } from "@/lib/utils";
 import Avatar from "./avatar";
 
-export function FriendCard({ email, name, children }: { email: string; name: string; children?: React.ReactNode }) {
+export function FriendCard({ 
+  email, 
+  firstName, 
+  lastName,
+  children 
+}: { 
+  email: string; 
+  firstName?: string; 
+  lastName?: string; 
+  children?: React.ReactNode 
+}) {
+  const displayName = getDisplayName(firstName, lastName);
+
   return (
     <div className="rounded-3xl bg-secondary p-2 space-y-2">
       <div className="flex items-center justify-center aspect-square">
         {children}
       </div>
       <div className="flex items-center flex-wrap gap-2">
-        <Avatar value={email} />
-        <p className="font-medium text-sm">{name}</p>
+        <Avatar size={32} firstName={firstName} lastName={lastName} email={email} />
+        <p className={cn("font-medium text-sm", {
+          "text-muted-foreground": !displayName,
+        })}>{displayName ?? "--"}</p>
       </div>
     </div>
   );

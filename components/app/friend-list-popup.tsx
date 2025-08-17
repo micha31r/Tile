@@ -4,14 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import { Popup } from "./popup";
 import { createClient } from "@/lib/supabase/client";
 import { getOrCreateProfile, Profile } from "@/lib/data/profile";
-import { FriendDetails, getFriendsWithDetails, removeFriend } from "@/lib/data/friend";
+import { FriendWithUser, getFriendsWithUser, removeFriend } from "@/lib/data/friend";
 import { TriangleAlertIcon } from "lucide-react";
 import { getDisplayName, getInitials } from "@/lib/utils";
 import { DangerAlert } from "../danger-alert";
 import { useRouter } from "next/navigation";
 import Avatar from "./avatar";
 
-function FriendItemPopup({ friend, trigger }: { friend: FriendDetails; trigger: (onClick: () => void) => React.ReactNode }) {
+function FriendItemPopup({ friend, trigger }: { friend: FriendWithUser; trigger: (onClick: () => void) => React.ReactNode }) {
   const popupTriggerRef = useRef<(() => void) | null>(null);
   const [disabled, setDisabled] = useState(false);
 
@@ -56,7 +56,7 @@ function FriendItemPopup({ friend, trigger }: { friend: FriendDetails; trigger: 
 export function FriendListPopup({ children }: { children?: React.ReactNode }) {
   const popupTriggerRef = useRef<(() => void) | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [friends, setFriends] = useState<FriendDetails[]>([])
+  const [friends, setFriends] = useState<FriendWithUser[]>([])
   const triggers = useRef<(() => void)[]>([])
 
   useEffect(() => {
@@ -71,7 +71,7 @@ export function FriendListPopup({ children }: { children?: React.ReactNode }) {
       if (!profile) return null;
       setProfile(profile);
 
-      const friends = await getFriendsWithDetails(profile.user_id);
+      const friends = await getFriendsWithUser(profile.user_id);
       setFriends(friends);
     })();
   }, []);
