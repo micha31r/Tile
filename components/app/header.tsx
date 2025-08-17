@@ -5,6 +5,7 @@ import { ShareIcon } from 'lucide-react';
 import { UserDetailPopup } from './user-detail-popup';
 import { getProfile } from '@/lib/data/profile';
 import { getDisplayName } from '@/lib/utils';
+import { ShareProfilePopup } from './share-profile-popup';
 
 export async function Header() {
   const supabase = await createClient();
@@ -31,10 +32,16 @@ export async function Header() {
           <Avatar size={32} value={displayName || data.claims.email} displayValue={initials} />
         </UserDetailPopup>
       </div>
+      
       <p className="font-medium">{profile?.first_name ? profile?.first_name : "Home"}</p>
-      <button className="flex items-center justify-center rounded-full w-8 aspect-square bg-secondary text-muted-foreground">
-        <ShareIcon className="w-4 h-4" />
-      </button>
+
+      <div>
+        <ShareProfilePopup>
+          <button className="flex items-center justify-center rounded-full w-8 aspect-square bg-secondary text-muted-foreground">
+            <ShareIcon className="w-4 h-4" />
+          </button>
+        </ShareProfilePopup>
+      </div>
     </div>
   )
 }

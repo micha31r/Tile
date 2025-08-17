@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { PlusIcon } from "lucide-react";
 import { GoalList } from "@/components/app/goal-list";
 import { GoalReminder } from "@/components/app/goal-reminder";
+import { StatusMessagePopup } from "@/components/app/status-message-popup";
 
 export default async function AppHomePage() {
   const supabase = await createClient();
@@ -18,6 +19,8 @@ export default async function AppHomePage() {
 
   return (
     <div className="space-y-8">
+      <StatusMessagePopup />
+
       <GoalReminder />
 
       <GoalList />
