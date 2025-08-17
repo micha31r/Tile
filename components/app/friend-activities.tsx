@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 
 export function FriendActivities() {
   const [broadcasts, setBroadcasts] = useState<BroadcastWithUser[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -30,6 +31,7 @@ export function FriendActivities() {
         );
       });
       setBroadcasts(filtered);
+      setLoaded(true);
     })()
   }, []);
 
@@ -63,6 +65,13 @@ export function FriendActivities() {
               </div>
             </FriendCard>
           ))}
+
+          {!loaded && (
+            <>
+              <div className="h-52 animate-pulse rounded-3xl bg-secondary p-2 space-y-2"></div>
+              <div className="h-52 animate-pulse rounded-3xl bg-secondary p-2 space-y-2"></div>
+            </>
+          )}
         </FriendGallery>
       </div>
   )
