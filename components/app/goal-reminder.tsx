@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Countdown } from "./countdown";
 import { RecordGoalPopup } from "./record-goal-popup";
-import { getTodayGoals, Goal } from "@/lib/data/goal";
+import { getGoalsByDate, Goal } from "@/lib/data/goal";
 import { useRealtime } from "../use-realtime";
 import { createClient } from "@/lib/supabase/client";
 import { useState } from "react";
@@ -14,20 +14,26 @@ export function GoalReminder() {
 
   const day = new Date().toISOString().split('T')[0];
 
-  const [goals] = useRealtime<Goal>('goal-reminder', 'public', 'goal', `created_date=eq.${day}`, async () => {
-    const supabase = createClient();
-    
-    const { data, error } = await supabase.auth.getClaims();
-    if (error || !data?.claims) {
-      router.push("/auth/login");
-      return [];
-    }
+  const [goals] = useRealtime<Goal>({
+    channelName: 'goal-reminder',
+    schema: 'public',
+    table: 'goal',
+    filter: `created_date=eq.${day}`,
+    getInitialData: async () => {
+      const supabase = createClient();
 
-    const user = data.claims;
-    const goalData = await getTodayGoals(user.sub, new Date())
-    setLoaded(true);
-    return goalData;
-  })
+      const { data, error } = await supabase.auth.getClaims();
+      if (error || !data?.claims) {
+        router.push("/auth/login");
+        return [];
+      }
+
+      const user = data.claims;
+      const goalData = await getGoalsByDate(user.sub, day)
+      setLoaded(true);
+      return goalData;
+    }
+  });
 
   if (!loaded || goals.length >= 4) {
     return null;

@@ -38,23 +38,28 @@ function GoalItem({ goal, priority }: { goal: Goal, priority: number }) {
 export function GoalList() {
   const day = new Date().toISOString().split('T')[0];
 
-  const [goals] = useRealtime<Goal>('goal-list', 'public', 'goal', `created_date=eq.${day}`, async () => {
-    const supabase = createClient();
-    
-    const { data, error } = await supabase
-      .from('goal')
-      .select('*')
-      .eq('created_date', day)
-      .order('created_at', { ascending: true })
+  const [goals] = useRealtime<Goal>({
+    channelName: 'goal-list', 
+    schema: 'public',
+    table: 'goal',
+    filter: `created_date=eq.${day}`,
+    getInitialData: async () => {
+      const supabase = createClient();
 
-    if (error) {
-      console.error('Error fetching goals:', error);
-      return [];
+      const { data, error } = await supabase
+        .from('goal')
+        .select('*')
+        .eq('created_date', day)
+        .order('created_at', { ascending: true })
+
+      if (error) {
+        console.error('Error fetching goals:', error);
+        return [];
+      }
+      
+      return data;
     }
-    
-    return data;
-  })
-
+  });
 
   return (
     <div className="space-y-4">

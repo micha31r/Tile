@@ -7,6 +7,7 @@ export interface Goal {
   name: string;
   details?: string | null;
   created_at: Date;
+  created_date: Date;
   completed: boolean;
   reflection?: string | null;
   user_id: string;
@@ -28,15 +29,13 @@ export async function createGoal(goal: Omit<Goal, 'id' | 'created_at' | 'user_id
   return data;
 }
 
-export async function getTodayGoals(userId: string, date: Date): Promise<Goal[]> {
-  const day = date.toISOString().split('T')[0]
-
+export async function getGoalsByDate(userId: string, dateString: string): Promise<Goal[]> {
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('goal')
     .select('*')
     .eq('user_id', userId)
-    .eq('created_date', day)
+    .eq('created_date', dateString)
     .limit(4)
 
   if (error) {

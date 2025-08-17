@@ -1,19 +1,43 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import { useEffect, useState } from "react";
 import { createClient } from "../lib/supabase/client";
 
-export interface EntryWithUUID {
-  id: string;
+function defaultOnInsert<T>(prev: any[], payload: any): T[] {
+  return [...prev, payload.new as any];
 }
 
-export function useRealtime<T extends EntryWithUUID>(
-  channelName: string,
-  schema: string, 
-  table: string, 
-  filter?: string, 
-  getInitialData?: () => Promise<T[]>,
-) {
+function defaultOnUpdate<T>(prev: any[], payload: any): T[] {
+  return prev.map(i => i.id === payload.new.id ? payload.new as any : i);
+}
+
+function defaultOnDelete<T>(prev: any[], payload: any): T[] {
+  return prev.filter(i => i.id !== payload.old.id);
+}
+  
+export interface UseRealtimeOptions<T> {
+  channelName: string;
+  schema: string;
+  table: string;
+  filter?: string;
+  getInitialData?: () => Promise<T[]>;
+  onInsert?: (prev: T[], payload: any) => T[];
+  onUpdate?: (prev: T[], payload: any) => T[];
+  onDelete?: (prev: T[], payload: any) => T[];
+}
+
+export function useRealtime<T>(options: UseRealtimeOptions<T>) {
+  const {
+    channelName,
+    schema,
+    table,
+    filter,
+    getInitialData,
+    onInsert,
+    onUpdate,
+    onDelete,
+  } = options;
   const [entries, setEntries] = useState<T[]>([])
 
   useEffect(() => {
@@ -27,25 +51,30 @@ export function useRealtime<T extends EntryWithUUID>(
     fetchInitial()
 
     const channel = supabase
-     .channel(channelName, {
+      .channel(channelName, {
         config: { private: true },
-     })
+      })
       .on(
         'postgres_changes',
         {
           event: '*',
-          schema: 'public',
-          table: 'goal',
+          schema,
+          table,
           ...(filter ? { filter } : {}),
         },
         payload => {
-          console.log('Change received!', payload)
-          if (payload.eventType === 'INSERT') setEntries(prev => [...prev, payload.new as T])
-          if (payload.eventType === 'UPDATE') setEntries(prev => prev.map(i => i.id === payload.new.id ? payload.new as T : i))
-          if (payload.eventType === 'DELETE') setEntries(prev => prev.filter(i => i.id !== payload.old.id))
+          if (payload.eventType === 'INSERT') {
+            setEntries(prev => (onInsert ?? defaultOnInsert)(prev, payload));
+          }
+          if (payload.eventType === 'UPDATE') {
+            setEntries(prev => (onUpdate ?? defaultOnUpdate)(prev, payload));
+          }
+          if (payload.eventType === 'DELETE') {
+            setEntries(prev => (onDelete ?? defaultOnDelete)(prev, payload));
+          }
         }
       )
-      .subscribe()
+      .subscribe();
 
     return () => {
       channel.unsubscribe();

@@ -4,9 +4,7 @@ import { CalendarMonth } from "@/components/app/calendar-month";
 import { FriendCard, FriendGallery } from "@/components/app/friend-gallery";
 import { Tile } from "@/components/tile/tile";
 import { cn } from "@/lib/utils";
-import { CheckIcon, Goal, PlusIcon } from "lucide-react";
-import { Countdown } from "@/components/app/countdown";
-import { RecordGoalPopup } from "@/components/app/record-goal-popup";
+import { PlusIcon } from "lucide-react";
 import { GoalList } from "@/components/app/goal-list";
 import { GoalReminder } from "@/components/app/goal-reminder";
 
@@ -26,7 +24,7 @@ export default async function AppHomePage() {
 
       <div className="space-y-4">
         <h3 className="font-medium">August</h3>
-        <CalendarMonth month={10} year={2025} showLabel={true} />
+        <CalendarMonth month={8} year={2025} showLabel={true} />
       </div>
 
       <div className="space-y-4">
