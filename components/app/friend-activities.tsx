@@ -1,18 +1,37 @@
+"use client"
+
 import { cn } from "@/lib/utils";
 import { Tile } from "../tile/tile";
 import { FriendCard, FriendGallery } from "./friend-gallery";
 import { FriendListPopup } from "./friend-list-popup";
-import { getFriendBroadcastsWithUser } from "@/lib/data/broadcast";
-import { createClient } from "@/lib/supabase/server";
+import { BroadcastWithUser, getFriendBroadcastsWithUser } from "@/lib/data/broadcast";
+import { createClient } from "@/lib/supabase/client";
+import { useEffect, useState } from "react";
 
-export async function FriendActivities() {
-  const supabase = await createClient();
-  const { data, error } = await supabase.auth.getClaims();
-  if (error || !data?.claims) {
-    return
-  }
+export function FriendActivities() {
+  const [broadcasts, setBroadcasts] = useState<BroadcastWithUser[]>([]);
 
-  const broadcasts = await getFriendBroadcastsWithUser(data.claims.sub);
+  useEffect(() => {
+    (async () => {
+      const supabase = createClient();
+      const { data, error } = await supabase.auth.getClaims();
+      if (error || !data?.claims) return
+
+      const broadcasts = await getFriendBroadcastsWithUser(data.claims.sub);
+
+      // Only show entries from client's today
+      const today = new Date();
+      const filtered = broadcasts.filter(broadcast => {
+        const updatedAt = new Date(broadcast.updated_at);
+        return (
+          updatedAt.getFullYear() === today.getFullYear() &&
+          updatedAt.getMonth() === today.getMonth() &&
+          updatedAt.getDate() === today.getDate()
+        );
+      });
+      setBroadcasts(filtered);
+    })()
+  }, []);
 
   function getTileData(arr: number[]) {
     return { 
