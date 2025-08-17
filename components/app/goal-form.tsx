@@ -35,6 +35,8 @@ export function GoalForm({ onSuccess }: { onSuccess?: () => void }) {
 
     if (!data) {
       setError("Failed to create goal.");
+      setDisabled(false);
+      return;
     }
     
     setDisabled(false);

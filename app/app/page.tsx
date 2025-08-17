@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { CheckIcon, Goal, PlusIcon } from "lucide-react";
 import { Countdown } from "@/components/app/countdown";
 import { RecordGoalPopup } from "@/components/app/record-goal-popup";
+import { GoalList } from "@/components/app/goal-list";
 
 export default async function AppHomePage() {
   const supabase = await createClient();
@@ -30,50 +31,7 @@ export default async function AppHomePage() {
         </div>
       {/* </div> */}
 
-      <div className="space-y-4">
-        <h3 className="font-medium">Today</h3>
-
-        <div className="space-y-2 font-medium">
-          <div className="flex flex-row gap-3 items-center rounded-xl p-3 bg-secondary">
-            <div className="flex justify-center items-center w-6 aspect-square bg-neutral-200 text-muted-foreground rounded-full text-sm">
-              1
-            </div>
-            <h4 className="text-sm line-clamp-1 mr-auto">Finish part 2 of graphics assignment</h4>
-            <div className="flex w-6 aspect-square bg-blue-100 rounded-full">
-              <CheckIcon className="w-4 h-4 m-auto text-blue-700" strokeWidth={3} />
-            </div>
-          </div>
-
-          <div className="flex flex-row gap-3 justify-between items-center rounded-xl p-3 bg-secondary">
-            <div className="flex justify-center items-center w-6 aspect-square bg-neutral-200 text-muted-foreground rounded-full text-sm">
-              2
-            </div>
-            <h4 className="text-sm line-clamp-1 mr-auto">Review DP modules</h4>
-            <div className="flex w-6 aspect-square border-2 border-border rounded-full">
-            </div>
-          </div>
-
-          <div className="flex flex-row gap-3 items-center rounded-xl p-3 bg-secondary">
-            <div className="flex justify-center items-center w-6 aspect-square bg-neutral-200 text-muted-foreground rounded-full text-sm">
-              3
-            </div>
-            <h4 className="text-sm line-clamp-1 mr-auto">Email manager about project updates</h4>
-            <div className="flex w-6 aspect-square bg-blue-100 rounded-full">
-              <CheckIcon className="w-4 h-4 m-auto text-blue-700" strokeWidth={3} />
-            </div>
-          </div>
-
-           <div className="flex flex-row gap-3 items-center rounded-xl p-3 bg-secondary">
-            <div className="flex justify-center items-center w-6 aspect-square bg-neutral-200 text-muted-foreground rounded-full text-sm">
-              4
-            </div>
-            <h4 className="text-sm line-clamp-1 mr-auto">Do laundry</h4>
-            <div className="flex w-6 aspect-square bg-blue-100 rounded-full">
-              <CheckIcon className="w-4 h-4 m-auto text-blue-700" strokeWidth={3} />
-            </div>
-          </div>
-        </div>
-      </div>
+      <GoalList />
 
       <div className="space-y-4">
         <h3 className="font-medium">August</h3>
