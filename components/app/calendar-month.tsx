@@ -19,8 +19,7 @@ export type CalendarMonthData = {
 };
 
 export type CellData = {
-  isEmpty: boolean;
-  allCompleted: boolean;
+  status: CellStatus;
   tileShape: {
     tl: boolean;
     tr: boolean;
@@ -29,64 +28,82 @@ export type CellData = {
   };
 };
 
+// Unset -> no goals
+// Set -> some or all goals set, but none completed
+// Partial -> some goals completed
+// Complete -> all goals completed
+export type CellStatus = "unset" | "set" | "partial" | "complete";
+
 function getCellData(entry: DayEntry): CellData {
-  // Count the number of goals completed each day
-  const completedTaskCount = entry.goals.filter((goal: Goal) => goal.completed).length;
+  let completedTaskCount = 0;
+  const prioritiesSet = new Set<number>();
+
+  for (const goal of entry.goals) {
+    if (goal.completed) completedTaskCount++;
+    prioritiesSet.add(goal.priority);
+  }
+
+  let status: CellStatus;
+
+  if (entry.goals.length === 0) {
+    status = "unset";
+  } else if (completedTaskCount === 0) {
+    status = "set";
+  } else if (completedTaskCount < 4) {
+    status = "partial";
+  } else {
+    status = "complete";
+  }
 
   return {
-    isEmpty: entry.goals.length === 0 || completedTaskCount === 0,
-    allCompleted: completedTaskCount === 4,
-    tileShape: getTileShapeData(entry.goals)
+    status: status,
+    tileShape: getTileData(prioritiesSet)
   };
 }
 
-function getTileShapeData(goals: Goal[]): { tl: boolean; tr: boolean; bl: boolean; br: boolean } {
-  const priorities: number[] = [];
-
-  goals = goals.sort((a, b) => {
-    const aTime = typeof a.created_at === "string" ? Date.parse(a.created_at) : a.created_at;
-    const bTime = typeof b.created_at === "string" ? Date.parse(b.created_at) : b.created_at;
-    return Number(aTime) - Number(bTime);
-  });
-
-  goals.forEach((goal, index) => {
-    if (goal.completed) {
-      priorities.push(index + 1);
-    }
-  });
-
+function getTileData(priorities: Set<number>) {
   return {
-    tl: priorities.includes(1),
-    tr: priorities.includes(2),
-    bl: priorities.includes(3),
-    br: priorities.includes(4)
+    tl: priorities.has(1),
+    tr: priorities.has(2),
+    bl: priorities.has(3),
+    br: priorities.has(4)
   };
 }
 
 const partialColor = "bg-neutral-300";
 const allCompletedColor = "bg-slate-700";
 const backgroundColor = "bg-neutral-100";
+const borderColor = "border-neutral-100";
 
 export function CalendarCell({ entry }: { entry: DayEntry }) {
   const cell = getCellData(entry);
   const isFutureDate = new Date(entry.date) > new Date();
 
-  return cell.isEmpty ? (
-    <div className={cn("flex w-full aspect-square rounded-sm", {
-      [backgroundColor]: !isFutureDate
-    })}>
-      {isFutureDate && (
-        <div className="bg-neutral-100 rounded w-2 h-2 m-auto" />
-      )}
-    </div>
-  ) : (
-    <div className={cn(`rounded-md p-1`, backgroundColor)}>
-      <Tile data={cell.tileShape} foregroundClass={cn({
-        [partialColor]: !cell.allCompleted,
-        [allCompletedColor]: cell.allCompleted
-      })} backgroundClass={backgroundColor} radiusClass="rounded-sm" maxWidth={100}/>
-    </div>
-  )
+  if (cell.status === "unset") {
+    return (
+      <div className={cn("flex w-full aspect-square rounded-md", {
+        [backgroundColor]: !isFutureDate,
+        [`border-2 ${borderColor}`]: isFutureDate
+      })}>
+      </div>
+    )
+  } else if (cell.status === "set") {
+    return (
+      <div className={cn("flex w-full aspect-square rounded-md", {
+        [backgroundColor]: !isFutureDate,
+        [`border-2 ${borderColor}`]: isFutureDate
+      })}></div>
+    )
+  } else {
+    return (
+      <div className={cn(`rounded-md p-1`, backgroundColor)}>
+        <Tile data={cell.tileShape} foregroundClass={cn({
+          [partialColor]: cell.status === "partial",
+          [allCompletedColor]: cell.status === "complete"
+        })} backgroundClass={backgroundColor} radiusClass="rounded-sm" maxWidth={100}/>
+      </div>
+    )
+  }
 }
 
 export function CalendarCellToday({ entry }: { entry: DayEntry }) {
@@ -123,16 +140,26 @@ export function CalendarCellToday({ entry }: { entry: DayEntry }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [goals])
 
-  return cell.isEmpty ? (
-    <div className={cn("flex w-full aspect-square rounded-sm", backgroundColor)}></div>
-  ) : (
-    <div className={cn(`rounded-md p-1`, backgroundColor)}>
-      <Tile data={cell.tileShape} foregroundClass={cn({
-        [partialColor]: !cell.allCompleted,
-        [allCompletedColor]: cell.allCompleted
-      })} backgroundClass={backgroundColor} radiusClass="rounded-sm" maxWidth={100}/>
-    </div>
-  )
+  console.log(cell.status)
+
+  if (cell.status === "unset") {
+    return (
+      <div className={cn("flex w-full aspect-square rounded-sm")}></div>
+    )
+  } else if (cell.status === "set") {
+    return (
+      <div className={cn("flex w-full aspect-square rounded-sm")}></div>
+    )
+  } else {
+    return (
+      <div className={cn(`rounded-md p-1`, backgroundColor)}>
+        <Tile data={cell.tileShape} foregroundClass={cn({
+          [partialColor]: cell.status === "partial",
+          [allCompletedColor]: cell.status === "complete"
+        })} backgroundClass={backgroundColor} radiusClass="rounded-sm" maxWidth={100}/>
+      </div>
+    )
+  }
 }
 
 function PlaceHolderCells({ count }: { count: number }) {
