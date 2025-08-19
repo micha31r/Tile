@@ -1,17 +1,12 @@
 "use client"
 
-import { JSX, useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import { Popup } from "./popup";
-import { createClient } from "@/lib/supabase/client";
-import { getOrCreateProfile, Profile } from "@/lib/data/profile";
-import { FriendWithUser, getFriendsWithUser, removeFriend } from "@/lib/data/friend";
-import { InfoIcon, TriangleAlertIcon } from "lucide-react";
-import { getDateString, getDisplayDateString, getDisplayName, getInitials } from "@/lib/utils";
+import { InfoIcon } from "lucide-react";
+import { getDisplayDateString } from "@/lib/utils";
 import { DangerAlert } from "../danger-alert";
-import { useRouter } from "next/navigation";
-import Avatar from "./avatar";
 import { GoalItem } from "./goal-list";
-import { getGoalsByDate, Goal } from "@/lib/data/goal";
+import { Goal } from "@/lib/data/goal";
 import { DayEntry } from "./calendar-month";
 import { InfoAlert } from "../info-alert";
 import { WarningAlert } from "../warning-alert";
