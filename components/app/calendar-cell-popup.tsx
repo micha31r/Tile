@@ -80,6 +80,46 @@ export function CalendarCellPopup({ calendarEntry, children }: { calendarEntry: 
   }, [calendarEntry.goals]);
 
   const goalsCompleted = calendarEntry.goals.reduce((count, goal) => goal.completed ? count + 1 : count, 0)
+  const isFutureDate = new Date(calendarEntry.date) > new Date(new Date().setHours(23, 59, 59, 999));
+
+  let alert;
+
+  if (isFutureDate) {
+    alert = (
+      <InfoAlert>
+        <InfoIcon />
+        Future date
+      </InfoAlert>
+    )
+  } else if (calendarEntry.goals.length === 0) {
+    alert = (
+      <DangerAlert>
+        <InfoIcon />
+        No goals were set
+      </DangerAlert>
+    )
+  } else if (goalsCompleted === 0) {
+    alert = (
+      <DangerAlert>
+        <InfoIcon />
+        Goals were set, but none completed
+      </DangerAlert>
+    )
+  } else if (goalsCompleted < 4) {
+    alert = (
+      <WarningAlert>
+        <InfoIcon />
+        Fewer than 4 goals were completed
+      </WarningAlert>
+    )
+  } else {
+    alert = (
+      <InfoAlert>
+        <InfoIcon />
+        All goals were completed
+      </InfoAlert>
+    )
+  }
 
   return (
     <>
@@ -92,33 +132,7 @@ export function CalendarCellPopup({ calendarEntry, children }: { calendarEntry: 
       >
         <div className="space-y-4">
           <div className="space-y-2">
-            {calendarEntry.goals.length === 0 && (
-              <DangerAlert>
-                <InfoIcon />
-                No goals were set
-              </DangerAlert>
-            )}
-
-            {calendarEntry.goals.length > 0 && goalsCompleted === 0 && (
-              <DangerAlert>
-                <InfoIcon />
-                Goals were set, but none completed
-              </DangerAlert>
-            )}
-
-            {calendarEntry.goals.length > 0 && goalsCompleted > 0 && goalsCompleted < 4 && (
-              <WarningAlert>
-                <InfoIcon />
-                Fewer than 4 goals were completed
-              </WarningAlert>
-            )}
-
-            {calendarEntry.goals.length > 0 && goalsCompleted === 4 && (
-              <InfoAlert>
-                <InfoIcon />
-                All goals were completed
-              </InfoAlert>
-            )}
+            {alert}
 
             <div className="space-y-2">
               {calendarEntry.goals.map((goal, index) => (
