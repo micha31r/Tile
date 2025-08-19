@@ -77,9 +77,10 @@ const borderColor = "border-neutral-100";
 export function CalendarCell({ entry }: { entry: DayEntry }) {
   const cell = getCellData(entry);
   const isFutureDate = new Date(entry.date) > new Date();
+  let cellContent;
 
   if (cell.status === "unset") {
-    return (
+    cellContent = (
       <div className={cn("flex w-full aspect-square rounded-md", {
         [backgroundColor]: !isFutureDate,
         [`border-2 ${borderColor}`]: isFutureDate
@@ -87,13 +88,13 @@ export function CalendarCell({ entry }: { entry: DayEntry }) {
       </div>
     )
   } else if (cell.status === "set") {
-    return (
+    cellContent = (
       <div className={cn("flex w-full aspect-square rounded-md p-2", backgroundColor)}>
         <XIcon className={cn("w-full h-full", setColor)} strokeWidth={3} />
       </div>
     )
   } else {
-    return (
+    cellContent = (
       <div className={cn(`rounded-md p-1`, backgroundColor)}>
         <Tile data={cell.tileShape} foregroundClass={cn({
           [partialColor]: cell.status === "partial",
@@ -102,6 +103,12 @@ export function CalendarCell({ entry }: { entry: DayEntry }) {
       </div>
     )
   }
+
+  return (
+    <CalendarCellPopup calendarEntry={entry}>
+      {cellContent}
+    </CalendarCellPopup>
+  )
 }
 
 export function CalendarCellToday({ entry }: { entry: DayEntry }) {
@@ -138,18 +145,18 @@ export function CalendarCellToday({ entry }: { entry: DayEntry }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [goals])
 
-  console.log(cell.status)
+  let cellContent;
 
   if (cell.status === "unset") {
-    return (
-      <div className={cn("flex w-full aspect-square rounded-sm")}></div>
+    cellContent = (
+      <div className={cn("flex w-full aspect-square rounded-sm", backgroundColor)}></div>
     )
   } else if (cell.status === "set") {
-    return (
-      <div className={cn("flex w-full aspect-square rounded-sm")}></div>
+    cellContent = (
+      <div className={cn("flex w-full aspect-square rounded-sm", backgroundColor)}></div>
     )
   } else {
-    return (
+    cellContent = (
       <div className={cn(`rounded-md p-1`, backgroundColor)}>
         <Tile data={cell.tileShape} foregroundClass={cn({
           [partialColor]: cell.status === "partial",
@@ -158,6 +165,15 @@ export function CalendarCellToday({ entry }: { entry: DayEntry }) {
       </div>
     )
   }
+
+  return (
+    <CalendarCellPopup calendarEntry={{
+      date: entry.date,
+      goals: goals as Goal[]
+    }}>
+      {cellContent}
+    </CalendarCellPopup>
+  )
 }
 
 function PlaceHolderCells({ count }: { count: number }) {
@@ -231,13 +247,9 @@ export function CalendarMonth({ month, year, showLabel = false }: { month: Month
       {!loaded ? (
         <PlaceHolderCells count={daysInMonth} />
       ) : Object.values(data).map(entry => (
-          <CalendarCellPopup key={entry.date} calendarEntry={entry}>
-            {entry.date == todayDateString ? (
-              <CalendarCellToday key={entry.date} entry={entry} />
-            ) : (
-              <CalendarCell key={entry.date} entry={entry} />
-            )}
-          </CalendarCellPopup>
+          entry.date == todayDateString 
+            ? <CalendarCellToday key={entry.date} entry={entry} />
+            : <CalendarCell key={entry.date} entry={entry} />
       ))}
     </div>
   );
