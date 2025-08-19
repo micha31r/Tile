@@ -1,15 +1,16 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Popup } from "./popup";
 import { createClient } from "@/lib/supabase/client";
 import { getOrCreateProfile, Profile } from "@/lib/data/profile";
 import { FriendWithUser, getFriendsWithUser, removeFriend } from "@/lib/data/friend";
-import { TriangleAlertIcon } from "lucide-react";
+import { InfoIcon, TriangleAlertIcon } from "lucide-react";
 import { getDisplayName, getInitials } from "@/lib/utils";
 import { DangerAlert } from "../danger-alert";
 import { useRouter } from "next/navigation";
 import Avatar from "./avatar";
+import { InfoAlert } from "../info-alert";
 
 function FriendItemPopup({ friend, trigger }: { friend: FriendWithUser; trigger: (onClick: () => void) => React.ReactNode }) {
   const popupTriggerRef = useRef<(() => void) | null>(null);
@@ -56,8 +57,21 @@ function FriendItemPopup({ friend, trigger }: { friend: FriendWithUser; trigger:
 export function FriendListPopup({ children }: { children?: React.ReactNode }) {
   const popupTriggerRef = useRef<(() => void) | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [friends, setFriends] = useState<FriendWithUser[]>([])
-  const triggers = useRef<(() => void)[]>([])
+  const [friends, setFriends] = useState<FriendWithUser[]>([]);
+  const [loaded, setLoaded] = useState(false);
+  const triggers = useRef<(() => void)[]>([]);
+  const items = useMemo(() => {
+    if (friends.length === 0) {
+      return [];
+    }
+    triggers.current = Array(friends.length).fill(undefined);
+    return friends.map((friend, index) => (
+      <FriendItemPopup key={index} friend={friend} trigger={(callback) => {
+        triggers.current[index] = callback;
+        return null;
+      }} />
+    ));
+  }, [friends]);
 
   useEffect(() => {
     (async () => {
@@ -73,17 +87,9 @@ export function FriendListPopup({ children }: { children?: React.ReactNode }) {
 
       const friends = await getFriendsWithUser(profile.user_id);
       setFriends(friends);
+      setLoaded(true)
     })();
   }, []);
-
-  // Separate trigger function and popup components
-  triggers.current = []
-  const items = friends.map((friend, index) => (
-    <FriendItemPopup key={index} friend={friend} trigger={(callback) => {
-      triggers.current.push(callback);
-      return null;
-    }} />
-  ))
 
   return (
     <>
@@ -106,10 +112,17 @@ export function FriendListPopup({ children }: { children?: React.ReactNode }) {
               </div>
             ))}
 
-            {friends.length === 0 && (
+            {!loaded && (
               <>
                 <div className="w-full h-14 rounded-xl p-3 bg-secondary animate-pulse"></div>
               </>
+            )}
+
+            {loaded && friends.length === 0 && (
+              <InfoAlert>
+                <InfoIcon />
+                No friends added
+              </InfoAlert>
             )}
           </div>
 
