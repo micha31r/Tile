@@ -49,7 +49,7 @@ export function GoalForm({ onSuccess }: { onSuccess?: () => void }) {
       <div className="space-y-3">
         <WarningAlert>
           <InfoIcon className="w-4 h-4" />
-          Goals cannot be edited later
+          Goals cannot be edited once set
         </WarningAlert>
         {error && (
           <DangerAlert>
