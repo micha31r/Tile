@@ -22,9 +22,9 @@ export interface UseRealtimeOptions<T> {
   table: string;
   filter?: string;
   getInitialData?: () => Promise<T[]>;
-  onInsert?: (prev: T[], payload: any) => T[];
-  onUpdate?: (prev: T[], payload: any) => T[];
-  onDelete?: (prev: T[], payload: any) => T[];
+  onInsert?: (prev: T[], payload: any) => T[] | Promise<T[]>;
+  onUpdate?: (prev: T[], payload: any) => T[] | Promise<T[]>;
+  onDelete?: (prev: T[], payload: any) => T[] | Promise<T[]>;
 }
 
 export function useRealtime<T>(options: UseRealtimeOptions<T>) {
@@ -63,14 +63,32 @@ export function useRealtime<T>(options: UseRealtimeOptions<T>) {
           ...(filter ? { filter } : {}),
         },
         payload => {
+          const handle = (
+            handler: ((prev: T[], payload: any) => T[] | Promise<T[]>) | undefined,
+            fallback: (prev: T[], payload: any) => T[]
+          ) => {
+            setEntries(prev => {
+              try {
+                const fn = handler ?? fallback;
+                const result = fn(prev, payload);
+                if (result instanceof Promise) {
+                  result.then(resolved => setEntries(resolved));
+                  return prev; // Don't update until resolved
+                }
+                return result;
+              } catch {
+                return prev;
+              }
+            });
+          };
           if (payload.eventType === 'INSERT') {
-            setEntries(prev => (onInsert ?? defaultOnInsert)(prev, payload));
+            handle(onInsert, defaultOnInsert);
           }
           if (payload.eventType === 'UPDATE') {
-            setEntries(prev => (onUpdate ?? defaultOnUpdate)(prev, payload));
+            handle(onUpdate, defaultOnUpdate);
           }
           if (payload.eventType === 'DELETE') {
-            setEntries(prev => (onDelete ?? defaultOnDelete)(prev, payload));
+            handle(onDelete, defaultOnDelete);
           }
         }
       )

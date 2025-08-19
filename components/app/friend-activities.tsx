@@ -35,8 +35,17 @@ export function FriendActivities({ userId, emptyMessage }: { userId: string, emp
       setLoaded(true);
       return data;
     },
-    onInsert: (prev: BroadcastWithUser[], payload: any) => {
-      return prev.map(item => item.user_id !== payload.new.user_id ? item : Object.assign(item, payload.new));
+    onInsert: async (prev: BroadcastWithUser[], payload: any) => {
+      const supabase = createClient();
+      const { data: profile } = await supabase
+        .from("profile")
+        .select("*")
+        .eq("user_id", payload.new.user_id)
+        .single();
+
+      const newEntry: BroadcastWithUser = { ...payload.new, ...profile, email: '' }
+      const filtered = prev.filter(item => item.user_id !== payload.new.user_id);
+      return [...filtered, newEntry].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
     },
   });
 
