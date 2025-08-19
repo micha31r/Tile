@@ -21,7 +21,19 @@ function IncompleteIcon() {
   )
 }
 
-function GoalItem({ goal, priority }: { goal: Goal, priority: number }) {
+export function GoalItem({ goal, priority }: { goal: Goal, priority: number }) {
+  return (
+    <div className="flex flex-row gap-3 items-center rounded-xl p-3 bg-secondary font-medium">
+      <div className="flex justify-center items-center w-6 aspect-square bg-neutral-200 text-muted-foreground rounded-full text-sm">
+        {priority}
+      </div>
+      <h4 className="text-sm line-clamp-1 mr-auto">{goal.name}</h4>
+      {goal.completed ? <CompleteIcon /> : <IncompleteIcon />}
+    </div>
+  )
+}
+
+function GoalItemPopup({ goal, priority }: { goal: Goal, priority: number }) {
   return (
     <GoalDetailPopup goal={goal}>
       <div className="flex flex-row gap-3 items-center rounded-xl p-3 bg-secondary font-medium">
@@ -64,7 +76,7 @@ export function GoalList({ userId }: { userId: string }) {
       <h3 className="font-medium">Today</h3>
       <div className="space-y-2">
         {todayGoals.map((goal, index) => (
-          <GoalItem key={goal.id} priority={index + 1} goal={goal} />
+          <GoalItemPopup key={goal.id} priority={index + 1} goal={goal} />
         ))}
       </div>
     </div>

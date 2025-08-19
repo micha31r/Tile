@@ -6,6 +6,8 @@ import { getGoalsByDate, Goal } from "@/lib/data/goal";
 import { useRealtime } from "../use-realtime";
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
+import { CalendarCellPopup } from "./calendar-cell-popup";
+import { XIcon } from "lucide-react";
 
 export type Month = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12
 
@@ -35,21 +37,21 @@ export type CellData = {
 export type CellStatus = "unset" | "set" | "partial" | "complete";
 
 function getCellData(entry: DayEntry): CellData {
-  let completedTaskCount = 0;
-  const prioritiesSet = new Set<number>();
+  const completed = new Set<number>();
+  const priorities = new Set<number>();
 
   for (const goal of entry.goals) {
-    if (goal.completed) completedTaskCount++;
-    prioritiesSet.add(goal.priority);
+    if (goal.completed) completed.add(goal.priority);
+    priorities.add(goal.priority);
   }
 
   let status: CellStatus;
 
   if (entry.goals.length === 0) {
     status = "unset";
-  } else if (completedTaskCount === 0) {
+  } else if (completed.size === 0) {
     status = "set";
-  } else if (completedTaskCount < 4) {
+  } else if (completed.size < 4) {
     status = "partial";
   } else {
     status = "complete";
@@ -57,19 +59,16 @@ function getCellData(entry: DayEntry): CellData {
 
   return {
     status: status,
-    tileShape: getTileData(prioritiesSet)
+    tileShape: {
+      tl: priorities.has(1) && completed.has(1),
+      tr: priorities.has(2) && completed.has(2),
+      bl: priorities.has(3) && completed.has(3),
+      br: priorities.has(4) && completed.has(4)
+    }
   };
 }
 
-function getTileData(priorities: Set<number>) {
-  return {
-    tl: priorities.has(1),
-    tr: priorities.has(2),
-    bl: priorities.has(3),
-    br: priorities.has(4)
-  };
-}
-
+const setColor = "text-neutral-300";
 const partialColor = "bg-neutral-300";
 const allCompletedColor = "bg-slate-700";
 const backgroundColor = "bg-neutral-100";
@@ -89,10 +88,9 @@ export function CalendarCell({ entry }: { entry: DayEntry }) {
     )
   } else if (cell.status === "set") {
     return (
-      <div className={cn("flex w-full aspect-square rounded-md", {
-        [backgroundColor]: !isFutureDate,
-        [`border-2 ${borderColor}`]: isFutureDate
-      })}></div>
+      <div className={cn("flex w-full aspect-square rounded-md p-2", backgroundColor)}>
+        <XIcon className={cn("w-full h-full", setColor)} strokeWidth={3} />
+      </div>
     )
   } else {
     return (
@@ -213,16 +211,16 @@ export function CalendarMonth({ month, year, showLabel = false }: { month: Month
   }, []);
 
   return (
-    <div className="grid grid-cols-7 gap-1 text-center font-medium text-sm text-muted-foreground">
+    <div className="grid grid-cols-7 gap-1 [&>p]:font-medium [&>p]:text-center [&>p]:text-sm [&>p]:text-muted-foreground">
       {showLabel && (
         <>
-          <div className="">Mon</div>
-          <div className="">Tue</div>
-          <div className="">Wed</div>
-          <div className="">Thu</div>
-          <div className="">Fri</div>
-          <div className="">Sat</div>
-          <div className="">Sun</div>
+          <p className="">Mon</p>
+          <p className="">Tue</p>
+          <p className="">Wed</p>
+          <p className="">Thu</p>
+          <p className="">Fri</p>
+          <p className="">Sat</p>
+          <p className="">Sun</p>
         </>
       )}
 
@@ -233,11 +231,13 @@ export function CalendarMonth({ month, year, showLabel = false }: { month: Month
       {!loaded ? (
         <PlaceHolderCells count={daysInMonth} />
       ) : Object.values(data).map(entry => (
-          entry.date == todayDateString ? (
-            <CalendarCellToday key={entry.date} entry={entry} />
-          ) : (
-            <CalendarCell key={entry.date} entry={entry} />
-          )
+          <CalendarCellPopup key={entry.date} calendarEntry={entry}>
+            {entry.date == todayDateString ? (
+              <CalendarCellToday key={entry.date} entry={entry} />
+            ) : (
+              <CalendarCell key={entry.date} entry={entry} />
+            )}
+          </CalendarCellPopup>
       ))}
     </div>
   );
