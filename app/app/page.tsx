@@ -22,7 +22,7 @@ export default async function AppHomePage() {
       <GoalReminder />
       <GoalList userId={user.sub} />
       <CalendarClientWrapper />
-      <FriendActivities />
+      <FriendActivities userId={user.sub} />
     </div>
   );
 }

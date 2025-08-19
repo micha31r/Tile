@@ -32,6 +32,7 @@ export async function getGoalsByDate(userId: string, date: Date): Promise<Goal[]
     .eq('user_id', userId)
     .gte('created_at', startUTC)
     .lte('created_at', endUTC)
+    .order('priority', { ascending: true })
     .limit(4)
 
   if (error) {

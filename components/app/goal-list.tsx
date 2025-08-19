@@ -63,10 +63,10 @@ export function GoalList({ userId }: { userId: string }) {
       <div className="space-y-2">
         {todayGoals.map((goal, index) => (
           goal.completed ? (
-            <GoalDetailPopup key={index} goal={goal} trigger={() => <GoalItem key={goal.id} priority={index + 1} goal={goal} />} />
+            <GoalDetailPopup key={index} goal={goal} trigger={() => <GoalItem key={goal.id} priority={goal.priority} goal={goal} />} />
           ) : (
             <GoalReflectionPopup key={index} goal={goal}>
-              <GoalItem key={goal.id} priority={index + 1} goal={goal} />
+              <GoalItem key={goal.id} priority={goal.priority} goal={goal} />
             </GoalReflectionPopup>
           )
         ))}

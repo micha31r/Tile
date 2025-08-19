@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import { cn } from "@/lib/utils";
@@ -7,6 +8,7 @@ import { FriendListPopup } from "./friend-list-popup";
 import { BroadcastWithUser, getFriendBroadcastsWithUser } from "@/lib/data/broadcast";
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
+import { useRealtime } from "../use-realtime";
 
 function getTileData(arr: number[]) {
   return { 
@@ -17,22 +19,23 @@ function getTileData(arr: number[]) {
   };
 }
 
-export function FriendActivities() {
-  const [broadcasts, setBroadcasts] = useState<BroadcastWithUser[]>([]);
+export function FriendActivities({ userId }: { userId: string }) {
   const [loaded, setLoaded] = useState(false);
 
-  useEffect(() => {
-    (async () => {
-      const supabase = createClient();
-      const { data, error } = await supabase.auth.getClaims();
-      if (error || !data?.claims) return
-
-      const broadcasts = await getFriendBroadcastsWithUser(data.claims.sub);
-      
-      setBroadcasts(broadcasts);
+  const [broadcasts] = useRealtime<BroadcastWithUser>({
+    channelName: 'friend-activities-list',
+    schema: 'public',
+    table: 'broadcast',
+    filter: `user_id=eq.${userId}`,
+    getInitialData: async () => {
+      const data = await getFriendBroadcastsWithUser(userId);
       setLoaded(true);
-    })()
-  }, []);
+      return data;
+    },
+    onInsert: (prev: BroadcastWithUser[], payload: any) => {
+      return [payload.new, ...prev.filter(prev => prev.user_id !== payload.new.user_id)];
+    },
+  });
 
   return (
     <div className="space-y-4">
@@ -48,7 +51,7 @@ export function FriendActivities() {
         </div>
 
         <FriendGallery>
-          {broadcasts.map((broadcast, index) => (
+          {(broadcasts as BroadcastWithUser[]).map((broadcast, index) => (
             <FriendCard key={index} email={broadcast.email} firstName={broadcast.first_name} lastName={broadcast.last_name}>
               <div className={cn(`rounded-lg p-1.5 bg-blue-100`)}>
                 <Tile data={getTileData(broadcast.payload.completed_goals)} backgroundClass={'bg-blue-100'} foregroundClass="bg-blue-700" maxWidth={64} radiusClass="rounded-md"/>

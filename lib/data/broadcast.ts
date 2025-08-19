@@ -11,6 +11,7 @@ export interface BroadcastPayload {
 
 // Future TODO: add broadcast type as field
 export interface Broadcast {
+  id: string,
   user_id: string;
   payload: BroadcastPayload;
   created_at: Date;
@@ -67,11 +68,10 @@ export async function getFriendBroadcastsWithUser(userId: string): Promise<Broad
   const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
 
   const { data, error } = await supabase
-    .from("broadcast")
-    .select()
-    .in("user_id", friendIds)
-    .gte("created_at", oneDayAgo)
-    .order("created_at", { ascending: false })
+    .rpc('get_latest_broadcasts_for_friends', {
+      friend_ids: friendIds,
+      since: oneDayAgo
+    });
 
   if (error) {
     console.error(`Failed to get latest friend broadcast: ${error.message}`)
@@ -79,7 +79,7 @@ export async function getFriendBroadcastsWithUser(userId: string): Promise<Broad
   }
 
   return data
-    .map((broadcast) => ({
+    .map((broadcast: Broadcast) => ({
       ...broadcast,
       ...friends.find((f) => f.user_id === broadcast.user_id),
     }))
