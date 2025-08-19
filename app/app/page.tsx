@@ -3,7 +3,6 @@ import { createClient } from "@/lib/supabase/server";
 import { GoalList } from "@/components/app/goal-list";
 import { GoalReminder } from "@/components/app/goal-reminder";
 import { StatusMessagePopup } from "@/components/app/status-message-popup";
-import { FriendListPopup } from "@/components/app/friend-list-popup";
 import { CalendarClientWrapper } from "@/components/app/calendar-client-wrapper";
 import { FriendActivities } from "@/components/app/friend-activities";
 
@@ -15,11 +14,13 @@ export default async function AppHomePage() {
     redirect("/auth/login");
   }
 
+  const user = data.claims
+
   return (
     <div className="space-y-8">
       <StatusMessagePopup />
       <GoalReminder />
-      <GoalList />
+      <GoalList userId={user.sub} />
       <CalendarClientWrapper />
       <FriendActivities />
     </div>

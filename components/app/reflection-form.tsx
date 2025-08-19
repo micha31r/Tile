@@ -6,7 +6,7 @@ import TextArea from "../textarea";
 import { useRef, useState } from "react";
 import { WarningAlert } from "../warning-alert";
 import { Goal, markGoalAsCompleted } from "@/lib/data/goal";
-import { completeGoalBroadcast } from "@/lib/data/broadcast";
+import { createGoalBroadcast } from "@/lib/data/broadcast";
 
 export function ReflectionForm({ goal, onSuccess }: { goal: Goal, onSuccess?: () => void }) {
   const [error, setError] = useState<string | null>(null);
@@ -25,7 +25,7 @@ export function ReflectionForm({ goal, onSuccess }: { goal: Goal, onSuccess?: ()
     const data = await markGoalAsCompleted(goal.id, reflection?.toString() || null);
 
     // Broadcast changes
-    await completeGoalBroadcast(goal);
+    await createGoalBroadcast(goal.user_id, new Date());
 
     if (!data) {
       setError("Failed to mark goal as completed.");

@@ -7,7 +7,6 @@ import TextArea from "../textarea";
 import { useRef, useState } from "react";
 import { WarningAlert } from "../warning-alert";
 import { createGoal } from "@/lib/data/goal";
-import { getTodayDateString } from "@/lib/utils";
 
 export function GoalForm({ onSuccess }: { onSuccess?: () => void }) {
   const [error, setError] = useState<string | null>(null);
@@ -32,7 +31,6 @@ export function GoalForm({ onSuccess }: { onSuccess?: () => void }) {
     const data = await createGoal({
       name: name.toString(),
       details: details?.toString(),
-      created_date: getTodayDateString(),
     });
 
     if (!data) {

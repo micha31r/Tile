@@ -19,18 +19,8 @@ export function FriendActivities() {
       if (error || !data?.claims) return
 
       const broadcasts = await getFriendBroadcastsWithUser(data.claims.sub);
-
-      // Only show entries from client's today
-      const today = new Date();
-      const filtered = broadcasts.filter(broadcast => {
-        const updatedAt = new Date(broadcast.updated_at);
-        return (
-          updatedAt.getFullYear() === today.getFullYear() &&
-          updatedAt.getMonth() === today.getMonth() &&
-          updatedAt.getDate() === today.getDate()
-        );
-      });
-      setBroadcasts(filtered);
+      
+      setBroadcasts(broadcasts);
       setLoaded(true);
     })()
   }, []);
@@ -61,7 +51,7 @@ export function FriendActivities() {
           {broadcasts.map((broadcast, index) => (
             <FriendCard key={index} email={broadcast.email} firstName={broadcast.first_name} lastName={broadcast.last_name}>
               <div className={cn(`rounded-lg p-1.5 bg-blue-100`)}>
-                <Tile data={getTileData(broadcast.payload.completed_goal_ids)} backgroundClass={'bg-blue-100'} foregroundClass="bg-blue-700" maxWidth={64} radiusClass="rounded-md"/>
+                <Tile data={getTileData(broadcast.payload.completed_goals)} backgroundClass={'bg-blue-100'} foregroundClass="bg-blue-700" maxWidth={64} radiusClass="rounded-md"/>
               </div>
             </FriendCard>
           ))}

@@ -1,11 +1,10 @@
 "use client"
 
-import { Goal } from "@/lib/data/goal";
+import { getGoalsByDate, Goal } from "@/lib/data/goal";
 import { createClient } from "@/lib/supabase/client";
 import { CheckIcon } from "lucide-react";
 import { useRealtime } from "../use-realtime";
 import { GoalDetailPopup } from "./goal-detail-popup";
-import { getTodayDateString } from "@/lib/utils";
 
 function CompleteIcon() {
   return (
@@ -36,40 +35,37 @@ function GoalItem({ goal, priority }: { goal: Goal, priority: number }) {
   )
 }
 
-export function GoalList() {
-  const day = getTodayDateString();
+export function GoalList({ userId }: { userId: string }) {
+  const start = new Date();
+  start.setHours(0, 0, 0, 0);
+  const startUTC = start.toISOString();
+
+  const end = new Date();
+  end.setHours(23, 59, 59, 999);
 
   const [goals] = useRealtime<Goal>({
-    channelName: 'goal-list', 
+    channelName: 'goal-list',
     schema: 'public',
     table: 'goal',
-    filter: `created_date=eq.${day}`,
+    filter: `created_at=gte.${startUTC}`,
     getInitialData: async () => {
-      const supabase = createClient();
-
-      const { data, error } = await supabase
-        .from('goal')
-        .select('*')
-        .eq('created_date', day)
-        .order('created_at', { ascending: true })
-
-      if (error) {
-        console.error('Error fetching goals:', error);
-        return [];
-      }
-      
-      return data;
+      return await getGoalsByDate(userId, new Date());
     }
+  });
+
+  // Manually filter for lte client-side
+  const todayGoals = (goals as Goal[]).filter(goal => {
+    const created = new Date(goal.created_at);
+    return created <= end;
   });
 
   return (
     <div className="space-y-4">
-        <h3 className="font-medium">Today</h3>
-
-        <div className="space-y-2">
-          {(goals as Goal[]).map((goal, index) => (
-            <GoalItem key={goal.id} priority={index + 1} goal={goal} />
-          ))}
+      <h3 className="font-medium">Today</h3>
+      <div className="space-y-2">
+        {todayGoals.map((goal, index) => (
+          <GoalItem key={goal.id} priority={index + 1} goal={goal} />
+        ))}
       </div>
     </div>
   )

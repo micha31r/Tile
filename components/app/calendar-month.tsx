@@ -1,6 +1,6 @@
 "use client"
 
-import { cn, getDateString, getTodayDateString } from "@/lib/utils";
+import { cn, getDateString } from "@/lib/utils";
 import { Tile } from "../tile/tile";
 import { getGoalsByDate, Goal } from "@/lib/data/goal";
 import { useRealtime } from "../use-realtime";
@@ -91,23 +91,34 @@ export function CalendarCell({ entry }: { entry: DayEntry }) {
 
 export function CalendarCellToday({ entry }: { entry: DayEntry }) {
   const [cell, setCell] = useState<CellData>(getCellData(entry));
-  const todayDateString = getTodayDateString();
 
-  // Track today's goals for live changes
+  const start = new Date();
+  start.setHours(0, 0, 0, 0);
+  const startUTC = start.toISOString();
+
+  const end = new Date();
+  end.setHours(23, 59, 59, 999);
+
   const [goals] = useRealtime<Goal>({
     channelName: 'goal-today-calendar',
     schema: 'public',
     table: 'goal',
-    filter: `created_date=eq.${todayDateString}`,
+    filter: `created_at=gte.${startUTC}`,
     getInitialData: async () => {
       return entry.goals
     }
   });
 
+  // Manually filter for lte client-side
+  const todayGoals = (goals as Goal[]).filter(goal => {
+    const created = new Date(goal.created_at);
+    return created <= end;
+  });
+
   useEffect(() => {
     setCell(getCellData({
-      date: todayDateString,
-      goals: goals as Goal[]
+      date: getDateString(new Date()),
+      goals: todayGoals
     }));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [goals])
@@ -158,7 +169,7 @@ export function CalendarMonth({ month, year, showLabel = false }: { month: Month
         const day = i + 1;
         const date = new Date(year, month - 1, day);
         const dateString = getDateString(date);
-        const goals = await getGoalsByDate(user.sub, dateString);
+        const goals = await getGoalsByDate(user.sub, date);
         goalData[dateString] = { date: dateString, goals };
       })
     );
