@@ -1,10 +1,12 @@
 "use client"
 
 import { getGoalsByDate, Goal } from "@/lib/data/goal";
-import { CheckIcon, Goal } from "lucide-react";
+import { CheckIcon, Goal, InfoIcon } from "lucide-react";
 import { useRealtime } from "../use-realtime";
 import { GoalReflectionPopup } from "./goal-reflection-popup";
 import { GoalDetailPopup } from "./calendar-cell-popup";
+import { InfoAlert } from "../info-alert";
+import { WarningAlert } from "../warning-alert";
 
 function CompleteIcon() {
   return (
@@ -33,7 +35,7 @@ export function GoalItem({ goal, priority }: { goal: Goal, priority: number }) {
   )
 }
 
-export function GoalList({ userId }: { userId: string }) {
+export function GoalList({ userId, emptyMessage }: { userId: string, emptyMessage?: string }) {
   const start = new Date();
   start.setHours(0, 0, 0, 0);
   const startUTC = start.toISOString();
@@ -70,6 +72,13 @@ export function GoalList({ userId }: { userId: string }) {
             </GoalReflectionPopup>
           )
         ))}
+
+        {todayGoals.length === 0 && emptyMessage && (
+          <WarningAlert>
+            <InfoIcon />
+            {emptyMessage}
+          </WarningAlert>
+        )}
       </div>
     </div>
   )

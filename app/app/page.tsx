@@ -20,7 +20,7 @@ export default async function AppHomePage() {
     <div className="space-y-8">
       <StatusMessagePopup />
       <GoalReminder />
-      <GoalList userId={user.sub} />
+      <GoalList userId={user.sub} emptyMessage="No goals set for today" />
       <CalendarClientWrapper userId={user.sub} />
       <FriendActivities userId={user.sub} />
     </div>
