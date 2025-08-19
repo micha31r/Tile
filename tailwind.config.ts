@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import { tailwindColorSafelist } from "./lib/theme";
 
 export default {
   darkMode: ["class"],
@@ -8,6 +9,7 @@ export default {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  safelist: tailwindColorSafelist,
   theme: {
     extend: {
       colors: {

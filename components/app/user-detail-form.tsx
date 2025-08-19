@@ -1,6 +1,6 @@
 "use client"
 
-import { InfoIcon } from "lucide-react";
+import { CheckIcon, InfoIcon } from "lucide-react";
 import { DangerAlert } from "../danger-alert";
 import Input from "../input";
 import { useRef, useState } from "react";
@@ -19,11 +19,18 @@ function ThemeSelector({ name, defaultValue }: { name: string; defaultValue?: Th
 
   return (
     <div>
-      <div className="flex items-center gap-2">
+      <div className="grid grid-cols-6 gap-2 w-full">
         {themeOptions.map((theme, index) => (
-          <button key={index} onClick={handleSelection} value={theme} className={cn("w-5 h-5 bg-secondary", {
-            "border-2": value === theme
-          })}></button>
+          <button
+            key={index}
+            onClick={handleSelection}
+            value={theme}
+            className={cn(`flex w-full aspect-square rounded-full bg-${theme}-500 scale-90`, {
+              "scale-100": value === theme
+            })}
+          >
+            {value === theme && <CheckIcon className="w-6 h-6 m-auto text-white" strokeWidth={2} />}
+          </button>
         ))}
       </div>
       <input
@@ -81,7 +88,11 @@ export function UserDetailForm({ onSuccess, userId, initialValues }: { onSuccess
         <Input type="text" name="firstname" placeholder="First name" defaultValue={initialValues.first_name} />
         <Input type="text" name="lastname" placeholder="Last name" defaultValue={initialValues.last_name} />
       </div>
+
+      <div className="w-full h-px bg-border/50"></div>
+
       <ThemeSelector name="theme" defaultValue={initialValues.theme} />
+
       <button disabled={disabled} type="submit" className="bg-blue-700 disabled:opacity-80 text-background rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform">
         Save changes
       </button>

@@ -12,6 +12,7 @@ import { useRealtime } from "../use-realtime";
 import { getProfile } from "@/lib/data/profile";
 import { InfoAlert } from "../info-alert";
 import { InfoIcon } from "lucide-react";
+import { t } from "@/lib/theme";
 
 function getTileData(arr: number[]) {
   return { 
@@ -66,8 +67,8 @@ export function FriendActivities({ userId, emptyMessage }: { userId: string, emp
           <FriendGallery>
             {(broadcasts as BroadcastWithUser[]).map((broadcast, index) => (
               <FriendCard key={index} email={broadcast.email} firstName={broadcast.first_name} lastName={broadcast.last_name}>
-                <div className={cn(`rounded-lg p-1.5 bg-blue-100`)}>
-                  <Tile data={getTileData(broadcast.payload.completed_goals)} backgroundClass={'bg-blue-100'} foregroundClass="bg-blue-700" maxWidth={64} radiusClass="rounded-md"/>
+                <div className={cn(`rounded-lg p-1.5`, t("bg", broadcast.theme, "b"))}>
+                  <Tile data={getTileData(broadcast.payload.completed_goals)} backgroundClass={t("bg", broadcast.theme, "b")} foregroundClass={t("bg", broadcast.theme, "f")} maxWidth={64} radiusClass="rounded-md"/>
                 </div>
               </FriendCard>
             ))}

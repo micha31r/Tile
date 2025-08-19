@@ -90,7 +90,9 @@ export function GoalReminder() {
       <div className="flex w-full justify-center p-4 py-4">
         <Countdown target={timerTarget} />
       </div>
-      <RecordGoalPopup />
+      <div>
+        <RecordGoalPopup />
+      </div>
     </div>
   )
 }

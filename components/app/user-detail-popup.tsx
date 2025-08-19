@@ -34,7 +34,8 @@ export function UserDetailPopup({ children }: { children?: React.ReactNode }) {
       {profile && (
         <div className="space-y-4">
           <UserDetailForm userId={profile.user_id} initialValues={profile} onSuccess={() => {
-            popupTriggerRef.current?.();
+            // popupTriggerRef.current?.();
+            window.location.reload();
           }} />
         </div>
       )}

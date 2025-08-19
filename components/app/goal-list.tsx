@@ -64,13 +64,15 @@ export function GoalList({ userId, emptyMessage }: { userId: string, emptyMessag
       <h3 className="font-medium">Today</h3>
       <div className="space-y-2">
         {todayGoals.map((goal, index) => (
-          goal.completed ? (
-            <GoalDetailPopup key={index} goal={goal} trigger={() => <GoalItem key={goal.id} priority={goal.priority} goal={goal} />} />
-          ) : (
-            <GoalReflectionPopup key={index} goal={goal}>
-              <GoalItem key={goal.id} priority={goal.priority} goal={goal} />
-            </GoalReflectionPopup>
-          )
+          <div key={index}>
+            {goal.completed ? (
+              <GoalDetailPopup goal={goal} trigger={() => <GoalItem key={goal.id} priority={goal.priority} goal={goal} />} />
+            ) : (
+              <GoalReflectionPopup goal={goal}>
+                <GoalItem key={goal.id} priority={goal.priority} goal={goal} />
+              </GoalReflectionPopup>
+            )}
+          </div>
         ))}
 
         {todayGoals.length === 0 && emptyMessage && (
