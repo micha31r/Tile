@@ -188,7 +188,7 @@ function PlaceHolderCells({ count }: { count: number }) {
   )
 }
 
-export function CalendarMonth({ month, year, showLabel = false }: { month: Month; year: number; showLabel?: boolean }) {
+export function CalendarMonth({ userId, month, year, showLabel = false }: { userId: string, month: Month; year: number; showLabel?: boolean }) {
   const daysInMonth = new Date(year, month - 1, 0).getDate();
   const startDay = new Date(year, month - 1, 0).getDay();
   const [data, setData] = useState<CalendarMonthData>({});
@@ -203,17 +203,43 @@ export function CalendarMonth({ month, year, showLabel = false }: { month: Month
       return {};
     }
 
-    const user = data.claims;
+    // Calculate local month start/end
+    const localStart = new Date(year, month - 1, 1, 0, 0, 0, 0);
+    const localEnd = new Date(year, month, 0, 23, 59, 59, 999);
+
+    // Convert to UTC ISO strings
+    const startUTC = localStart.toISOString();
+    const endUTC = localEnd.toISOString();
+
+    const { data: goals, error: rpcError } = await createClient()
+      .rpc('get_goals_for_month', {
+        user_id: userId,
+        start_utc: startUTC,
+        end_utc: endUTC
+      });
+
+    if (rpcError) {
+      console.error('Failed to fetch monthly goals:', rpcError.message);
+      setLoaded(true);
+      return {};
+    }
+
+    // Map results to CalendarMonthData
     const goalData: CalendarMonthData = {};
-    await Promise.all(
-      Array.from({ length: daysInMonth }, async (_, i) => {
-        const day = i + 1;
-        const date = new Date(year, month - 1, day);
-        const dateString = getDateString(date);
-        const goals = await getGoalsByDate(user.sub, date);
-        goalData[dateString] = { date: dateString, goals };
-      })
-    );
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(year, month - 1, day);
+      const dateString = getDateString(date);
+      goalData[dateString] = {
+        date: dateString,
+        goals: (goals ?? []).filter((goal: Goal) => {
+          // Compare only date part
+          const goalDate = new Date(goal.created_at);
+          return goalDate.getFullYear() === date.getFullYear() &&
+                 goalDate.getMonth() === date.getMonth() &&
+                 goalDate.getDate() === date.getDate();
+        })
+      };
+    }
     setLoaded(true);
     return goalData;
   }
