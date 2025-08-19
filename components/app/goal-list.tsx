@@ -33,20 +33,6 @@ export function GoalItem({ goal, priority }: { goal: Goal, priority: number }) {
   )
 }
 
-// function GoalItemPopup({ goal, priority }: { goal: Goal, priority: number }) {
-//   return (
-//     <GoalReflectionPopup goal={goal}>
-//       <div className="flex flex-row gap-3 items-center rounded-xl p-3 bg-secondary font-medium">
-//         <div className="flex justify-center items-center w-6 aspect-square bg-neutral-200 text-muted-foreground rounded-full text-sm">
-//           {priority}
-//         </div>
-//         <h4 className="text-sm line-clamp-1 mr-auto">{goal.name}</h4>
-//         {goal.completed ? <CompleteIcon /> : <IncompleteIcon />}
-//       </div>
-//     </GoalReflectionPopup>
-//   )
-// }
-
 export function GoalList({ userId }: { userId: string }) {
   const start = new Date();
   start.setHours(0, 0, 0, 0);
@@ -61,16 +47,13 @@ export function GoalList({ userId }: { userId: string }) {
     table: 'goal',
     filter: `created_at=gte.${startUTC}`,
     getInitialData: async () => {
-      const a = await getGoalsByDate(userId, new Date())
-      console.log(a)
-      return a;
+      return await getGoalsByDate(userId, new Date());
     }
   });
 
   // Manually filter for lte client-side
   const todayGoals = (goals as Goal[]).filter(goal => {
     const created = new Date(goal.created_at);
-    // console.log(created goal.created_at)
     return created <= end;
   });
 
