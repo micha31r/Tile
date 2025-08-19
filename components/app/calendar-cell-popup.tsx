@@ -99,7 +99,7 @@ export function CalendarCellPopup({ calendarEntry, children }: { calendarEntry: 
               </DangerAlert>
             )}
 
-            {calendarEntry.goals.length > 0 && goalsCompleted === 0 ? (
+            {calendarEntry.goals.length > 0 && (goalsCompleted === 0 ? (
               <DangerAlert>
                 <InfoIcon />
                 Goals were set, but none completed
@@ -109,7 +109,7 @@ export function CalendarCellPopup({ calendarEntry, children }: { calendarEntry: 
                 <InfoIcon />
                 Fewer than 4 goals were completed
               </WarningAlert>
-            )}
+            ))}
 
             {calendarEntry.goals.length > 0 && goalsCompleted === 4 && (
               <InfoAlert>
