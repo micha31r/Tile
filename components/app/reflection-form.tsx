@@ -28,7 +28,7 @@ export function ReflectionForm({ goal, onSuccess }: { goal: Goal, onSuccess?: ()
     await createGoalBroadcast(goal.user_id, new Date());
 
     if (!data) {
-      setError("Failed to mark goal as completed.");
+      setError("Failed to mark goal as completed");
       setDisabled(false);
       return;
     }

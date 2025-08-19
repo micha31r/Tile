@@ -22,7 +22,7 @@ export function GoalForm({ onSuccess }: { onSuccess?: () => void }) {
     const details = formData.get("details");
 
     if (!name || name.toString().length < 6) {
-      setError("Title must be at least 6 characters long.");
+      setError("Title must be at least 6 characters long");
       return;
     }
 
@@ -34,7 +34,7 @@ export function GoalForm({ onSuccess }: { onSuccess?: () => void }) {
     });
 
     if (!data) {
-      setError("Failed to create goal.");
+      setError("Failed to create goal");
       setDisabled(false);
       return;
     }
@@ -49,7 +49,7 @@ export function GoalForm({ onSuccess }: { onSuccess?: () => void }) {
       <div className="space-y-3">
         <WarningAlert>
           <InfoIcon className="w-4 h-4" />
-          Goals cannot be edited later.
+          Goals cannot be edited later
         </WarningAlert>
         {error && (
           <DangerAlert>
