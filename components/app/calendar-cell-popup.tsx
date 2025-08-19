@@ -11,7 +11,7 @@ import { DayEntry } from "./calendar-month";
 import { InfoAlert } from "../info-alert";
 import { WarningAlert } from "../warning-alert";
 
-function GoalDetailPopup({ goal, trigger }: { goal: Goal; trigger: (onClick: () => void) => React.ReactNode }) {
+export function GoalDetailPopup({ goal, trigger }: { goal: Goal; trigger: (onClick: () => void) => React.ReactNode }) {
   const popupTriggerRef = useRef<(() => void) | null>(null);
 
   return (
@@ -19,7 +19,10 @@ function GoalDetailPopup({ goal, trigger }: { goal: Goal; trigger: (onClick: () 
       title="Goal details"
       trigger={(callback) => {
         popupTriggerRef.current = callback;
-        return trigger(callback);
+        const triggerNode = trigger(callback);
+        return triggerNode
+          ? <div className="cursor-pointer hover:scale-95 transition-transform" onClick={callback}>{triggerNode}</div>
+          : null;
       }}
     >
       <div className="space-y-4">

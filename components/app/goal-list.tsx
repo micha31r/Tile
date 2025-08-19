@@ -1,10 +1,10 @@
 "use client"
 
 import { getGoalsByDate, Goal } from "@/lib/data/goal";
-import { createClient } from "@/lib/supabase/client";
-import { CheckIcon } from "lucide-react";
+import { CheckIcon, Goal } from "lucide-react";
 import { useRealtime } from "../use-realtime";
-import { GoalDetailPopup } from "./goal-detail-popup";
+import { GoalReflectionPopup } from "./goal-reflection-popup";
+import { GoalDetailPopup } from "./calendar-cell-popup";
 
 function CompleteIcon() {
   return (
@@ -33,19 +33,19 @@ export function GoalItem({ goal, priority }: { goal: Goal, priority: number }) {
   )
 }
 
-function GoalItemPopup({ goal, priority }: { goal: Goal, priority: number }) {
-  return (
-    <GoalDetailPopup goal={goal}>
-      <div className="flex flex-row gap-3 items-center rounded-xl p-3 bg-secondary font-medium">
-        <div className="flex justify-center items-center w-6 aspect-square bg-neutral-200 text-muted-foreground rounded-full text-sm">
-          {priority}
-        </div>
-        <h4 className="text-sm line-clamp-1 mr-auto">{goal.name}</h4>
-        {goal.completed ? <CompleteIcon /> : <IncompleteIcon />}
-      </div>
-    </GoalDetailPopup>
-  )
-}
+// function GoalItemPopup({ goal, priority }: { goal: Goal, priority: number }) {
+//   return (
+//     <GoalReflectionPopup goal={goal}>
+//       <div className="flex flex-row gap-3 items-center rounded-xl p-3 bg-secondary font-medium">
+//         <div className="flex justify-center items-center w-6 aspect-square bg-neutral-200 text-muted-foreground rounded-full text-sm">
+//           {priority}
+//         </div>
+//         <h4 className="text-sm line-clamp-1 mr-auto">{goal.name}</h4>
+//         {goal.completed ? <CompleteIcon /> : <IncompleteIcon />}
+//       </div>
+//     </GoalReflectionPopup>
+//   )
+// }
 
 export function GoalList({ userId }: { userId: string }) {
   const start = new Date();
@@ -61,13 +61,16 @@ export function GoalList({ userId }: { userId: string }) {
     table: 'goal',
     filter: `created_at=gte.${startUTC}`,
     getInitialData: async () => {
-      return await getGoalsByDate(userId, new Date());
+      const a = await getGoalsByDate(userId, new Date())
+      console.log(a)
+      return a;
     }
   });
 
   // Manually filter for lte client-side
   const todayGoals = (goals as Goal[]).filter(goal => {
     const created = new Date(goal.created_at);
+    // console.log(created goal.created_at)
     return created <= end;
   });
 
@@ -76,7 +79,13 @@ export function GoalList({ userId }: { userId: string }) {
       <h3 className="font-medium">Today</h3>
       <div className="space-y-2">
         {todayGoals.map((goal, index) => (
-          <GoalItemPopup key={goal.id} priority={index + 1} goal={goal} />
+          goal.completed ? (
+            <GoalDetailPopup key={index} goal={goal} trigger={() => <GoalItem key={goal.id} priority={index + 1} goal={goal} />} />
+          ) : (
+            <GoalReflectionPopup key={index} goal={goal}>
+              <GoalItem key={goal.id} priority={index + 1} goal={goal} />
+            </GoalReflectionPopup>
+          )
         ))}
       </div>
     </div>

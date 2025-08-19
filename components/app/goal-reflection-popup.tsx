@@ -5,7 +5,7 @@ import { Popup } from "./popup";
 import { Goal } from "@/lib/data/goal";
 import { ReflectionForm } from "./reflection-form";
 
-export function GoalDetailPopup({ goal, children }: { goal: Goal, children?: React.ReactNode }) {
+export function GoalReflectionPopup({ goal, children }: { goal: Goal, children?: React.ReactNode }) {
   const popupTriggerRef = useRef<(() => void) | null>(null);
 
   return (
@@ -13,7 +13,7 @@ export function GoalDetailPopup({ goal, children }: { goal: Goal, children?: Rea
       title={goal.name}
       trigger={(callback) => {
         popupTriggerRef.current = callback;
-        return <div className="cursor-pointer hover:scale-95 transition-transform" onClick={goal.completed ? undefined : callback}>{children}</div>;
+        return <div className="cursor-pointer hover:scale-95 transition-transform" onClick={callback}>{children}</div>;
       }}
     >
       <div className="space-y-4">
