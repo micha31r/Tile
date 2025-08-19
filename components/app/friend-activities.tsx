@@ -8,6 +8,15 @@ import { BroadcastWithUser, getFriendBroadcastsWithUser } from "@/lib/data/broad
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 
+function getTileData(arr: number[]) {
+  return { 
+    tl: arr.includes(1), 
+    tr: arr.includes(2), 
+    bl: arr.includes(3), 
+    br: arr.includes(4)
+  };
+}
+
 export function FriendActivities() {
   const [broadcasts, setBroadcasts] = useState<BroadcastWithUser[]>([]);
   const [loaded, setLoaded] = useState(false);
@@ -24,15 +33,6 @@ export function FriendActivities() {
       setLoaded(true);
     })()
   }, []);
-
-  function getTileData(arr: number[]) {
-    return { 
-      tl: arr.includes(1), 
-      tr: arr.includes(2), 
-      bl: arr.includes(3), 
-      br: arr.includes(4) 
-    };
-  }
 
   return (
     <div className="space-y-4">
