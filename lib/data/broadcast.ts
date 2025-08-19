@@ -93,6 +93,6 @@ export async function createGoalBroadcast(userId: string, date: Date) {
   }
 
   await createBroadcast(userId, {
-    completed_goals: Array.from(new Set(goalsToday.map(goal => goal.priority)))
+    completed_goals: Array.from(new Set(goalsToday.filter(goal => goal.completed).map(goal => goal.priority)))
    });
 }
