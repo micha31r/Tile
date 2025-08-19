@@ -9,6 +9,7 @@ import { BroadcastWithUser, getFriendBroadcastsWithUser } from "@/lib/data/broad
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 import { useRealtime } from "../use-realtime";
+import { getProfile } from "@/lib/data/profile";
 
 function getTileData(arr: number[]) {
   return { 
@@ -33,7 +34,7 @@ export function FriendActivities({ userId }: { userId: string }) {
       return data;
     },
     onInsert: (prev: BroadcastWithUser[], payload: any) => {
-      return [payload.new, ...prev.filter(prev => prev.user_id !== payload.new.user_id)];
+      return prev.map(item => item.user_id !== payload.new.user_id ? item : Object.assign(item, payload.new));
     },
   });
 
