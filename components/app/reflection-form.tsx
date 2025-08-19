@@ -43,7 +43,7 @@ export function ReflectionForm({ goal, onSuccess }: { goal: Goal, onSuccess?: ()
       <div className="space-y-3">
         <WarningAlert>
           <InfoIcon className="w-4 h-4" />
-          Once complete, the reflection cannot be changed later.
+          Cannot be changed once completed
         </WarningAlert>
         {error && (
           <DangerAlert>

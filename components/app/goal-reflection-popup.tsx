@@ -18,7 +18,10 @@ export function GoalReflectionPopup({ goal, children }: { goal: Goal, children?:
     >
       <div className="space-y-4">
         {goal.details && (
-          <p className="text-muted-foreground text-sm">{goal.details}</p>
+          <div className="space-y-2">
+            <h4 className="font-medium">Details</h4>
+            <p>{goal.details}</p>
+          </div>
         )}
 
         <ReflectionForm goal={goal} onSuccess={() => {
