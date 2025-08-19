@@ -13,6 +13,14 @@ export function getDateString(date: Date): string {
   return date.toLocaleDateString('en-CA');
 }
 
+export function getDisplayDateString(date: Date): string {
+  return date.toLocaleDateString('en-AU', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric'
+  });
+}
+
 export function getDisplayName(firstName?: string, lastName?: string) {
   let displayName = ''
   if (firstName) {
