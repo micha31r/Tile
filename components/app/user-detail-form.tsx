@@ -3,7 +3,7 @@
 import { CheckIcon, InfoIcon } from "lucide-react";
 import { DangerAlert } from "../danger-alert";
 import Input from "../input";
-import { useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { fallbackTheme, t, Theme, themeOptions } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import { Profile, updateProfile } from "@/lib/data/profile";
@@ -45,6 +45,51 @@ function ThemeSelector({ name, defaultValue }: { name: string; defaultValue?: Th
   );
 }
 
+function Select({ name, defaultValue, options }: { name: string; defaultValue?: Theme; options: string[] }) {
+  const { profile: { theme } } = useContext(ProfileContext);
+  const [value, setValue] = useState<Theme>(defaultValue || fallbackTheme);
+
+  function handleSelection(event: React.MouseEvent<HTMLButtonElement>) {
+    event.preventDefault();
+    const theme = event.currentTarget.value as Theme;
+    setValue(theme);
+  }
+
+  return (
+    <div>
+      <div className="space-y-1 w-full rounded-2xl bg-secondary p-2 overflow-y-auto max-h-48">
+        {options.map((item, index) => (
+          <React.Fragment key={index}>
+            {index !== 0 && (
+              <div className="px-3">
+                <div className="w-full h-px bg-white/10"></div>
+              </div>
+            )}
+            <button
+              onClick={handleSelection}
+              value={item}
+              className={cn(`flex justify-between items-center gap-2 p-2 py-1.5 w-full rounded-xl transition-all cursor-pointer hover:scale-95`, {
+                [`text-white ${t("bg", theme, "f")}`]: value === item,
+                [`hover:bg-neutral-200 hover:dark:bg-neutral-700`]: value !== item
+              })}
+              >
+              <span className="flex-1 text-left">{item}</span>
+              {value === item && <CheckIcon className="w-5 h-5 m-auto text-white" strokeWidth={2} />}
+            </button>
+          </React.Fragment>
+        ))}
+      </div>
+      <input
+        type="text"
+        name={name}
+        value={value}
+        hidden
+        readOnly
+      />
+    </div>
+  );
+}
+
 export function UserDetailForm({ onSuccess, userId, initialValues }: { onSuccess?: () => void; userId: string; initialValues: Partial<Profile> }) {
   const { profile: { theme } } = useContext(ProfileContext);
   const [error, setError] = useState<string | null>(null);
@@ -59,13 +104,15 @@ export function UserDetailForm({ onSuccess, userId, initialValues }: { onSuccess
     const firstname = formData.get("firstname");
     const lastname = formData.get("lastname");
     const theme = formData.get("theme");
+    const timezone = formData.get("timezone");
 
     setDisabled(true);
 
     const data = await updateProfile(userId, {
       first_name: firstname?.toString(),
       last_name: lastname?.toString(),
-      theme: theme?.toString() || fallbackTheme
+      theme: theme?.toString() || fallbackTheme,
+      timezone: timezone?.toString() || "Australia/Melbourne"
     })
 
     if (!data) {
@@ -78,8 +125,14 @@ export function UserDetailForm({ onSuccess, userId, initialValues }: { onSuccess
     onSuccess?.();
   }
 
+  const timezoneOptions = Intl.supportedValuesOf("timeZone")
+
   return (
     <form ref={formRef} name="profile" onSubmit={handleSubmit} className="space-y-4">
+      <ThemeSelector name="theme" defaultValue={initialValues.theme} />
+
+      <div className="w-full h-px bg-border/50"></div>
+
       <div className="space-y-3">
         {error && (
           <DangerAlert>
@@ -89,11 +142,8 @@ export function UserDetailForm({ onSuccess, userId, initialValues }: { onSuccess
         )}
         <Input type="text" name="firstname" placeholder="First name" defaultValue={initialValues.first_name} />
         <Input type="text" name="lastname" placeholder="Last name" defaultValue={initialValues.last_name} />
+        <Select name="timezone" defaultValue={initialValues.timezone} options={timezoneOptions} />
       </div>
-
-      <div className="w-full h-px bg-border/50"></div>
-
-      <ThemeSelector name="theme" defaultValue={initialValues.theme} />
 
       <button disabled={disabled} type="submit" className={cn("disabled:opacity-80 text-white rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform", t("bg", theme, "f"))}>
         Save changes

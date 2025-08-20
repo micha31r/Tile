@@ -9,6 +9,7 @@ export interface Profile {
   first_name?: string;
   last_name?: string;
   theme?: Theme;
+  timezone: string;
 }
 
 export async function getProfile(userId: string): Promise<Profile | null> {
