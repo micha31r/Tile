@@ -19,7 +19,10 @@ export default function Home() {
         That&apos;s why we built Tile.
 
         <br /><br />
-        A simple app designed to help you focus on outcomes, while giving you the freedom to breathe.
+        Our philosophy? Keep it simple.
+
+        <br />
+        4 goals, daily check-offs, and friends to keep you motivated.
       </p>
 
       <Link href="/auth/login" className="text-center rounded-full bg-foreground text-background px-6 py-4 w-full text-md font-medium hover:scale-95 transition-transform">

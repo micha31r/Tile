@@ -4,14 +4,12 @@ import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import { AppFrame } from "@/components/app-frame";
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
+const defaultUrl = process.env.NEXT_PUBLIC_DOMAIN ?? "http://localhost:3000";
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
   title: "Tile",
-  description: "Focus on what matters",
+  description: "Focus on daily goals that truly matter",
 };
 
 const geistSans = Geist({
