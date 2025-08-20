@@ -189,8 +189,11 @@ function PlaceHolderCells({ count }: { count: number }) {
 }
 
 export function CalendarMonth({ userId, month, year, showLabel = false }: { userId: string, month: Month; year: number; showLabel?: boolean }) {
-  const daysInMonth = new Date(year, month - 1, 0).getDate();
-  const startDay = new Date(year, month - 1, 0).getDay();
+  const daysInMonth = new Date(year, month, 0).getDate();
+  
+  // Adjust so Monday is first column: Sunday (0) -> 6, Monday (1) -> 0, etc.
+  const jsDay = new Date(year, month - 1, 1).getDay();
+  const startDay = (jsDay === 0) ? 6 : jsDay - 1;
   const [data, setData] = useState<CalendarMonthData>({});
   const [loaded, setLoaded] = useState(false)
 

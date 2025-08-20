@@ -26,7 +26,7 @@ function ThemeSelector({ name, defaultValue }: { name: string; defaultValue?: Th
             key={index}
             onClick={handleSelection}
             value={theme}
-            className={cn(`flex w-full aspect-square rounded-full bg-${theme}-500 scale-90`, {
+            className={cn(`flex w-full aspect-square rounded-full bg-${theme}-500 scale-90 transition-transform`, {
               "scale-100": value === theme
             })}
           >
