@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
 import Link from "next/link";
-import { CalendarMonth, Month } from "./calendar-month"
+import { CalendarMonth, Month } from "./calendar-month";
 
 export function CalendarClientWrapper({ userId }: { userId: string }) {
   const now = new Date();
@@ -21,5 +21,5 @@ export function CalendarClientWrapper({ userId }: { userId: string }) {
       </div>
       <CalendarMonth userId={userId} month={now.getMonth() + 1 as Month} year={year} showLabel={true} />
     </div>
-  )
+  );
 }

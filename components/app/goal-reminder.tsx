@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useRouter } from "next/navigation";
 import { Countdown } from "./countdown";
@@ -13,8 +13,8 @@ import { ProfileContext } from "./profile-context";
 
 export function GoalReminder() {
   const { profile: { theme } } = useContext(ProfileContext);
-  const router = useRouter()
-  const [loaded, setLoaded] = useState<boolean>(false)
+  const router = useRouter();
+  const [loaded, setLoaded] = useState<boolean>(false);
 
   const start = new Date();
   start.setHours(0, 0, 0, 0);
@@ -38,7 +38,7 @@ export function GoalReminder() {
       }
 
       const user = data.claims;
-      const goalData = await getGoalsByDate(user.sub, new Date())
+      const goalData = await getGoalsByDate(user.sub, new Date());
       setLoaded(true);
       return goalData;
     }
@@ -84,8 +84,8 @@ export function GoalReminder() {
     );
   }
 
-  const timerTarget = new Date()
-  timerTarget.setHours(9, 0, 0, 0)
+  const timerTarget = new Date();
+  timerTarget.setHours(9, 0, 0, 0);
 
   return (
     <div className={cn("space-y-2 p-4 rounded-3xl", t("bg", theme, "b"))}>
@@ -98,5 +98,5 @@ export function GoalReminder() {
         <RecordGoalPopup />
       </div>
     </div>
-  )
+  );
 }

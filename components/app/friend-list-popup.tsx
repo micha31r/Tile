@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Popup } from "./popup";
@@ -19,7 +19,7 @@ function FriendItemPopup({ friend, trigger }: { friend: FriendWithUser; trigger:
   const displayName = getDisplayName(friend.first_name, friend.last_name) ?? friend.email;
 
   async function handleRemoveFriend() {
-    setDisabled(true)
+    setDisabled(true);
     const success = await removeFriend(friend.user_a_id, friend.user_b_id);
     if (success) {
       window.location.replace(`/app?success=Removed ${displayName} from friend list`);
@@ -87,7 +87,7 @@ export function FriendListPopup({ children }: { children?: React.ReactNode }) {
 
       const friends = await getFriendsWithUser(profile.user_id);
       setFriends(friends);
-      setLoaded(true)
+      setLoaded(true);
     })();
   }, []);
 

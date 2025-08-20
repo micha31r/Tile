@@ -26,7 +26,7 @@ export function Tile({
   backgroundClass?: string,
   foregroundClass?: string
 }) {
-  const tileCommonClasses = `${backgroundClass} ${radiusClass}`
+  const tileCommonClasses = `${backgroundClass} ${radiusClass}`;
 
   // Number of subtiles
   const count = boolToInt(data.tl) + boolToInt(data.tr) + boolToInt(data.bl) + boolToInt(data.br);
@@ -36,7 +36,7 @@ export function Tile({
     "tr": "",
     "bl": "",
     "br": "",
-  }
+  };
 
   if (data.tl && data.tr) {
     radius.tl += " rounded-r-none";
@@ -80,5 +80,5 @@ export function Tile({
         })}></div>
       </div>
     </div>
-  )
+  );
 }

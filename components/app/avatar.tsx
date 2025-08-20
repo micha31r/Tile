@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
 import { cn, getDisplayName, getInitials } from "@/lib/utils";
-import Avvvatars from "avvvatars-react"
+import Avvvatars from "avvvatars-react";
 import { useEffect, useState } from "react";
 
 export default function Avatar({ 
@@ -27,8 +27,8 @@ export default function Avatar({
     return () => clearTimeout(id);
   }, []);
 
-  const displayName = getDisplayName(firstName, lastName)
-  const initials = getInitials(firstName, lastName)
+  const displayName = getDisplayName(firstName, lastName);
+  const initials = getInitials(firstName, lastName);
 
   return (
     <div className={cn("transition-opacity opacity-0", {
@@ -36,5 +36,5 @@ export default function Avatar({
     })} style={{ width: size, height: size }}>
       <Avvvatars size={size} style={style} value={displayName ?? email} displayValue={initials} />
     </div>
-  )
+  );
 }

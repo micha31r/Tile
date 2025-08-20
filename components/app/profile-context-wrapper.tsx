@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { getOrCreateProfile, Profile } from "@/lib/data/profile";
 import { ProfileContext, ProfileContextData } from "./profile-context";
@@ -17,9 +17,9 @@ export function ProfileContextWrapper({ user, children }: { user: JwtPayload, ch
     table: 'profile',
     filter: `user_id=eq.${user.sub}`,
     getInitialData: async () => {
-      const profile = await getOrCreateProfile(user.sub)
+      const profile = await getOrCreateProfile(user.sub);
       setLoad(true);
-      return profile ? [profile] : []
+      return profile ? [profile] : [];
     }
   });
 
@@ -28,7 +28,7 @@ export function ProfileContextWrapper({ user, children }: { user: JwtPayload, ch
   }
 
   if (profiles.length === 0) {
-    router.push("/auth/login")
+    router.push("/auth/login");
     return null;
   }
 
@@ -36,11 +36,11 @@ export function ProfileContextWrapper({ user, children }: { user: JwtPayload, ch
     email: user.email,
     userId: user.sub,
     profile: (profiles as Profile[]).at(0)!
-  }
+  };
 
   return (
     <ProfileContext value={contextData}>
       {children}
     </ProfileContext>
-  )
+  );
 }

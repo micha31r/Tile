@@ -1,5 +1,5 @@
-"use server"
-import { createClient } from '@supabase/supabase-js'
+"use server";
+import { createClient } from '@supabase/supabase-js';
 
 export async function dangerCreateServerRoleClient() {
   return createClient(
@@ -10,5 +10,5 @@ export async function dangerCreateServerRoleClient() {
       autoRefreshToken: false,
       detectSessionInUrl: false,
     },
-  })
+  });
 }

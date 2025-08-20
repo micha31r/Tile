@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useContext, useEffect, useRef, useState } from "react";
 import { Popup } from "./popup";
@@ -21,7 +21,7 @@ export function ShareProfilePopup({ children }: { children?: React.ReactNode }) 
       setInvite(invite);
 
       if (process.env.NODE_ENV === "development") {
-        console.log(`${window.location.origin}/add/?id=${profile!.user_id}&code=${invite.code}`)
+        console.log(`${window.location.origin}/add/?id=${profile!.user_id}&code=${invite.code}`);
       }
     })();
   }, [profile, email, userId]);

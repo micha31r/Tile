@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useMemo, useRef } from "react";
 import { Popup } from "./popup";
@@ -79,7 +79,7 @@ export function CalendarCellPopup({ calendarEntry, children }: { calendarEntry: 
     ));
   }, [calendarEntry.goals]);
 
-  const goalsCompleted = calendarEntry.goals.reduce((count, goal) => goal.completed ? count + 1 : count, 0)
+  const goalsCompleted = calendarEntry.goals.reduce((count, goal) => goal.completed ? count + 1 : count, 0);
   const isFutureDate = new Date(calendarEntry.date) > new Date(new Date().setHours(23, 59, 59, 999));
 
   let alert;
@@ -90,35 +90,35 @@ export function CalendarCellPopup({ calendarEntry, children }: { calendarEntry: 
         <InfoIcon />
         Future date
       </InfoAlert>
-    )
+    );
   } else if (calendarEntry.goals.length === 0) {
     alert = (
       <DangerAlert>
         <InfoIcon />
         No goals were set
       </DangerAlert>
-    )
+    );
   } else if (goalsCompleted === 0) {
     alert = (
       <DangerAlert>
         <InfoIcon />
         Goals were set, but none completed
       </DangerAlert>
-    )
+    );
   } else if (goalsCompleted < 4) {
     alert = (
       <WarningAlert>
         <InfoIcon />
         Fewer than 4 goals were completed
       </WarningAlert>
-    )
+    );
   } else {
     alert = (
       <InfoAlert>
         <InfoIcon />
         All goals were completed
       </InfoAlert>
-    )
+    );
   }
 
   return (

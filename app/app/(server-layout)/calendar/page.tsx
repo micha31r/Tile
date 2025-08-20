@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { CalendarMonth, Month } from "@/components/app/calendar-month";
 import { useContext, useState } from "react";

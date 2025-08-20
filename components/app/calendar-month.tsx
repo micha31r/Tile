@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { cn, getDateString } from "@/lib/utils";
 import { Tile } from "../tile/tile";
@@ -86,13 +86,13 @@ export function CalendarCell({ entry }: { entry: DayEntry }) {
         [`border-2 ${borderColor}`]: isFutureDate
       })}>
       </div>
-    )
+    );
   } else if (cell.status === "set") {
     cellContent = (
       <div className={cn("flex w-full aspect-square rounded-md p-2", backgroundColor)}>
         <XIcon className={cn("w-full h-full", setColor)} strokeWidth={3} />
       </div>
-    )
+    );
   } else {
     cellContent = (
       <div className={cn(`rounded-md p-1`, backgroundColor)}>
@@ -101,14 +101,14 @@ export function CalendarCell({ entry }: { entry: DayEntry }) {
           [allCompletedColor]: cell.status === "complete"
         })} backgroundClass={backgroundColor} radiusClass="rounded-sm" maxWidth={100}/>
       </div>
-    )
+    );
   }
 
   return (
     <CalendarCellPopup calendarEntry={entry}>
       {cellContent}
     </CalendarCellPopup>
-  )
+  );
 }
 
 export function CalendarCellToday({ entry }: { entry: DayEntry }) {
@@ -127,7 +127,7 @@ export function CalendarCellToday({ entry }: { entry: DayEntry }) {
     table: 'goal',
     filter: `created_at=gte.${startUTC}`,
     getInitialData: async () => {
-      return entry.goals
+      return entry.goals;
     }
   });
 
@@ -143,18 +143,18 @@ export function CalendarCellToday({ entry }: { entry: DayEntry }) {
       goals: todayGoals
     }));
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [goals])
+  }, [goals]);
 
   let cellContent;
 
   if (cell.status === "unset") {
     cellContent = (
       <div className={cn("flex w-full aspect-square rounded-sm", backgroundColor)}></div>
-    )
+    );
   } else if (cell.status === "set") {
     cellContent = (
       <div className={cn("flex w-full aspect-square rounded-sm", backgroundColor)}></div>
-    )
+    );
   } else {
     cellContent = (
       <div className={cn(`rounded-md p-1`, backgroundColor)}>
@@ -163,7 +163,7 @@ export function CalendarCellToday({ entry }: { entry: DayEntry }) {
           [allCompletedColor]: cell.status === "complete"
         })} backgroundClass={backgroundColor} radiusClass="rounded-sm" maxWidth={100}/>
       </div>
-    )
+    );
   }
 
   return (
@@ -173,7 +173,7 @@ export function CalendarCellToday({ entry }: { entry: DayEntry }) {
     }}>
       {cellContent}
     </CalendarCellPopup>
-  )
+  );
 }
 
 function PlaceHolderCells({ count }: { count: number }) {
@@ -185,7 +185,7 @@ function PlaceHolderCells({ count }: { count: number }) {
         </div>
       ))}
     </>
-  )
+  );
 }
 
 export function CalendarMonth({ userId, month, year, showLabel = false }: { userId: string, month: Month; year: number; showLabel?: boolean }) {
@@ -195,7 +195,7 @@ export function CalendarMonth({ userId, month, year, showLabel = false }: { user
   const jsDay = new Date(year, month - 1, 1).getDay();
   const startDay = (jsDay === 0) ? 6 : jsDay - 1;
   const [data, setData] = useState<CalendarMonthData>({});
-  const [loaded, setLoaded] = useState(false)
+  const [loaded, setLoaded] = useState(false);
 
   const todayDateString = getDateString(new Date());
 

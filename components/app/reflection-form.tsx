@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { InfoIcon } from "lucide-react";
 import { DangerAlert } from "../danger-alert";
@@ -61,5 +61,5 @@ export function ReflectionForm({ goal, onSuccess }: { goal: Goal, onSuccess?: ()
         Mark as completed
       </button>
     </form>
-  )
+  );
 }

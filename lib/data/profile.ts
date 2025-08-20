@@ -1,4 +1,4 @@
-"use server"
+"use server";
 
 import { createClient } from "../supabase/server";
 import { fallbackTheme, Theme } from "../theme";
@@ -22,7 +22,7 @@ export async function getProfile(userId: string): Promise<Profile | null> {
 
   if (error) {
     console.error(`Error fetching profile for user ${userId}: ${error.message}`);
-    return null
+    return null;
   }
 
   return data;

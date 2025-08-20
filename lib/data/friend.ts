@@ -1,4 +1,4 @@
-"use server"
+"use server";
 
 import { dangerCreateServerRoleClient } from "../supabase/server-role";
 import { Profile } from "./profile";

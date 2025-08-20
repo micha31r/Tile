@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Profile } from "@/lib/data/profile";
 import { createContext } from "react";
 

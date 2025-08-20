@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use client"
+"use client";
 
 import { useEffect, useState } from "react";
 import { createClient } from "../lib/supabase/client";
@@ -38,17 +38,17 @@ export function useRealtime<T>(options: UseRealtimeOptions<T>) {
     onUpdate,
     onDelete,
   } = options;
-  const [entries, setEntries] = useState<T[]>([])
+  const [entries, setEntries] = useState<T[]>([]);
 
   useEffect(() => {
     const supabase = createClient();
 
     const fetchInitial = async () => {
       const data = getInitialData ? await getInitialData() : [];
-      setEntries((data as unknown as T[]) ?? [])
-    }
+      setEntries((data as unknown as T[]) ?? []);
+    };
 
-    fetchInitial()
+    fetchInitial();
 
     const channel = supabase
       .channel(channelName, {
@@ -96,9 +96,9 @@ export function useRealtime<T>(options: UseRealtimeOptions<T>) {
 
     return () => {
       channel.unsubscribe();
-    }
+    };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   return [entries, setEntries];
 }

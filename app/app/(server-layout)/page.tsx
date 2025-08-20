@@ -10,7 +10,7 @@ export default async function AppHomePage() {
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getClaims();
   if (error || !data?.claims) redirect("/auth/login");
-  const user = data.claims
+  const user = data.claims;
 
   return (
     <div className="space-y-8">

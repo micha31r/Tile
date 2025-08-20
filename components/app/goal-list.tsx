@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { getGoalsByDate, Goal } from "@/lib/data/goal";
 import { CheckIcon, InfoIcon } from "lucide-react";
@@ -18,14 +18,14 @@ function CompleteIcon() {
     <div className={`flex w-6 aspect-square rounded-full ${t("bg", theme, "b", "light")} dark:${t("bg", theme, "f", "dark")}`}>
       <CheckIcon className={`w-4 h-4 m-auto ${t("text", theme, "f")} dark:text-white`} strokeWidth={3} />
     </div>
-  )
+  );
 }
 
 function IncompleteIcon() {
   return (
     <div className="flex w-6 aspect-square border-2 border-border rounded-full">
     </div>
-  )
+  );
 }
 
 export function GoalItem({ goal, priority }: { goal: Goal, priority: number }) {
@@ -37,7 +37,7 @@ export function GoalItem({ goal, priority }: { goal: Goal, priority: number }) {
       <h4 className="text-sm line-clamp-1 mr-auto">{goal.name}</h4>
       {goal.completed ? <CompleteIcon /> : <IncompleteIcon />}
     </div>
-  )
+  );
 }
 
 export function GoalList({ userId, emptyMessage }: { userId: string, emptyMessage?: string }) {
@@ -88,5 +88,5 @@ export function GoalList({ userId, emptyMessage }: { userId: string, emptyMessag
         )}
       </div>
     </div>
-  )
+  );
 }

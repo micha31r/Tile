@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Logo } from "@/components/logo";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
@@ -7,7 +7,7 @@ import { useState } from "react";
 type ButtonStatus = 'idle' | 'loading' | 'success' | 'error';
 
 export default function LoginPage() {
-  const [status, setStatus] = useState<ButtonStatus>('idle')
+  const [status, setStatus] = useState<ButtonStatus>('idle');
 
   async function signInWithEmail(email: string) {
     const supabase = createClient();
@@ -18,7 +18,7 @@ export default function LoginPage() {
         shouldCreateUser: true,
         emailRedirectTo: `${window.location.origin}/auth/confirm`,
       },
-    })
+    });
   }
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -26,18 +26,18 @@ export default function LoginPage() {
 
     const email = event.currentTarget.email.value;
     if (!email) {
-      return
+      return;
     }
 
-    setStatus('loading')
+    setStatus('loading');
 
-    const { error } = await signInWithEmail(email)
+    const { error } = await signInWithEmail(email);
     if (error) {
-      setStatus('error')
-      return
+      setStatus('error');
+      return;
     }
 
-    setStatus('success')
+    setStatus('success');
   }
 
   return (

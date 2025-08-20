@@ -1,4 +1,4 @@
-"use server"
+"use server";
 
 import { dangerCreateServerRoleClient } from "../supabase/server-role";
 import { getFriendsWithUser } from "./friend";
@@ -22,7 +22,7 @@ export interface BroadcastWithUser extends Profile, Broadcast {
 }
 
 export async function createBroadcast(userId: string, payload: BroadcastPayload): Promise<Broadcast | null> {
-  const supabase = await dangerCreateServerRoleClient()
+  const supabase = await dangerCreateServerRoleClient();
 
   const { data, error } = await supabase
     .from("broadcast")
@@ -31,18 +31,18 @@ export async function createBroadcast(userId: string, payload: BroadcastPayload)
       payload,
     }])
     .select()
-    .single()
+    .single();
 
   if (error) {
-    console.error(`Failed to create broadcast: ${error.message}`)
-    return null
+    console.error(`Failed to create broadcast: ${error.message}`);
+    return null;
   }
 
-  return data
+  return data;
 }
 
 export async function getLatestBroadcast(userId: string): Promise<Broadcast | null> {
-  const supabase = await dangerCreateServerRoleClient()
+  const supabase = await dangerCreateServerRoleClient();
 
   const { data, error } = await supabase
     .from("broadcast")
@@ -50,20 +50,20 @@ export async function getLatestBroadcast(userId: string): Promise<Broadcast | nu
     .eq("user_id", userId)
     .order("created_at", { ascending: false })
     .limit(1)
-    .single()
+    .single();
 
   if (error) {
-    console.error(`Failed to get lastest broadcast: ${error.message}`)
-    return null
+    console.error(`Failed to get lastest broadcast: ${error.message}`);
+    return null;
   }
 
-  return data
+  return data;
 }
 
 export async function getFriendBroadcastsWithUser(userId: string): Promise<BroadcastWithUser[]> {
-  const supabase = await dangerCreateServerRoleClient()
-  const friends = await getFriendsWithUser(userId)
-  const friendIds = friends?.map((f) => f.user_a_id === userId ? f.user_b_id : f.user_a_id) ?? []
+  const supabase = await dangerCreateServerRoleClient();
+  const friends = await getFriendsWithUser(userId);
+  const friendIds = friends?.map((f) => f.user_a_id === userId ? f.user_b_id : f.user_a_id) ?? [];
 
   const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
 
@@ -74,22 +74,22 @@ export async function getFriendBroadcastsWithUser(userId: string): Promise<Broad
     });
 
   if (error) {
-    console.error(`Failed to get latest friend broadcast: ${error.message}`)
-    return []
+    console.error(`Failed to get latest friend broadcast: ${error.message}`);
+    return [];
   }
 
   return data
     .map((broadcast: Broadcast) => ({
       ...broadcast,
       ...friends.find((f) => f.user_id === broadcast.user_id),
-    }))
+    }));
 }
 
 export async function createGoalBroadcast(userId: string, date: Date) {
-  const goalsToday = await getGoalsByDate(userId, date)
+  const goalsToday = await getGoalsByDate(userId, date);
 
   if (!goalsToday || goalsToday.length === 0) {
-    return false
+    return false;
   }
 
   await createBroadcast(userId, {

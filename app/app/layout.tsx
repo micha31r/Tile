@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { createClient } from "@/lib/supabase/client";
 import { JwtPayload } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
@@ -22,8 +22,8 @@ export default function AppLayout({
       if (error || !data?.claims) return;
       setUser(data.claims);
       setLoaded(true);
-    })()
-  }, [])
+    })();
+  }, []);
 
   if (!loaded) {
     return null;

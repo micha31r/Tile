@@ -1,4 +1,4 @@
-"use server"
+"use server";
 
 import { createClient } from "../supabase/server";
 
@@ -34,7 +34,7 @@ export async function createInvite(userId: string): Promise<Invite | null> {
 
   if (error) {
     console.error(`Failed to create invite: ${error.message}`);
-    return null
+    return null;
   }
 
   return data;

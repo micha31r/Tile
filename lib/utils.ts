@@ -22,14 +22,14 @@ export function getDisplayDateString(date: Date): string {
 }
 
 export function getDisplayName(firstName?: string, lastName?: string) {
-  let displayName = ''
+  let displayName = '';
   if (firstName) {
-    displayName += firstName
+    displayName += firstName;
   }
   if (lastName) {
-    displayName += ' ' + lastName
+    displayName += ' ' + lastName;
   }
-  return displayName
+  return displayName;
 }
 
 export function getInitials(firstName?: string, lastName?: string): string | undefined {

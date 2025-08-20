@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { CheckIcon, InfoIcon } from "lucide-react";
 import { DangerAlert } from "../danger-alert";
@@ -114,7 +114,7 @@ export function UserDetailForm({ onSuccess, userId, initialValues }: { onSuccess
       last_name: lastname?.toString(),
       theme: theme?.toString() || fallbackTheme,
       timezone: timezone?.toString() || "Australia/Melbourne"
-    })
+    });
 
     if (!data) {
       setError("Failed to update profile.");
@@ -126,7 +126,7 @@ export function UserDetailForm({ onSuccess, userId, initialValues }: { onSuccess
     onSuccess?.();
   }
 
-  const timezoneOptions = Intl.supportedValuesOf("timeZone")
+  const timezoneOptions = Intl.supportedValuesOf("timeZone");
 
   return (
     <form ref={formRef} name="profile" onSubmit={handleSubmit} className="space-y-4">
@@ -163,5 +163,5 @@ export function UserDetailForm({ onSuccess, userId, initialValues }: { onSuccess
         Save changes
       </button>
     </form>
-  )
+  );
 }

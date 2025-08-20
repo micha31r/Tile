@@ -7,5 +7,5 @@ export function AppFrame({ children }: { children?: React.ReactNode }) {
         {children}
       </div>
     </main>
-  )
+  );
 }

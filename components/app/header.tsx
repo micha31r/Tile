@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import Avatar from './avatar'
+import Avatar from './avatar';
 import { ShareIcon } from 'lucide-react';
 import { UserDetailPopup } from './user-detail-popup';
 import { ShareProfilePopup } from './share-profile-popup';
@@ -28,5 +28,5 @@ export function Header() {
         </ShareProfilePopup>
       </div>
     </div>
-  )
+  );
 }

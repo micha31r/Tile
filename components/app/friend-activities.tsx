@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use client"
+"use client";
 
 import { cn } from "@/lib/utils";
 import { Tile } from "../tile/tile";
@@ -43,7 +43,7 @@ export function FriendActivities({ userId, emptyMessage }: { userId: string, emp
         .eq("user_id", payload.new.user_id)
         .single();
 
-      const newEntry: BroadcastWithUser = { ...payload.new, ...profile, email: '' }
+      const newEntry: BroadcastWithUser = { ...payload.new, ...profile, email: '' };
       const filtered = prev.filter(item => item.user_id !== payload.new.user_id);
       return [...filtered, newEntry].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
     },
@@ -88,5 +88,5 @@ export function FriendActivities({ userId, emptyMessage }: { userId: string, emp
           </InfoAlert>
         )}
       </div>
-  )
+  );
 }
