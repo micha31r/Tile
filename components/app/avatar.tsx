@@ -34,7 +34,7 @@ export default function Avatar({
     <div className={cn("transition-opacity opacity-0", {
       "opacity-100": loaded
     })} style={{ width: size, height: size }}>
-      <Avvvatars size={size} style={style} value={displayName ?? email} displayValue={initials} />
+      <Avvvatars size={size} style={style} value={displayName || email} displayValue={initials} />
     </div>
   );
 }

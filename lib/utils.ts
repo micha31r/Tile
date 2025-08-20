@@ -22,6 +22,10 @@ export function getDisplayDateString(date: Date): string {
 }
 
 export function getDisplayName(firstName?: string, lastName?: string) {
+  if (!firstName && !lastName) {
+    return '';
+  }
+
   let displayName = '';
   if (firstName) {
     displayName += firstName;
