@@ -12,12 +12,12 @@ const THEME_CODES: Record<
     dark: { f: number; b: number };
   }
 > = {
-  blue:   { light: { f: 600, b: 100 }, dark: { f: 900, b: 900 } },
-  yellow: { light: { f: 600, b: 100 }, dark: { f: 900, b: 900 } },
-  rose:   { light: { f: 600, b: 100 }, dark: { f: 900, b: 900 } },
-  purple: { light: { f: 600, b: 100 }, dark: { f: 900, b: 900 } },
-  orange: { light: { f: 600, b: 100 }, dark: { f: 900, b: 900 } },
-  green:  { light: { f: 600, b: 100 }, dark: { f: 900, b: 900 } },
+  blue:   { light: { f: 600, b: 100 }, dark: { f: 500, b: 950 } },
+  yellow: { light: { f: 600, b: 100 }, dark: { f: 700, b: 950 } },
+  rose:   { light: { f: 600, b: 100 }, dark: { f: 600, b: 950 } },
+  purple: { light: { f: 600, b: 100 }, dark: { f: 600, b: 950 } },
+  orange: { light: { f: 600, b: 100 }, dark: { f: 700, b: 950 } },
+  green:  { light: { f: 600, b: 100 }, dark: { f: 700, b: 950 } },
 };
 
 export function t(
@@ -33,8 +33,9 @@ export function t(
 }
 
 export const tailwindColorSafelist: string[] = themeOptions.flatMap(theme =>
-  Array.from({ length: 10 }, (_, i) => {
-    const shade = (i + 1) * 100;
-    return [`text-${theme}-${shade}`, `bg-${theme}-${shade}`, `dark:bg-${theme}-${shade}`];
-  }).flat()
+  [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950].flatMap(shade => [
+    `text-${theme}-${shade}`,
+    `bg-${theme}-${shade}`,
+    `dark:bg-${theme}-${shade}`
+  ])
 );

@@ -1,5 +1,6 @@
 'use client'
 
+import { cn } from "@/lib/utils";
 import { XIcon } from "lucide-react";
 import { useState } from "react";
 
@@ -13,17 +14,17 @@ export function Popup({
   children?: React.ReactNode 
 }) {
   const [translateY, setTranslateY] = useState(0);
-  const [backgroundColor, setBackgroundColor] = useState('rgba(0,0,0,0)');
+  const [backgroundColor, setBackgroundColor] = useState('bg-transparent');
   const [isOpen, setIsOpen] = useState(false);
 
   function toggle() {
     if (!isOpen) {
       setTranslateY(-100);
-      setBackgroundColor('rgba(0,0,0,0.2)');
+      setBackgroundColor('bg-black/20 dark:bg-white/20');
       setIsOpen(true);
     } else {
       setTranslateY(0);
-      setBackgroundColor('rgba(0,0,0,0)');
+      setBackgroundColor('bg-transparent');
       setIsOpen(false);
     }
   }
@@ -38,8 +39,7 @@ export function Popup({
     <>
       {trigger && trigger(toggle)}
       
-      <div onClick={onOutsideClick} className="fixed w-full sm:max-w-96 h-full top-0 left-1/2 -translate-x-1/2 right-0 sm:rounded-[48px] transition-colors duration-500 overflow-hidden z-20" style={{
-        backgroundColor: backgroundColor,
+      <div onClick={onOutsideClick} className={cn("fixed w-full sm:max-w-96 h-full top-0 left-1/2 -translate-x-1/2 right-0 sm:rounded-[48px] transition-colors duration-500 overflow-hidden z-20", backgroundColor)} style={{
         pointerEvents: isOpen ? 'auto' : 'none'
       }}>
         <div className="fixed z-50 left-1/2 top-full transition-all duration-500 w-full max-w-96" style={{

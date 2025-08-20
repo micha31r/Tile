@@ -30,7 +30,7 @@ export default function RootLayout({
       <body className={`flex justify-center ${geistSans.className} antialiased sm:bg-secondary`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
+          defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >

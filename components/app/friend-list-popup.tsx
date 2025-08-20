@@ -45,7 +45,7 @@ function FriendItemPopup({ friend, trigger }: { friend: FriendWithUser; trigger:
           <button onClick={() => popupTriggerRef.current?.()} className="bg-foreground disabled:opacity-80 text-background rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform">
             Cancel
           </button>
-          <button disabled={disabled} onClick={handleRemoveFriend} className="bg-red-100 disabled:opacity-80 text-red-700 rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform">
+          <button disabled={disabled} onClick={handleRemoveFriend} className="disabled:opacity-80 bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400 rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform">
             Remove
           </button>
         </div>
@@ -106,7 +106,7 @@ export function FriendListPopup({ children }: { children?: React.ReactNode }) {
               <div key={index} className="flex flex-row gap-3 items-center rounded-xl p-3 bg-secondary font-medium">
                 <Avatar size={32} firstName={friend.first_name} lastName={friend.last_name} email={friend.email} />
                 <h4 className="text-sm line-clamp-1 mr-auto">{getDisplayName(friend.first_name, friend.last_name) ?? friend.email}</h4>
-                <button key={index} onClick={() => triggers.current[index]?.()} className="text-sm bg-red-100 text-red-600 p-1 px-2 rounded-md">
+                <button key={index} onClick={() => triggers.current[index]?.()} className="text-sm bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400 p-1 px-2 rounded-md">
                   Remove
                 </button>
               </div>

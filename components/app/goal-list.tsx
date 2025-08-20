@@ -31,7 +31,7 @@ function IncompleteIcon() {
 export function GoalItem({ goal, priority }: { goal: Goal, priority: number }) {
   return (
     <div className="flex flex-row gap-3 items-center rounded-xl p-3 bg-secondary font-medium">
-      <div className="flex justify-center items-center w-6 aspect-square bg-neutral-200 text-muted-foreground rounded-full text-sm">
+      <div className="flex justify-center items-center w-6 aspect-square bg-neutral-200 dark:bg-neutral-700 text-muted-foreground rounded-full text-sm">
         {priority}
       </div>
       <h4 className="text-sm line-clamp-1 mr-auto">{goal.name}</h4>

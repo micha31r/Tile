@@ -75,7 +75,7 @@ export function GoalReminder() {
     );
   }
 
-  if (hour >= 23) {
+  if (hour >= 9) {
     return (
       <div className="space-y-2 p-4 bg-secondary rounded-3xl">
         <h4 className="font-medium">You are missing {4 - todayGoals.length} goals</h4>

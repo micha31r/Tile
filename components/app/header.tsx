@@ -17,7 +17,7 @@ export async function Header() {
   const profile = await getProfile(data.claims.sub);
 
   return (
-    <div className="sticky z-10 top-0 bg-background shadow-[0_-32px_0_48px_rgb(255,255,255)] flex justify-between gap-4 items-center">
+    <div className="sticky z-10 top-0 bg-background shadow-[0_-32px_0_48px_hsla(var(--background))] flex justify-between gap-4 items-center">
       <div>
         <UserDetailPopup>
           <Avatar size={32} firstName={profile?.first_name} lastName={profile?.last_name} email={data.claims.email} />

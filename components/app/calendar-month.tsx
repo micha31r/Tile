@@ -68,11 +68,11 @@ function getCellData(entry: DayEntry): CellData {
   };
 }
 
-const setColor = "text-neutral-300";
-const partialColor = "bg-neutral-300";
-const allCompletedColor = "bg-slate-700";
-const backgroundColor = "bg-neutral-100";
-const borderColor = "border-neutral-100";
+const setColor = "text-neutral-300 dark:text-neutral-600";
+const partialColor = "bg-neutral-300 dark:bg-neutral-600";
+const allCompletedColor = "bg-slate-700 dark:bg-neutral-300";
+const backgroundColor = "bg-neutral-100 dark:bg-neutral-800";
+const borderColor = "border-neutral-100 dark:border-neutral-800";
 
 export function CalendarCell({ entry }: { entry: DayEntry }) {
   const cell = getCellData(entry);
@@ -190,7 +190,7 @@ function PlaceHolderCells({ count }: { count: number }) {
 
 export function CalendarMonth({ userId, month, year, showLabel = false }: { userId: string, month: Month; year: number; showLabel?: boolean }) {
   const daysInMonth = new Date(year, month, 0).getDate();
-  
+
   // Adjust so Monday is first column: Sunday (0) -> 6, Monday (1) -> 0, etc.
   const jsDay = new Date(year, month - 1, 1).getDay();
   const startDay = (jsDay === 0) ? 6 : jsDay - 1;
