@@ -2,7 +2,7 @@
 
 import { cn, getDateString } from "@/lib/utils";
 import { Tile } from "../tile/tile";
-import { getGoalsByDate, Goal } from "@/lib/data/goal";
+import { Goal } from "@/lib/data/goal";
 import { useRealtime } from "../use-realtime";
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";

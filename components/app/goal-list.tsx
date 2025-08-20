@@ -8,7 +8,6 @@ import { GoalDetailPopup } from "./calendar-cell-popup";
 import { WarningAlert } from "../warning-alert";
 import { useContext } from "react";
 import { ProfileContext } from "./profile-context";
-import { cn } from "@/lib/utils";
 import { t } from "@/lib/theme";
 
 function CompleteIcon() {

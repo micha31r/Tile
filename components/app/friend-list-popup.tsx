@@ -1,16 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Popup } from "./popup";
-import { createClient } from "@/lib/supabase/client";
-import { getOrCreateProfile, Profile } from "@/lib/data/profile";
 import { FriendWithUser, getFriendsWithUser, removeFriend } from "@/lib/data/friend";
 import { InfoIcon, TriangleAlertIcon } from "lucide-react";
-import { getDisplayName, getInitials } from "@/lib/utils";
+import { getDisplayName } from "@/lib/utils";
 import { DangerAlert } from "../danger-alert";
-import { useRouter } from "next/navigation";
 import Avatar from "./avatar";
 import { InfoAlert } from "../info-alert";
+import { ProfileContext } from "./profile-context";
 
 function FriendItemPopup({ friend, trigger }: { friend: FriendWithUser; trigger: (onClick: () => void) => React.ReactNode }) {
   const popupTriggerRef = useRef<(() => void) | null>(null);
@@ -56,7 +54,7 @@ function FriendItemPopup({ friend, trigger }: { friend: FriendWithUser; trigger:
 
 export function FriendListPopup({ children }: { children?: React.ReactNode }) {
   const popupTriggerRef = useRef<(() => void) | null>(null);
-  const [profile, setProfile] = useState<Profile | null>(null);
+  const { userId } = useContext(ProfileContext);
   const [friends, setFriends] = useState<FriendWithUser[]>([]);
   const [loaded, setLoaded] = useState(false);
   const triggers = useRef<(() => void)[]>([]);
@@ -75,21 +73,11 @@ export function FriendListPopup({ children }: { children?: React.ReactNode }) {
 
   useEffect(() => {
     (async () => {
-      const supabase = createClient();
-      const { data } = await supabase.auth.getClaims();
-      if (!data?.claims) {
-        return;
-      }
-
-      const profile = await getOrCreateProfile(data.claims.sub);
-      if (!profile) return null;
-      setProfile(profile);
-
-      const friends = await getFriendsWithUser(profile.user_id);
+      const friends = await getFriendsWithUser(userId);
       setFriends(friends);
       setLoaded(true);
     })();
-  }, []);
+  }, [userId]);
 
   return (
     <>
