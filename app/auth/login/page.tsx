@@ -17,7 +17,7 @@ export default function LoginPage() {
       email: email,
       options: {
         shouldCreateUser: true,
-        emailRedirectTo: `${window.location.origin}/auth/confirm`,
+        emailRedirectTo: `${window.location.origin}/auth/confirm?next=app`,
       },
     });
   }
