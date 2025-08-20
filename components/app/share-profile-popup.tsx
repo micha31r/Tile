@@ -1,43 +1,30 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Popup } from "./popup";
-import { createClient } from "@/lib/supabase/client";
-import { getOrCreateProfile, Profile } from "@/lib/data/profile";
 import QRCode from "react-qr-code";
 import { cn, getDisplayName } from "@/lib/utils";
 import { InfoAlert } from "../info-alert";
 import { InfoIcon } from "lucide-react";
 import { getValidOrCreateInvite, Invite } from "@/lib/data/invite";
+import { ProfileContext } from "./profile-context";
 
 export function ShareProfilePopup({ children }: { children?: React.ReactNode }) {
+  const { profile, email, userId } = useContext(ProfileContext);
   const popupTriggerRef = useRef<(() => void) | null>(null);
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [email, setEmail] = useState<string | null>(null);
   const [invite, setInvite] = useState<Invite | null>(null);
-  // const []
 
   useEffect(() => {
     (async () => {
-      const supabase = createClient();
-      const { data } = await supabase.auth.getClaims();
-      if (!data?.claims) return;
-      
-      const profile = await getOrCreateProfile(data.claims.sub);
-      if (!profile) return;
-      
-      const invite = await getValidOrCreateInvite(data.claims.sub);
+      const invite = await getValidOrCreateInvite(userId);
       if (!invite) return;
-
-      setEmail(data.claims.email);
-      setProfile(profile);
       setInvite(invite);
 
       if (process.env.NODE_ENV === "development") {
         console.log(`${window.location.origin}/add/?id=${profile!.user_id}&code=${invite.code}`)
       }
     })();
-  }, []);
+  }, [profile, email, userId]);
 
   return (
     <Popup
@@ -61,16 +48,14 @@ export function ShareProfilePopup({ children }: { children?: React.ReactNode }) 
               <QRCode
                 className="h-auto max-w-full w-full"
                 size={256}
-                value={`${window.location.origin}/add/?id=${profile!.user_id}&code=${invite.code}`}
+                value={`${window.location.origin}/add/?id=${userId}&code=${invite.code}`}
                 viewBox={`0 0 256 256`}
               />
             )}
           </div>
           
-          <p className={cn("bg-secondary text-muted-foreground font-semibold p-3 py-1.5 rounded-full w-max m-auto text-sm", {
-            "animate-pulse": !profile
-          })}>
-            {profile ? (getDisplayName(profile.first_name, profile.last_name) ?? email) : "Loading..."}
+          <p className="bg-secondary text-muted-foreground font-semibold p-3 py-1.5 rounded-full w-max m-auto text-sm">
+            {getDisplayName(profile.first_name, profile.last_name) ?? email}
           </p>
         </div>
 
