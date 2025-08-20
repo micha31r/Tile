@@ -23,7 +23,7 @@ export function FriendCard({
         <Avatar size={32} firstName={firstName} lastName={lastName} email={email} />
         <p className={cn("font-medium text-sm", {
           "text-muted-foreground": !displayName,
-        })}>{displayName ?? "--"}</p>
+        })}>{displayName || "--"}</p>
       </div>
     </div>
   );
