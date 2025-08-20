@@ -13,10 +13,10 @@ import { t } from "@/lib/theme";
 
 function CompleteIcon() {
   const { profile: { theme } } = useContext(ProfileContext);
-  
+
   return (
-    <div className={cn("flex w-6 aspect-square rounded-full", t("bg", theme, "b"))}>
-      <CheckIcon className={cn("w-4 h-4 m-auto", t("text", theme, "f"))} strokeWidth={3} />
+    <div className={`flex w-6 aspect-square rounded-full ${t("bg", theme, "b", "light")} dark:${t("bg", theme, "f", "dark")}`}>
+      <CheckIcon className={`w-4 h-4 m-auto ${t("text", theme, "f")} dark:text-white`} strokeWidth={3} />
     </div>
   )
 }

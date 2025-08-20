@@ -23,11 +23,18 @@ const THEME_CODES: Record<
 export function t(
   prefix: string,
   theme: Theme = fallbackTheme,
-  type: "b" | "f" = "b"
+  type: "b" | "f" = "b",
+  mode?: "light" | "dark"
 ): string {
   const codes = THEME_CODES[theme] || THEME_CODES[fallbackTheme];
   const lightCode = codes.light[type];
   const darkCode = codes.dark[type];
+
+  if (mode === "light") {
+    return `${prefix}-${theme}-${lightCode}`;
+  } else if (mode === "dark") {
+    return `${prefix}-${theme}-${darkCode}`;
+  }
 
   return `${prefix}-${theme}-${lightCode} dark:${prefix}-${theme}-${darkCode}`;
 }
