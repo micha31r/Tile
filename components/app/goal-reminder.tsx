@@ -70,22 +70,22 @@ export function GoalReminder() {
     return (
       <div className="space-y-2 p-4 bg-secondary rounded-3xl">
         <h4 className="font-medium">Snoozing</h4>
-        <p className="text-sm">You cannot set goals before 7am. Try again later.</p>
+        <p className="text-sm">You can only set goals between 7 am - 10 am. Try again later.</p>
       </div>
     );
   }
 
-  if (hour >= 9) {
+  if (hour >= 10) {
     return (
       <div className="space-y-2 p-4 bg-secondary rounded-3xl">
         <h4 className="font-medium">You are missing {4 - todayGoals.length} goals</h4>
-        <p className="text-sm">You cannot set goals outside of the designated time (7am - 9am). Try again tomorrow.</p>
+        <p className="text-sm">To restart your streak, make sure to set 4 goals tomorrow before 10 am.</p>
       </div>
     );
   }
 
   const timerTarget = new Date();
-  timerTarget.setHours(9, 0, 0, 0);
+  timerTarget.setHours(10, 0, 0, 0);
 
   return (
     <div className={cn("space-y-2 p-4 rounded-3xl", t("bg", theme, "b"))}>
