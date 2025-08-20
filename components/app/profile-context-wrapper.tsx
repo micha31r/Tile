@@ -12,9 +12,9 @@ export function ProfileContextWrapper({ user, children }: { user: JwtPayload, ch
   const [loaded, setLoad] = useState(false);
 
   const [profiles] = useRealtime<Profile>({
-    channelName: 'goal-today-calendar',
+    channelName: 'profile',
     schema: 'public',
-    table: 'goal',
+    table: 'profile',
     filter: `user_id=eq.${user.sub}`,
     getInitialData: async () => {
       const profile = await getOrCreateProfile(user.sub)
