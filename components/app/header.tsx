@@ -1,26 +1,20 @@
-import { createClient } from '@/lib/supabase/server';
+"use client"
+
 import Avatar from './avatar'
-import { redirect } from 'next/navigation';
 import { ShareIcon } from 'lucide-react';
 import { UserDetailPopup } from './user-detail-popup';
-import { getProfile } from '@/lib/data/profile';
 import { ShareProfilePopup } from './share-profile-popup';
+import { useContext } from 'react';
+import { ProfileContext } from './profile-context';
 
-export async function Header() {
-  const supabase = await createClient();
-
-  const { data, error } = await supabase.auth.getClaims();
-  if (error || !data?.claims) {
-    redirect("/auth/login");
-  }
-
-  const profile = await getProfile(data.claims.sub);
+export function Header() {
+  const { profile, email } = useContext(ProfileContext);
 
   return (
     <div className="sticky z-10 top-0 bg-background shadow-[0_-32px_0_48px_hsla(var(--background))] flex justify-between gap-4 items-center">
       <div>
         <UserDetailPopup>
-          <Avatar size={32} firstName={profile?.first_name} lastName={profile?.last_name} email={data.claims.email} />
+          <Avatar size={32} firstName={profile?.first_name} lastName={profile?.last_name} email={email} />
         </UserDetailPopup>
       </div>
       
