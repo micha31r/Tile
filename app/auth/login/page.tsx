@@ -1,4 +1,5 @@
 "use client";
+import { StatusMessagePopup } from "@/components/app/status-message-popup";
 import { Logo } from "@/components/logo";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
@@ -42,6 +43,8 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-1 flex-col gap-8 items-center justify-between">
+      <StatusMessagePopup />
+
       <Logo tileWidth={28} />
 
       <div className="flex flex-col gap-6 w-full">
