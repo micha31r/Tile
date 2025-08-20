@@ -26,6 +26,7 @@ export function ProfileContextWrapper({ user, children }: { user: JwtPayload, ch
   }
 
   if (profiles.length === 0) {
+    window.location.reload();
     return null;
   }
 
