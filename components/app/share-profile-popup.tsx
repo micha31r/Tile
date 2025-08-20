@@ -54,8 +54,8 @@ export function ShareProfilePopup({ children }: { children?: React.ReactNode }) 
             )}
           </div>
           
-          <p className="bg-secondary text-muted-foreground font-semibold p-3 py-1.5 rounded-full w-max m-auto text-sm">
-            {getDisplayName(profile.first_name, profile.last_name) || email}
+          <p className="bg-secondary text-muted-foreground font-semibold p-3 py-1.5 rounded-full w-max max-w-full m-auto text-sm">
+            <span className="line-clamp-1">{getDisplayName(profile.first_name, profile.last_name) || email}</span>
           </p>
         </div>
 
