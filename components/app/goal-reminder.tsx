@@ -6,9 +6,13 @@ import { RecordGoalPopup } from "./record-goal-popup";
 import { getGoalsByDate, Goal } from "@/lib/data/goal";
 import { useRealtime } from "../use-realtime";
 import { createClient } from "@/lib/supabase/client";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { cn } from "@/lib/utils";
+import { t } from "@/lib/theme";
+import { ProfileContext } from "./profile-context";
 
 export function GoalReminder() {
+  const { profile: { theme } } = useContext(ProfileContext);
   const router = useRouter()
   const [loaded, setLoaded] = useState<boolean>(false)
 
@@ -71,7 +75,7 @@ export function GoalReminder() {
     );
   }
 
-  if (hour >= 9) {
+  if (hour >= 23) {
     return (
       <div className="space-y-2 p-4 bg-secondary rounded-3xl">
         <h4 className="font-medium">You are missing {4 - todayGoals.length} goals</h4>
@@ -84,7 +88,7 @@ export function GoalReminder() {
   timerTarget.setHours(9, 0, 0, 0)
 
   return (
-    <div className="space-y-2 p-4 bg-blue-50 rounded-3xl">
+    <div className={cn("space-y-2 p-4 rounded-3xl", t("bg", theme, "b"))}>
       <h4 className="font-medium">Daily goals</h4>
       <p className="text-sm">Don&apos;t forget to set your four daily goals before the timer runs out. Finish all your goals to keep your streak going.</p>
       <div className="flex w-full justify-center p-4 py-4">

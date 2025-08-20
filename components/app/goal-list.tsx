@@ -1,17 +1,22 @@
 "use client"
 
 import { getGoalsByDate, Goal } from "@/lib/data/goal";
-import { CheckIcon, Goal, InfoIcon } from "lucide-react";
+import { CheckIcon, InfoIcon } from "lucide-react";
 import { useRealtime } from "../use-realtime";
 import { GoalReflectionPopup } from "./goal-reflection-popup";
 import { GoalDetailPopup } from "./calendar-cell-popup";
-import { InfoAlert } from "../info-alert";
 import { WarningAlert } from "../warning-alert";
+import { useContext } from "react";
+import { ProfileContext } from "./profile-context";
+import { cn } from "@/lib/utils";
+import { t } from "@/lib/theme";
 
 function CompleteIcon() {
+  const { profile: { theme } } = useContext(ProfileContext);
+  
   return (
-    <div className="flex w-6 aspect-square bg-blue-100 rounded-full">
-      <CheckIcon className="w-4 h-4 m-auto text-blue-700" strokeWidth={3} />
+    <div className={cn("flex w-6 aspect-square rounded-full", t("bg", theme, "b"))}>
+      <CheckIcon className={cn("w-4 h-4 m-auto", t("text", theme, "f"))} strokeWidth={3} />
     </div>
   )
 }

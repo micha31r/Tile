@@ -4,14 +4,18 @@ import { InfoIcon } from "lucide-react";
 import { DangerAlert } from "../danger-alert";
 import Input from "../input";
 import TextArea from "../textarea";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { WarningAlert } from "../warning-alert";
 import { createGoal } from "@/lib/data/goal";
+import { t } from "@/lib/theme";
+import { ProfileContext } from "./profile-context";
+import { cn } from "@/lib/utils";
 
 export function GoalForm({ onSuccess }: { onSuccess?: () => void }) {
   const [error, setError] = useState<string | null>(null);
   const [disabled, setDisabled] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+  const { profile: { theme } } = useContext(ProfileContext);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -60,7 +64,7 @@ export function GoalForm({ onSuccess }: { onSuccess?: () => void }) {
         <Input type="text" name="name" placeholder="Name" />
         <TextArea name="details" className="resize-none" placeholder="What is it about?" rows={3} />
       </div>
-      <button disabled={disabled} type="submit" className="bg-blue-700 disabled:opacity-80 text-background rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform">
+      <button disabled={disabled} type="submit" className={cn("disabled:opacity-80 text-background rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform", t("bg", theme, "f"))}>
         Add new goal
       </button>
     </form>

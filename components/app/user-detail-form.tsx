@@ -3,10 +3,11 @@
 import { CheckIcon, InfoIcon } from "lucide-react";
 import { DangerAlert } from "../danger-alert";
 import Input from "../input";
-import { useRef, useState } from "react";
-import { fallbackTheme, Theme, themeOptions } from "@/lib/theme";
+import { useContext, useRef, useState } from "react";
+import { fallbackTheme, t, Theme, themeOptions } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import { Profile, updateProfile } from "@/lib/data/profile";
+import { ProfileContext } from "./profile-context";
 
 function ThemeSelector({ name, defaultValue }: { name: string; defaultValue?: Theme }) {
   const [value, setValue] = useState<Theme>(defaultValue || fallbackTheme);
@@ -45,6 +46,7 @@ function ThemeSelector({ name, defaultValue }: { name: string; defaultValue?: Th
 }
 
 export function UserDetailForm({ onSuccess, userId, initialValues }: { onSuccess?: () => void; userId: string; initialValues: Partial<Profile> }) {
+  const { profile: { theme } } = useContext(ProfileContext);
   const [error, setError] = useState<string | null>(null);
   const [disabled, setDisabled] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
@@ -93,7 +95,7 @@ export function UserDetailForm({ onSuccess, userId, initialValues }: { onSuccess
 
       <ThemeSelector name="theme" defaultValue={initialValues.theme} />
 
-      <button disabled={disabled} type="submit" className="bg-blue-700 disabled:opacity-80 text-background rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform">
+      <button disabled={disabled} type="submit" className={cn("disabled:opacity-80 text-background rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform", t("bg", theme, "f"))}>
         Save changes
       </button>
     </form>

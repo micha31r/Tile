@@ -35,6 +35,6 @@ export function t(
 export const tailwindColorSafelist: string[] = themeOptions.flatMap(theme =>
   Array.from({ length: 10 }, (_, i) => {
     const shade = (i + 1) * 100;
-    return [`bg-${theme}-${shade}`, `dark:bg-${theme}-${shade}`];
+    return [`text-${theme}-${shade}`, `bg-${theme}-${shade}`, `dark:bg-${theme}-${shade}`];
   }).flat()
 );
