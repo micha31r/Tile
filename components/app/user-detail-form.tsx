@@ -8,6 +8,7 @@ import { fallbackTheme, t, Theme, themeOptions } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import { Profile, updateProfile } from "@/lib/data/profile";
 import { ProfileContext } from "./profile-context";
+import { InfoAlert } from "../info-alert";
 
 function ThemeSelector({ name, defaultValue }: { name: string; defaultValue?: Theme }) {
   const [value, setValue] = useState<Theme>(defaultValue || fallbackTheme);
@@ -133,17 +134,30 @@ export function UserDetailForm({ onSuccess, userId, initialValues }: { onSuccess
 
       <div className="w-full h-px bg-border/50"></div>
 
-      <div className="space-y-3">
+      {/* <div className="space-y-3"> */}
         {error && (
           <DangerAlert>
             <InfoIcon className="w-4 h-4" />
             {error}
           </DangerAlert>
         )}
-        <Input type="text" name="firstname" placeholder="First name" defaultValue={initialValues.first_name} />
-        <Input type="text" name="lastname" placeholder="Last name" defaultValue={initialValues.last_name} />
-        <Select name="timezone" defaultValue={initialValues.timezone} options={timezoneOptions} />
-      </div>
+        <div className="space-y-2">
+          <h4 className="font-medium">Display name</h4>
+          <div className="grid grid-cols-2 gap-3">
+            <Input type="text" name="firstname" placeholder="First name" defaultValue={initialValues.first_name} />
+            <Input type="text" name="lastname" placeholder="Last name" defaultValue={initialValues.last_name} />
+          </div>
+        </div>
+
+         <div className="space-y-2">
+          <h4 className="font-medium">Timezone</h4>
+          <InfoAlert>
+            <InfoIcon />
+            Timezone for email notifications
+          </InfoAlert>
+          <Select name="timezone" defaultValue={initialValues.timezone} options={timezoneOptions} />
+        </div>
+      {/* </div> */}
 
       <button disabled={disabled} type="submit" className={cn("disabled:opacity-80 text-white rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform", t("bg", theme, "f"))}>
         Save changes

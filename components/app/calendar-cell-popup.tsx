@@ -134,13 +134,15 @@ export function CalendarCellPopup({ calendarEntry, children }: { calendarEntry: 
           <div className="space-y-2">
             {alert}
 
-            <div className="space-y-2">
-              {calendarEntry.goals.map((goal, index) => (
-                <div key={index} onClick={() => triggers.current[index]?.()} className="hover:scale-95 transition-transform cursor-pointer">
-                  <GoalItem goal={goal} priority={index + 1} />
-                </div>
-              ))}
-            </div>
+            {calendarEntry.goals.length > 0 && (
+              <div className="space-y-2">
+                {calendarEntry.goals.map((goal, index) => (
+                  <div key={index} onClick={() => triggers.current[index]?.()} className="hover:scale-95 transition-transform cursor-pointer">
+                    <GoalItem goal={goal} priority={index + 1} />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <button onClick={() => popupTriggerRef.current?.()} className="bg-foreground disabled:opacity-80 text-background rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform">
