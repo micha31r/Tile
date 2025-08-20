@@ -45,12 +45,12 @@ export default function LoginPage() {
       <Logo tileWidth={28} />
 
       <div className="flex flex-col gap-6 w-full">
-        <h3 className="text-center text-xl font-semibold">Welcome to Tile</h3>
+        <h3 className="text-center text-xl font-medium">Welcome to Tile</h3>
         <p className="text-center leading-snug text-xl">
-          Enter your email address to get a magic link to log in.
+          Enter your email address to<br /> get a magic link to log in.
         </p>
         <p className="text-center leading-snug text-xl">
-          Didn&apos;t receive the email? Check your spam folder or contact us at <Link className="underline" href="mailto:support@tile.com">support@tile.com</Link>
+          Didn&apos;t receive the email?<br /> Check your spam folder or email<br /> <Link className="underline" href="mailto:${process.env.NEXT_PUBLIC_SUPPORT_EMAIL}">{process.env.NEXT_PUBLIC_SUPPORT_EMAIL}</Link>
         </p>
       </div>
 
