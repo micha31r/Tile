@@ -9,7 +9,7 @@ export function Popup({
   trigger, 
   children 
 }: { 
-  title: string; 
+  title: React.ReactNode; 
   trigger: (onClick: () => void) => React.ReactNode; 
   children?: React.ReactNode 
 }) {
@@ -47,7 +47,7 @@ export function Popup({
         }}>
           <div className="bg-background mx-4 mb-8 p-4 pb-0 rounded-3xl pointer-events-auto">
             <div className="flex flex-row gap-3 justify-between items-center mb-4">
-              <h2 className=" font-medium">{title}</h2>
+              <h2 className="font-medium flex-1">{title}</h2>
 
               <button onClick={toggle} className="flex items-center justify-center rounded-full w-8 aspect-square bg-secondary text-muted-foreground">
                 <XIcon className="w-4 h-4" strokeWidth={3} />
