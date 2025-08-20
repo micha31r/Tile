@@ -28,7 +28,9 @@ export function GoalDetailPopup({ goal, trigger }: { goal: Goal; trigger: (onCli
       <div className="space-y-4">
         <div className="space-y-2">
           <h4 className="font-medium">Name</h4>
-          <p>{goal.name}</p>
+          <p>
+            <span className="break-words">{goal.name}</span>
+          </p>
         </div>
 
         {goal.details && (
@@ -36,7 +38,9 @@ export function GoalDetailPopup({ goal, trigger }: { goal: Goal; trigger: (onCli
             <div className="w-full h-px bg-border/50"></div>
             <div className="space-y-2">
               <h4 className="font-medium">Description</h4>
-              <p>{goal.details}</p>
+              <p>
+                <span className="break-words">{goal.details}</span>
+              </p>
             </div>
           </>
         )}
@@ -46,7 +50,9 @@ export function GoalDetailPopup({ goal, trigger }: { goal: Goal; trigger: (onCli
             <div className="w-full h-px bg-border/50"></div>
             <div className="space-y-2">
               <h4 className="font-medium">Reflection</h4>
-              <p>{goal.reflection}</p>
+              <p>
+                <span className="break-words">{goal.reflection}</span>
+              </p>
             </div>
           </>
         )}
