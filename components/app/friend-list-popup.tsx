@@ -14,7 +14,7 @@ function FriendItemPopup({ friend, trigger }: { friend: FriendWithUser; trigger:
   const popupTriggerRef = useRef<(() => void) | null>(null);
   const [disabled, setDisabled] = useState(false);
 
-  const displayName = getDisplayName(friend.first_name, friend.last_name) || friend.email;
+  const displayName = getDisplayName(friend.first_name, friend.last_name) || friend.email || "user";
 
   async function handleRemoveFriend() {
     setDisabled(true);
@@ -92,8 +92,8 @@ export function FriendListPopup({ children }: { children?: React.ReactNode }) {
           <div className="space-y-2">
             {friends.map((friend, index) => (
               <div key={index} className="flex flex-row gap-3 items-center rounded-xl p-3 bg-secondary font-medium">
-                <Avatar size={32} firstName={friend.first_name} lastName={friend.last_name} email={friend.email} />
-                <h4 className="text-sm line-clamp-1 mr-auto">{getDisplayName(friend.first_name, friend.last_name) || friend.email}</h4>
+                <Avatar size={32} firstName={friend.first_name} lastName={friend.last_name} email={friend.email} style={(!friend.first_name && !friend.last_name && !friend.email) ? "shape" : "character"} />
+                <h4 className="text-sm line-clamp-1 mr-auto">{getDisplayName(friend.first_name, friend.last_name) || friend.email || "--"}</h4>
                 <button key={index} onClick={() => triggers.current[index]?.()} className="text-sm bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400 p-1 px-2 rounded-md">
                   Remove
                 </button>

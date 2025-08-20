@@ -12,7 +12,7 @@ export function FriendCard({
   lastName?: string; 
   children?: React.ReactNode 
 }) {
-  const displayName = getDisplayName(firstName, lastName);
+  const displayName = getDisplayName(firstName, lastName) || email;
 
   return (
     <div className="rounded-3xl bg-secondary p-2 space-y-2">
@@ -20,7 +20,7 @@ export function FriendCard({
         {children}
       </div>
       <div className="flex items-center flex-wrap gap-2">
-        <Avatar size={32} firstName={firstName} lastName={lastName} email={email} />
+        <Avatar size={32} firstName={firstName} lastName={lastName} email={email} style={!displayName ? "shape" : "character"} />
         <p className={cn("font-medium text-sm", {
           "text-muted-foreground": !displayName,
         })}>{displayName || "--"}</p>
