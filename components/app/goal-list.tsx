@@ -33,7 +33,9 @@ export function GoalItem({ goal, priority }: { goal: Goal, priority: number }) {
       <div className="flex justify-center items-center w-6 h-6 bg-neutral-200 dark:bg-neutral-700 text-muted-foreground rounded-full text-sm">
         {priority}
       </div>
-      <h4 className="flex-1 text-sm line-clamp-1 mr-auto">{goal.name}</h4>
+      <h4 className="flex-1 text-sm mr-auto">
+        <span className="line-clamp-1 break-all">{goal.name}</span>
+      </h4>
       {goal.completed ? <CompleteIcon /> : <IncompleteIcon />}
     </div>
   );

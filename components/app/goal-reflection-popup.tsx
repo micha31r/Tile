@@ -10,7 +10,7 @@ export function GoalReflectionPopup({ goal, children }: { goal: Goal, children?:
 
   return (
     <Popup
-      title={<span className="line-clamp-1">{goal.name}</span>}
+      title={<span className="line-clamp-1 break-all">{goal.name}</span>}
       trigger={(callback) => {
         popupTriggerRef.current = callback;
         return <div className="cursor-pointer hover:scale-95 transition-transform" onClick={callback}>{children}</div>;
