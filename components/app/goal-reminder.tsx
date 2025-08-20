@@ -70,7 +70,7 @@ export function GoalReminder() {
     return (
       <div className="space-y-2 p-4 bg-secondary rounded-3xl">
         <h4 className="font-medium">Snoozing</h4>
-        <p className="text-sm">You can only set goals between 7 am - 10 am. Try again later.</p>
+        <p className="text-sm">You can only set goals between 7 am - 10 am. Please come back later.</p>
       </div>
     );
   }
