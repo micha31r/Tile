@@ -21,9 +21,11 @@ export function FriendCard({
       </div>
       <div className="flex items-center flex-wrap gap-2">
         <Avatar size={32} firstName={firstName} lastName={lastName} email={email} style={!displayName ? "shape" : "character"} />
-        <p className={cn("font-medium text-sm", {
+        <p className={cn("font-medium text-sm flex-1", {
           "text-muted-foreground": !displayName,
-        })}>{displayName || "--"}</p>
+        })}>
+          <span className="line-clamp-1 break-all">{displayName || "--"}</span>
+        </p>
       </div>
     </div>
   );

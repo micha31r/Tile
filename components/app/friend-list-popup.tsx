@@ -93,7 +93,9 @@ export function FriendListPopup({ children }: { children?: React.ReactNode }) {
             {friends.map((friend, index) => (
               <div key={index} className="flex flex-row gap-3 items-center rounded-xl p-3 bg-secondary font-medium">
                 <Avatar size={32} firstName={friend.first_name} lastName={friend.last_name} email={friend.email} style={(!friend.first_name && !friend.last_name && !friend.email) ? "shape" : "character"} />
-                <h4 className="text-sm line-clamp-1 mr-auto">{getDisplayName(friend.first_name, friend.last_name) || friend.email || "--"}</h4>
+                <h4 className="flex-1 text-sm mr-auto">
+                  <span className="line-clamp-1 break-all">{getDisplayName(friend.first_name, friend.last_name) || friend.email || "--"}</span>
+                </h4>
                 <button key={index} onClick={() => triggers.current[index]?.()} className="text-sm bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400 p-1 px-2 rounded-md">
                   Remove
                 </button>
