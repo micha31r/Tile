@@ -16,12 +16,15 @@ export function StatusMessagePopup() {
   useEffect(() => {
     if (successMessage || errorMessage) {
       popupTriggerRef.current?.();
-      
-      // Remove search params
-      window.history.replaceState({}, '', window.location.pathname);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [popupTriggerRef.current]);
+
+  function closeMessage() {
+    popupTriggerRef.current?.();
+    // Remove search params
+    window.history.replaceState({}, '', window.location.pathname);
+  }
 
   const title = successMessage ? "Success" : errorMessage ? "An error has occured" : "Status";
 
@@ -45,7 +48,7 @@ export function StatusMessagePopup() {
           </DangerAlert>
         )}
 
-        <button onClick={() => popupTriggerRef.current?.()} className="bg-foreground disabled:opacity-80 text-background rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform">
+        <button onClick={closeMessage} className="bg-foreground disabled:opacity-80 text-background rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform">
           Done
         </button>
       </div>
