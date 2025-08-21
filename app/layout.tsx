@@ -10,6 +10,18 @@ export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
   title: "Tile",
   description: "An app to help you focus on what truly matters. 4 goals, daily check-offs, and friends to keep you motivated.",
+
+  // PWA
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)",  color: "#000000" }
+  ],
+
+  // IOS status bar
+  appleWebApp: { 
+    capable: true,
+    statusBarStyle: "black-translucent"
+  }
 };
 
 const geistSans = Geist({
