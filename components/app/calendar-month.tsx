@@ -96,7 +96,7 @@ export function CalendarCell({
   } else if (cell.status === "set") {
     cellContent = (
       <div className={cn("flex w-full aspect-square rounded-md p-2", backgroundColor)}>
-        <XIcon className={cn("w-full h-full", setColor)} strokeWidth={3} />
+        <XIcon className={cn("flex-1 w-auto h-auto", setColor)} strokeWidth={3} />
       </div>
     );
   } else {
