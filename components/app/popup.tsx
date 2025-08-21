@@ -45,7 +45,7 @@ export function Popup({
         <div className="fixed z-50 left-1/2 top-full transition-all duration-500 w-full sm:max-w-96 max-w-md" style={{
           transform: `translate(-50%, ${translateY}%)`
         }}>
-          <div className="bg-background mx-4 mb-8 p-4 pb-0 rounded-3xl pointer-events-auto">
+          <div className="bg-background mx-4 mb-8 p-4 pb-0 rounded-3xl pointer-events-auto overflow-clip">
             <div className="flex flex-row gap-3 justify-between items-center mb-4">
               <h2 className="font-medium flex-1">{title}</h2>
 
