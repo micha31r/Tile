@@ -42,7 +42,7 @@ export function Popup({
       <div onClick={onOutsideClick} className={cn("fixed w-full sm:max-w-96 h-full top-0 left-1/2 -translate-x-1/2 right-0 sm:rounded-[48px] transition-colors duration-500 overflow-hidden z-20", backgroundColor)} style={{
         pointerEvents: isOpen ? 'auto' : 'none'
       }}>
-        <div className="fixed z-50 left-1/2 top-full transition-all duration-500 w-full max-w-96" style={{
+        <div className="fixed z-50 left-1/2 top-full transition-all duration-500 w-full sm:max-w-96 max-w-md" style={{
           transform: `translate(-50%, ${translateY}%)`
         }}>
           <div className="bg-background mx-4 mb-8 p-4 pb-0 rounded-3xl pointer-events-auto">
