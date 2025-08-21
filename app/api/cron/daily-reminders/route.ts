@@ -75,8 +75,13 @@ export async function GET(req: Request) {
   // verify caller by header or vercel cron header
   const headers = new Headers(req.headers);
   const hasVercelCronHeader = headers.has("x-vercel-cron");
-  const hasOurSecret = CRON_SECRET && headers.get("x-cron-secret") === CRON_SECRET;
-  if (!hasVercelCronHeader && !hasOurSecret) {
+  const authHeader = headers.get("authorization");
+  const hasBearerSecret =
+    CRON_SECRET && authHeader === `Bearer ${CRON_SECRET}`;
+  const hasOurSecret =
+    CRON_SECRET && headers.get("x-cron-secret") === CRON_SECRET;
+
+  if (!hasVercelCronHeader && !hasOurSecret && !hasBearerSecret) {
     return new NextResponse("Unauthorised", { status: 401 });
   }
 
@@ -90,7 +95,10 @@ export async function GET(req: Request) {
 
   if (error) {
     console.error("rpc error:", error);
-    return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { ok: false, error: error.message },
+      { status: 500 }
+    );
   }
 
   const recipients: Recipient[] = (data ?? []) as Recipient[];
@@ -98,7 +106,9 @@ export async function GET(req: Request) {
     return NextResponse.json({ ok: true, claimed: 0, sent: 0 });
   }
 
-  const FROM = `"${process.env.APP_NAME}" <${process.env.EMAIL_USER as string}>`;
+  const FROM = `"${process.env.APP_NAME}" <${
+    process.env.EMAIL_USER as string
+  }>`;
   const batches = chunk(recipients, 25);
 
   let sent = 0;
@@ -122,5 +132,9 @@ export async function GET(req: Request) {
     }
   }
 
-  return NextResponse.json({ ok: true, claimed: recipients.length, sent });
+  return NextResponse.json({
+    ok: true,
+    claimed: recipients.length,
+    sent,
+  });
 }
