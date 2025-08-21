@@ -9,6 +9,11 @@ export default function manifest(): MetadataRoute.Manifest {
     display: "standalone",
     // Let supporting browsers prefer overlay on desktop, fall back to standalone elsewhere
     display_override: ["window-controls-overlay", "standalone", "minimal-ui"],
+    capture_links: "existing-client-navigate",
+    launch_handler: { client_mode: "navigate-existing" },
+    protocol_handlers: [
+      { protocol: "web+instapwa", url: "/open?payload=%s" }
+    ],
     background_color: "#ffffff",
     theme_color: "#000000",
     icons: [
@@ -31,5 +36,5 @@ export default function manifest(): MetadataRoute.Manifest {
         form_factor: "narrow"
       }
     ]
-  };
+  } as unknown as MetadataRoute.Manifest;
 }
