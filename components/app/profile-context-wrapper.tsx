@@ -26,17 +26,13 @@ export function ProfileContextWrapper({ user, children }: { user: JwtPayload, ch
 
   useEffect(() => {
     if (profiles.length > 0) {
+      window.location.href = "/auth/login";
       setProfile((profiles as Profile[])[0]);
     }
   }, [profiles]);
 
-  if (!loaded) {
+  if (!loaded || !profile) {
     return <Loading />;
-  }
-
-  if (!profile) {
-    window.location.reload();
-    return null;
   }
 
   const contextData: ProfileContextData = {
