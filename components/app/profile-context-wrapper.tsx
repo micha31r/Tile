@@ -4,10 +4,13 @@ import { getOrCreateProfile, Profile } from "@/lib/data/profile";
 import { ProfileContext, ProfileContextData } from "./profile-context";
 import { JwtPayload } from "@supabase/supabase-js";
 import { useRealtime } from "../use-realtime";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Loading from "@/app/loading";
+import { cn } from "@/lib/utils";
 
 export function ProfileContextWrapper({ user, children }: { user: JwtPayload, children: React.ReactNode }) {
   const [loaded, setLoad] = useState(false);
+  const [profile, setProfile] = useState<Profile | null>(null);
 
   const [profiles] = useRealtime<Profile>({
     channelName: 'profile',
@@ -21,23 +24,31 @@ export function ProfileContextWrapper({ user, children }: { user: JwtPayload, ch
     }
   });
 
+  useEffect(() => {
+    if (profiles.length > 0) {
+      setProfile((profiles as Profile[])[0]);
+    }
+  }, [profiles]);
+
   if (!loaded) {
-    return null;
+    return <Loading />;
   }
 
-  if (profiles.length === 0) {
-    window.location.reload();
+  if (!profile) {
     return null;
   }
 
   const contextData: ProfileContextData = {
     email: user.email,
     userId: user.sub,
-    profile: (profiles as Profile[]).at(0)!
+    profile: profile
   };
 
   return (
     <ProfileContext value={contextData}>
+      <Loading className={cn("fixed z-30 inset-0 w-full h-[100svh]", {
+        "opacity-0 pointer-events-none": loaded
+      })} />
       {children}
     </ProfileContext>
   );

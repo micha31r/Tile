@@ -1,7 +1,10 @@
-export default function Loading() {
+import { Logo } from "@/components/logo";
+import { cn } from "@/lib/utils";
+
+export default function Loading({ className }: { className?: string }) {
   return (
-    <div className="flex items-center justify-center h-full">
-      <p className="text-lg">Loading...</p>
+    <div className={cn("flex items-center justify-center h-full", className)}>
+      <Logo />
     </div>
   );
 }

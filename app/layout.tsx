@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
@@ -11,17 +11,19 @@ export const metadata: Metadata = {
   title: "Tile",
   description: "An app to help you focus on what truly matters. 4 goals, daily check-offs, and friends to keep you motivated.",
 
-  // PWA
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)",  color: "#000000" }
-  ],
-
   // IOS status bar
   appleWebApp: { 
     capable: true,
     statusBarStyle: "black-translucent"
   }
+};
+
+export const viewport: Viewport = {
+  // PWA
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)",  color: "#000000" }
+  ],
 };
 
 const geistSans = Geist({

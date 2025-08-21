@@ -4,6 +4,8 @@ import { JwtPayload } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ProfileContextWrapper } from "@/components/app/profile-context-wrapper";
+import Loading from "../loading";
+import { cn } from "@/lib/utils";
 
 
 export default function AppLayout({
@@ -25,8 +27,14 @@ export default function AppLayout({
     })();
   }, []);
 
+  useEffect(() => {
+    if (loaded) {
+
+    }
+  }, [loaded]);
+
   if (!loaded) {
-    return null;
+    return <Loading />;
   }
 
   if (!user) {
@@ -36,6 +44,9 @@ export default function AppLayout({
 
   return (
     <ProfileContextWrapper user={user}>
+      <Loading className={cn("fixed z-30 inset-0 w-full h-[100svh]", {
+        "opacity-0 pointer-events-none": loaded
+      })} />
       {children}
     </ProfileContextWrapper>
   );
