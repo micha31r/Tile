@@ -22,7 +22,10 @@ export default function Home() {
         Our philosophy? Keep it simple.
 
         <br />
-        4 goals, daily check-offs, and friends to keep you motivated.
+        4 goals, daily check-offs, and friends to
+
+        <br />
+        keep you motivated.
       </p>
 
       <Link href="/auth/login" className="text-center rounded-full bg-foreground text-background px-6 py-4 w-full text-md font-medium hover:scale-95 transition-transform">
