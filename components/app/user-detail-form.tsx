@@ -126,6 +126,12 @@ export function UserDetailForm({ onSuccess, userId, initialValues }: { onSuccess
     onSuccess?.();
   }
 
+  function handleCancel(event: React.MouseEvent<HTMLButtonElement>) {
+    event.preventDefault();
+    onSuccess?.();
+    window.location.reload();
+  }
+
   const timezoneOptions = Intl.supportedValuesOf("timeZone");
 
   return (
@@ -159,9 +165,14 @@ export function UserDetailForm({ onSuccess, userId, initialValues }: { onSuccess
         </div>
       {/* </div> */}
 
-      <button disabled={disabled} type="submit" className={cn("disabled:opacity-80 text-white rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform", t("bg", theme, "f"))}>
-        Save changes
-      </button>
+      <div className="flex gap-3 sticky bottom-0 shadow-[0_0_0_16px_hsla(var(--background))] bg-background">
+        <button onClick={handleCancel} className="text-background bg-foreground rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform">
+          Cancel
+        </button>
+        <button disabled={disabled} type="submit" className={cn("disabled:opacity-80 text-white rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform", t("bg", theme, "f"))}>
+          Save changes
+        </button>
+      </div>
     </form>
   );
 }
