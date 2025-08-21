@@ -9,7 +9,7 @@ const defaultUrl = process.env.NEXT_PUBLIC_DOMAIN ?? "http://localhost:3000";
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
   title: "Tile",
-  description: "Focus on daily goals that truly matter",
+  description: "An app to help you focus on what truly matters. 4 goals, daily check-offs, and friends to keep you motivated.",
 };
 
 const geistSans = Geist({
