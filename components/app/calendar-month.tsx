@@ -5,7 +5,7 @@ import { Tile } from "../tile/tile";
 import { Goal } from "@/lib/data/goal";
 import { useRealtime } from "../use-realtime";
 import { createClient } from "@/lib/supabase/client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CalendarCellPopup } from "./calendar-cell-popup";
 import { XIcon } from "lucide-react";
 
@@ -74,7 +74,13 @@ const allCompletedColor = "bg-slate-700 dark:bg-neutral-300";
 const backgroundColor = "bg-neutral-100 dark:bg-neutral-800";
 const borderColor = "border-neutral-100 dark:border-neutral-800";
 
-export function CalendarCell({ entry }: { entry: DayEntry }) {
+export function CalendarCell({ 
+  entry, 
+  handleClick 
+}: { 
+  entry: DayEntry; 
+  handleClick: (data: DayEntry) => void 
+}) {
   const cell = getCellData(entry);
   const isFutureDate = new Date(entry.date) > new Date();
   let cellContent;
@@ -105,13 +111,19 @@ export function CalendarCell({ entry }: { entry: DayEntry }) {
   }
 
   return (
-    <CalendarCellPopup calendarEntry={entry}>
+    <div onClick={() => handleClick(entry)}>
       {cellContent}
-    </CalendarCellPopup>
+    </div>
   );
 }
 
-export function CalendarCellToday({ entry }: { entry: DayEntry }) {
+export function CalendarCellToday({ 
+  entry, 
+  handleClick 
+}: { 
+  entry: DayEntry; 
+  handleClick: (data: DayEntry) => void 
+}) {
   const [cell, setCell] = useState<CellData>(getCellData(entry));
 
   const start = new Date();
@@ -167,12 +179,12 @@ export function CalendarCellToday({ entry }: { entry: DayEntry }) {
   }
 
   return (
-    <CalendarCellPopup calendarEntry={{
+    <div onClick={() => handleClick({
       date: entry.date,
       goals: goals as Goal[]
-    }}>
+    })}>
       {cellContent}
-    </CalendarCellPopup>
+    </div>
   );
 }
 
@@ -181,7 +193,7 @@ function PlaceHolderCells({ count }: { count: number }) {
     <>
       {Array.from({ length: count }).map((_, index) => (
         <div key={index} className="animate-pulse">
-          <CalendarCell entry={{ date: '0000-00-00', goals: [] } as unknown as DayEntry} />
+          <CalendarCell entry={{ date: '0000-00-00', goals: [] } as unknown as DayEntry} handleClick={() => {}} />
         </div>
       ))}
     </>
@@ -196,6 +208,8 @@ export function CalendarMonth({ userId, month, year, showLabel = false }: { user
   const startDay = (jsDay === 0) ? 6 : jsDay - 1;
   const [data, setData] = useState<CalendarMonthData>({});
   const [loaded, setLoaded] = useState(false);
+  const [selectedEntry, setSelectedEntry] = useState<DayEntry>({ date: '', goals: [] });
+  const popupTriggerRef = useRef<(() => void) | null>(null);
 
   const todayDateString = getDateString(new Date());
 
@@ -255,6 +269,11 @@ export function CalendarMonth({ userId, month, year, showLabel = false }: { user
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  function handleClick(data: DayEntry) {
+    setSelectedEntry(data);
+    popupTriggerRef.current?.();
+  }
+
   return (
     <div className="grid grid-cols-7 gap-1 [&>p]:font-medium [&>p]:text-center [&>p]:text-sm [&>p]:text-muted-foreground">
       {showLabel && (
@@ -276,10 +295,18 @@ export function CalendarMonth({ userId, month, year, showLabel = false }: { user
       {!loaded ? (
         <PlaceHolderCells count={daysInMonth} />
       ) : Object.values(data).map(entry => (
-          entry.date == todayDateString 
-            ? <CalendarCellToday key={entry.date} entry={entry} />
-            : <CalendarCell key={entry.date} entry={entry} />
+        <div key={entry.date} className="cursor-pointer hover:scale-90 transition-transform">
+          {entry.date == todayDateString
+            ? <CalendarCellToday entry={entry} handleClick={handleClick} />
+            : <CalendarCell entry={entry} handleClick={handleClick} />
+          }
+        </div>
       ))}
+
+      <CalendarCellPopup calendarEntry={selectedEntry} trigger={(callback) => {
+        popupTriggerRef.current = callback;
+        return null;
+      }} />
     </div>
   );
 }

@@ -72,7 +72,13 @@ export function GoalDetailPopup({ goal, trigger }: { goal: Goal; trigger: (onCli
   );
 }
 
-export function CalendarCellPopup({ calendarEntry, children }: { calendarEntry: DayEntry, children?: React.ReactNode }) {
+export function CalendarCellPopup({ 
+  calendarEntry, 
+  trigger 
+}: { 
+  calendarEntry: DayEntry, 
+  trigger: (onClick: () => void) => React.ReactNode
+}) {
   const popupTriggerRef = useRef<(() => void) | null>(null);
   const triggers = useRef<(() => void)[]>([]);
   const items = useMemo(() => {
@@ -133,7 +139,7 @@ export function CalendarCellPopup({ calendarEntry, children }: { calendarEntry: 
         title={`${getDisplayDateString(new Date(calendarEntry.date))}`}
         trigger={(callback) => {
           popupTriggerRef.current = callback;
-          return <div className="cursor-pointer hover:scale-95 transition-transform" onClick={callback}>{children}</div>;
+          return trigger(callback);
         }}
       >
         <div className="space-y-4">
