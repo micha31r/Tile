@@ -10,14 +10,17 @@ import { Profile, updateProfile } from "@/lib/data/profile";
 import { ProfileContext } from "./profile-context";
 import { InfoAlert } from "../info-alert";
 import MobileDetect from "mobile-detect";
+import { useHaptic } from "react-haptic";
 
 function ThemeSelector({ name, defaultValue }: { name: string; defaultValue?: Theme }) {
   const [value, setValue] = useState<Theme>(defaultValue || fallbackTheme);
+  const { vibrate } = useHaptic();
 
   function handleSelection(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
     const theme = event.currentTarget.value as Theme;
     setValue(theme);
+    vibrate();
   }
 
   return (
@@ -50,11 +53,13 @@ function ThemeSelector({ name, defaultValue }: { name: string; defaultValue?: Th
 function Select({ name, defaultValue, options }: { name: string; defaultValue?: Theme; options: string[] }) {
   const { profile: { theme } } = useContext(ProfileContext);
   const [value, setValue] = useState<Theme>(defaultValue || fallbackTheme);
+  const { vibrate } = useHaptic();
 
   function handleSelection(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
     const theme = event.currentTarget.value as Theme;
     setValue(theme);
+    vibrate();
   }
 
   return (
@@ -99,6 +104,7 @@ export function UserDetailForm({ onSuccess, userId, initialValues }: { onSuccess
   const formRef = useRef<HTMLFormElement>(null);
   const [rerender, setRerender] = useState(0);
   const [isIOS, setIsIOS] = useState(false);
+  const { vibrate } = useHaptic();
   
   useEffect(() => {
     const md = new MobileDetect(window.navigator.userAgent);
@@ -108,6 +114,7 @@ export function UserDetailForm({ onSuccess, userId, initialValues }: { onSuccess
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
+    vibrate();
 
     const formData = new FormData(event.currentTarget);
     const firstname = formData.get("firstname");
