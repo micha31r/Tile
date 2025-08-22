@@ -88,7 +88,7 @@ export function CalendarCell({
   if (cell.status === "unset") {
     cellContent = (
       <div className={cn("flex w-full aspect-square rounded-md", backgroundColor, {
-        [`scale-[25%]`]: isFutureDate
+        [`scale-[25%] rounded-full`]: isFutureDate
       })}>
       </div>
     );
