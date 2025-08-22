@@ -1,7 +1,12 @@
+"use client";
+
 import { Logo } from "@/components/logo";
 import Link from "next/link";
+import { useHaptic } from "react-haptic";
 
 export default function Home() {
+  const { vibrate } = useHaptic();
+
   return (
     <div className="flex flex-1 flex-col gap-8 items-center justify-between sm:pt-0 pt-4">
       <Logo tileWidth={28} />
@@ -28,7 +33,7 @@ export default function Home() {
         to keep you motivated.
       </p>
 
-      <Link href="/auth/login" className="text-center rounded-full bg-foreground text-background px-6 py-4 w-full text-md font-medium hover:scale-95 transition-transform">
+      <Link onClick={vibrate} href="/auth/login" className="text-center rounded-full bg-foreground text-background px-6 py-4 w-full text-md font-medium hover:scale-95 transition-transform">
         Continue with email
       </Link>
     </div>
