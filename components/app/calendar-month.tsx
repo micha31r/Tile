@@ -68,10 +68,10 @@ function getCellData(entry: DayEntry): CellData {
   };
 }
 
-const setColor = "text-neutral-300 dark:text-neutral-600";
-const partialColor = "bg-neutral-300 dark:bg-neutral-600";
+const setColor = "text-slate-400 dark:text-neutral-600";
+const partialColor = "bg-slate-400 dark:bg-neutral-600";
 const allCompletedColor = "bg-slate-700 dark:bg-neutral-300";
-const backgroundColor = "bg-neutral-100 dark:bg-neutral-800";
+const backgroundColor = "bg-neutral-200 dark:bg-neutral-800";
 // const borderColor = "border-neutral-100 dark:border-neutral-800";
 
 export function CalendarCell({ 
