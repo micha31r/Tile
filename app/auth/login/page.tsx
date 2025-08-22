@@ -81,14 +81,16 @@ export default function LoginPage() {
         </p>
       </div>
 
-      <form className="space-y-4 w-full" onSubmit={onSubmit}>
-        <button onClick={handleTryAgain} className={cn("block opacity-0 pointer-events-none transition-opacity text-muted-foreground text-sm m-auto", {
-          "opacity-100 pointer-events-auto": status === "error" || status === "success",
-        })}>
-          Click to try again
-        </button>
+      <form className="w-full" onSubmit={onSubmit}>
+        <div className="h-0">
+          <button onClick={handleTryAgain} className={cn("block -translate-y-[calc(100%+16px)] opacity-0 pointer-events-none transition-opacity text-muted-foreground text-sm m-auto", {
+            "opacity-100 pointer-events-auto": status === "error" || status === "success",
+          })}>
+            Click to try again
+          </button>
+        </div>
 
-        <input required type="email" name="email" autoComplete="off" data-1p-ignore data-lpignore="true" data-protonpass-ignore="true" className="bg-secondary placeholder:text-muted-foreground py-4 indent-6 rounded-2xl w-full outline-2 outline-offset-4 outline-border font-medium" placeholder="tile@example.com" />
+        <input required type="email" name="email" autoComplete="off" data-1p-ignore data-lpignore="true" data-protonpass-ignore="true" className="mb-4 bg-secondary placeholder:text-muted-foreground py-4 indent-6 rounded-2xl w-full outline-2 outline-offset-4 outline-border font-medium" placeholder="tile@example.com" />
         <button disabled={status !== 'idle'} type="submit" className="bg-foreground disabled:opacity-80 text-background rounded-full px-6 py-4 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform">
           {status === 'idle' && "Get magic link"}
           {status === 'loading' && "Sending..."}
