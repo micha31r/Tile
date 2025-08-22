@@ -6,7 +6,7 @@ import { useRealtime } from "../use-realtime";
 import { GoalReflectionPopup } from "./goal-reflection-popup";
 import { GoalDetailPopup } from "./calendar-cell-popup";
 import { WarningAlert } from "../warning-alert";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ProfileContext } from "./profile-context";
 import { t } from "@/lib/theme";
 import { getTodayRangeAsUTC } from "@/lib/utils";
@@ -44,6 +44,7 @@ export function GoalItem({ goal, priority }: { goal: Goal, priority: number }) {
 
 export function GoalList({ userId, emptyMessage }: { userId: string, emptyMessage?: string }) {
   const [startUTC, endUTC] = getTodayRangeAsUTC();
+  const [loaded, setLoaded] = useState(false);
 
   const [goals] = useRealtime<Goal>({
     channelName: 'goal-list',
@@ -51,7 +52,9 @@ export function GoalList({ userId, emptyMessage }: { userId: string, emptyMessag
     table: 'goal',
     filter: `created_at=gte.${startUTC}`,
     getInitialData: async () => {
-      return await filterGoalsByTimeRange(userId, startUTC, endUTC);
+      const data = await filterGoalsByTimeRange(userId, startUTC, endUTC);
+      setLoaded(true);
+      return data;
     }
   });
 
@@ -65,6 +68,22 @@ export function GoalList({ userId, emptyMessage }: { userId: string, emptyMessag
     <div className="space-y-4">
       <h3 className="font-medium">Today</h3>
       <div className="space-y-2">
+        {!loaded && (
+          <>
+            <div className="h-12 animate-pulse rounded-xl bg-secondary"></div>
+            <div className="h-12 animate-pulse rounded-xl bg-secondary"></div>
+            <div className="h-12 animate-pulse rounded-xl bg-secondary"></div>
+            <div className="h-12 animate-pulse rounded-xl bg-secondary"></div>
+          </>
+        )}
+
+        {loaded && todayGoals.length === 0 && emptyMessage && (
+          <WarningAlert>
+            <InfoIcon />
+            {emptyMessage}
+          </WarningAlert>
+        )}
+
         {todayGoals.map((goal, index) => (
           <div key={index}>
             {goal.completed ? (
@@ -76,13 +95,6 @@ export function GoalList({ userId, emptyMessage }: { userId: string, emptyMessag
             )}
           </div>
         ))}
-
-        {todayGoals.length === 0 && emptyMessage && (
-          <WarningAlert>
-            <InfoIcon />
-            {emptyMessage}
-          </WarningAlert>
-        )}
       </div>
     </div>
   );
