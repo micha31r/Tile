@@ -3,12 +3,13 @@
 import { CheckIcon, InfoIcon } from "lucide-react";
 import { DangerAlert } from "../danger-alert";
 import Input from "../input";
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { fallbackTheme, t, Theme, themeOptions } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import { Profile, updateProfile } from "@/lib/data/profile";
 import { ProfileContext } from "./profile-context";
 import { InfoAlert } from "../info-alert";
+import MobileDetect from "mobile-detect";
 
 function ThemeSelector({ name, defaultValue }: { name: string; defaultValue?: Theme }) {
   const [value, setValue] = useState<Theme>(defaultValue || fallbackTheme);
@@ -97,6 +98,12 @@ export function UserDetailForm({ onSuccess, userId, initialValues }: { onSuccess
   const [disabled, setDisabled] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const [rerender, setRerender] = useState(0);
+  const [isIOS, setIsIOS] = useState(false);
+  
+  useEffect(() => {
+    const md = new MobileDetect(window.navigator.userAgent);
+    setIsIOS(md.is("iPhone") || md.is("iPad") || md.os() === "iOS");
+  }, []);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -167,7 +174,9 @@ export function UserDetailForm({ onSuccess, userId, initialValues }: { onSuccess
         </div>
       {/* </div> */}
 
-      <div className="flex gap-3 sticky bottom-0 shadow-[0_0_0_16px_hsla(var(--background))] bg-background">
+      <div className={cn("flex gap-3 sticky bottom-4 shadow-[0_0_0_16px_hsla(var(--background))] bg-background", {
+        "bottom-8 shadow-[0_16px_0_32px_hsla(var(--background))]": isIOS
+      })}>
         <button onClick={handleCancel} className="text-background bg-foreground rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform">
           Cancel
         </button>
