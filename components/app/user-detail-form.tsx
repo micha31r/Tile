@@ -96,6 +96,7 @@ export function UserDetailForm({ onSuccess, userId, initialValues }: { onSuccess
   const [error, setError] = useState<string | null>(null);
   const [disabled, setDisabled] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+  const [rerender, setRerender] = useState(0);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -129,14 +130,15 @@ export function UserDetailForm({ onSuccess, userId, initialValues }: { onSuccess
   function handleCancel(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
     onSuccess?.();
-    window.location.reload();
+    setRerender(prev => prev + 1);
+    formRef.current?.reset();
   }
 
   const timezoneOptions = Intl.supportedValuesOf("timeZone");
 
   return (
     <form ref={formRef} name="profile" onSubmit={handleSubmit} className="space-y-4">
-      <ThemeSelector name="theme" defaultValue={initialValues.theme} />
+      <ThemeSelector key={rerender} name="theme" defaultValue={initialValues.theme} />
 
       <div className="w-full h-px bg-border/50"></div>
 
@@ -161,7 +163,7 @@ export function UserDetailForm({ onSuccess, userId, initialValues }: { onSuccess
             <InfoIcon />
             Timezone for email notifications
           </InfoAlert>
-          <Select name="timezone" defaultValue={initialValues.timezone} options={timezoneOptions} />
+          <Select key={rerender} name="timezone" defaultValue={initialValues.timezone} options={timezoneOptions} />
         </div>
       {/* </div> */}
 
