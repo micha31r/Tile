@@ -41,7 +41,7 @@ export function ShareProfilePopup({ children }: { children?: React.ReactNode }) 
         </InfoAlert>
 
         <div className="space-y-2 py-4">
-          <div className={cn("w-40 aspect-square p-1 bg-white m-auto", {
+          <div className={cn("w-48 aspect-square p-1 bg-white m-auto", {
             "animate-pulse bg-secondary": !invite
           })}>
             {invite && (
