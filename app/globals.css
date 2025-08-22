@@ -69,4 +69,19 @@
   html, body {
     @apply overscroll-none;
   }
+  /* Disable rubber banding effect */
+  * {
+    @apply overscroll-none;
+  }
+}
+
+/* Disable scroll bar */
+/* Firefox */
+* {
+  scrollbar-width: none;
+}
+
+/* Chrome, Safari, Edge */
+*::-webkit-scrollbar {
+  display: none;
 }
