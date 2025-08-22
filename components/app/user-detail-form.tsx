@@ -58,7 +58,7 @@ function Select({ name, defaultValue, options }: { name: string; defaultValue?: 
 
   return (
     <div>
-      <div className="space-y-1 w-full rounded-2xl bg-secondary p-2 overflow-y-auto max-h-48">
+      <div className="space-y-1 w-full rounded-2xl bg-secondary p-2 overflow-y-auto max-h-60">
         {options.map((item, index) => (
           <React.Fragment key={index}>
             {index !== 0 && (
