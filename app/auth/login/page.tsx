@@ -89,7 +89,6 @@ export default function LoginPage() {
       <Suspense fallback={null}>
         <StatusMessagePopup />
       </Suspense>
-      {deviceId}
 
       <div onClick={handleReload} className="hover:scale-95 transition-transform cursor-pointer">
         <Logo tileWidth={28} />
