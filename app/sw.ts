@@ -14,7 +14,7 @@ declare const self: ServiceWorkerGlobalScope;
 
 /* 2 Config you may tweak */
 const AUTH_CALLBACK_PREFIX = "/auth/confirm"; // your server callback path
-const SUCCESS_PATH = "/";                     // final path after successful login
+const SUCCESS_PATH = "/app";                     // final path after successful login
 const SUCCESS_HEADER = "x-auth-event";        // optional success header name
 const SUCCESS_HEADER_VALUE = "login";         // optional success header value
 
