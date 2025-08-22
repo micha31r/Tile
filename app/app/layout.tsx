@@ -7,7 +7,6 @@ import { ProfileContextWrapper } from "@/components/app/profile-context-wrapper"
 import Loading from "../loading";
 import { cn } from "@/lib/utils";
 
-
 export default function AppLayout({
   children,
 }: {
@@ -26,12 +25,6 @@ export default function AppLayout({
       setLoaded(true);
     })();
   }, []);
-
-  useEffect(() => {
-    if (loaded) {
-
-    }
-  }, [loaded]);
 
   if (!loaded) {
     return <Loading />;
