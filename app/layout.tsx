@@ -3,7 +3,6 @@ import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import { AppFrame } from "@/components/app-frame";
-import AuthSync from "@/components/auth-sync";
 
 const defaultUrl = process.env.NEXT_PUBLIC_DOMAIN ?? "http://localhost:3000";
 
@@ -51,7 +50,6 @@ export default function RootLayout({
             {children}
           </AppFrame>
         </ThemeProvider>
-        <AuthSync />
       </body>
     </html>
   );
