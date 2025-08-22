@@ -10,16 +10,19 @@ import { createGoal } from "@/lib/data/goal";
 import { t } from "@/lib/theme";
 import { ProfileContext } from "./profile-context";
 import { cn, getTodayRangeAsUTC } from "@/lib/utils";
+import { useHaptic } from "react-haptic";
 
 export function GoalForm({ onSuccess }: { onSuccess?: () => void }) {
   const [error, setError] = useState<string | null>(null);
   const [disabled, setDisabled] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const { profile: { theme } } = useContext(ProfileContext);
+  const { vibrate } = useHaptic();
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
+    vibrate();
 
     const formData = new FormData(event.currentTarget);
     const name = formData.get("name");
