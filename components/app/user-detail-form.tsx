@@ -160,11 +160,11 @@ export function UserDetailForm({ onSuccess, initialValues }: { onSuccess?: () =>
         <LogoutButton className="ml-auto rounded-full bg-secondary text-muted-foreground font-medium p-4 py-2" />
       </div>
 
-      <div className="w-full h-px bg-border/50"></div>
+      <div className="w-full h-px bg-border/50 dark:bg-border"></div>
 
       <ThemeSelector key={rerender} name="theme" defaultValue={initialValues.theme} />
 
-      <div className="w-full h-px bg-border/50"></div>
+      <div className="w-full h-px bg-border/50 dark:bg-border"></div>
 
       {/* <div className="space-y-3"> */}
         {error && (

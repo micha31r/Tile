@@ -35,7 +35,7 @@ export function GoalDetailPopup({ goal, trigger }: { goal: Goal; trigger: (onCli
 
         {goal.details && (
           <>
-            <div className="w-full h-px bg-border/50"></div>
+            <div className="w-full h-px bg-border/50 dark:bg-border"></div>
             <div className="space-y-2">
               <h4 className="font-medium">Description</h4>
               <p>
@@ -47,7 +47,7 @@ export function GoalDetailPopup({ goal, trigger }: { goal: Goal; trigger: (onCli
         
         {goal.reflection && (
           <>
-            <div className="w-full h-px bg-border/50"></div>
+            <div className="w-full h-px bg-border/50 dark:bg-border"></div>
             <div className="space-y-2">
               <h4 className="font-medium">Reflection</h4>
               <p>

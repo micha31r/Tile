@@ -65,7 +65,7 @@ export function Popup({
             </div>
 
             {/* Seperator */}
-            <div className="w-full h-px bg-border/50"></div>
+            <div className="w-full h-px bg-border/50 dark:bg-border"></div>
 
             <div className={cn("py-4", {
               "pb-8": isIOS
