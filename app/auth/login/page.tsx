@@ -2,13 +2,18 @@
 import { StatusMessagePopup } from "@/components/app/status-message-popup";
 import { Logo } from "@/components/logo";
 import { createClient } from "@/lib/supabase/client";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
+import { useHaptic } from "react-haptic";
 
 type ButtonStatus = 'idle' | 'loading' | 'success' | 'error';
 
 export default function LoginPage() {
   const [status, setStatus] = useState<ButtonStatus>('idle');
+  const router = useRouter();
+  const { vibrate } = useHaptic();
 
   async function signInWithEmail(email: string) {
     const supabase = createClient();
@@ -35,10 +40,24 @@ export default function LoginPage() {
     const { error } = await signInWithEmail(email);
     if (error) {
       setStatus('error');
+      router.push(`/auth/login?error=${error.message}`);
       return;
     }
 
     setStatus('success');
+  }
+
+  function handleReload() {
+    vibrate();
+    window.location.reload();
+  }
+
+  function handleTryAgain(event: React.MouseEvent<HTMLButtonElement>) {
+    if (status === "success" || status === "error") {
+      event.preventDefault();
+      vibrate();
+      setStatus('idle');
+    }
   }
 
   return (
@@ -47,7 +66,9 @@ export default function LoginPage() {
         <StatusMessagePopup />
       </Suspense>
 
-      <Logo tileWidth={28} />
+      <div onClick={handleReload} className="hover:scale-95 transition-transform cursor-pointer">
+        <Logo tileWidth={28} />
+      </div>
 
       <div className="flex flex-col gap-6 w-full">
         <h3 className="text-center text-xl font-medium">Welcome to Tile</h3>
@@ -60,6 +81,12 @@ export default function LoginPage() {
       </div>
 
       <form className="space-y-4 w-full" onSubmit={onSubmit}>
+        <button onClick={handleTryAgain} className={cn("block opacity-0 pointer-events-none transition-colors text-muted-foreground text-sm m-auto", {
+          "opacity-100 pointer-events-auto": status === "error" || status === "success",
+        })}>
+          Click to try again
+        </button>
+
         <input required type="email" name="email" autoComplete="off" data-1p-ignore data-lpignore="true" data-protonpass-ignore="true" className="bg-secondary placeholder:text-muted-foreground py-4 indent-6 rounded-2xl w-full outline-2 outline-offset-4 outline-border font-medium" placeholder="tile@example.com" />
         <button disabled={status !== 'idle'} type="submit" className="bg-foreground disabled:opacity-80 text-background rounded-full px-6 py-4 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform">
           {status === 'idle' && "Get magic link"}
