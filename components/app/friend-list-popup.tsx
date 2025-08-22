@@ -9,15 +9,18 @@ import { DangerAlert } from "../danger-alert";
 import Avatar from "./avatar";
 import { InfoAlert } from "../info-alert";
 import { ProfileContext } from "./profile-context";
+import { useHaptic } from "react-haptic";
 
 function FriendItemPopup({ friend, trigger }: { friend: FriendWithUser; trigger: (onClick: () => void) => React.ReactNode }) {
   const popupTriggerRef = useRef<(() => void) | null>(null);
   const [disabled, setDisabled] = useState(false);
+  const { vibrate } = useHaptic();
 
   const displayName = getDisplayName(friend.first_name, friend.last_name) || friend.email || "user";
 
   async function handleRemoveFriend() {
     setDisabled(true);
+    vibrate();
     const success = await removeFriend(friend.user_a_id, friend.user_b_id);
     if (success) {
       window.location.replace(`/app?success=Removed ${displayName} from friend list`);
