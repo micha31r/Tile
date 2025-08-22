@@ -82,7 +82,7 @@ export default function LoginPage() {
       </div>
 
       <form className="space-y-4 w-full" onSubmit={onSubmit}>
-        <button onClick={handleTryAgain} className={cn("block opacity-0 pointer-events-none transition-colors text-muted-foreground text-sm m-auto", {
+        <button onClick={handleTryAgain} className={cn("block opacity-0 pointer-events-none transition-opacity text-muted-foreground text-sm m-auto", {
           "opacity-100 pointer-events-auto": status === "error" || status === "success",
         })}>
           Click to try again
