@@ -6,6 +6,7 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: "Tile",
     description: "An app to help you focus on what truly matters. 4 goals, daily check-offs, and friends to keep you motivated.",
     start_url: "/",
+    scope: '/',
     display: "standalone",
     // Let supporting browsers prefer overlay on desktop, fall back to standalone elsewhere
     display_override: ["window-controls-overlay", "standalone", "minimal-ui"],
