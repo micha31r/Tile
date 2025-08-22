@@ -29,6 +29,7 @@ export default function LoginPage() {
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    vibrate();
 
     const email = event.currentTarget.email.value;
     if (!email) {
