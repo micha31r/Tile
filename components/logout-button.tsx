@@ -9,7 +9,9 @@ export function LogoutButton({ className }: { className?: string }) {
   const logout = async () => {
     vibrate();
     const supabase = createClient();
-    await supabase.auth.signOut();
+    await supabase.auth.signOut({
+      scope: 'local'
+    });
     window.location.href = "/auth/login";
   };
 
