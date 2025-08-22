@@ -55,7 +55,7 @@ export default function CalendarPage() {
           </div>
         );
       })}
-      <div className="sticky bottom-8 grid grid-cols-2 gap-3">
+      <div className="sticky bottom-8 grid grid-cols-2 gap-3 bg-background shadow-[0_16px_0_32px_hsla(var(--background))]">
         <button
           className="px-4 py-2.5 rounded-full text-background font-medium hover:scale-95 transition-transform bg-foreground"
           onClick={handleBack}
