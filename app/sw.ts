@@ -4,6 +4,7 @@ import { Serwist } from "serwist";
 import { defaultCache } from "@serwist/next/worker";
 import type { PrecacheEntry, SerwistGlobalConfig } from "serwist";
 
+/* 1 Setup globals */
 declare global {
   interface WorkerGlobalScope extends SerwistGlobalConfig {
     __SW_MANIFEST: (PrecacheEntry | string)[] | undefined;
@@ -11,7 +12,13 @@ declare global {
 }
 declare const self: ServiceWorkerGlobalScope;
 
-// 1) Serwist bootstrap
+/* 2 Config you may tweak */
+const AUTH_CALLBACK_PREFIX = "/auth/confirm"; // your server callback path
+const SUCCESS_PATH = "/";                     // final path after successful login
+const SUCCESS_HEADER = "x-auth-event";        // optional success header name
+const SUCCESS_HEADER_VALUE = "login";         // optional success header value
+
+/* 3 Initialise Serwist */
 const serwist = new Serwist({
   precacheEntries: self.__SW_MANIFEST,
   skipWaiting: true,
@@ -21,49 +28,50 @@ const serwist = new Serwist({
 });
 serwist.addEventListeners();
 
-// 2) Settings you can tweak
-const AUTH_CALLBACK_PREFIX = "/api/auth/callback";
-const SUCCESS_PATH = "/"; // where your server finally redirects after success
-const SUCCESS_HEADER = "x-auth-event"; // optional: set this on success response
-const SUCCESS_HEADER_VALUE = "login";
-
-// 3) Never cache auth navigations (belt and braces)
+/* 4 Never cache auth routes and intercept the callback navigation */
 self.addEventListener("fetch", (event: FetchEvent) => {
   const url = new URL(event.request.url);
 
-  // Only care about navigations hitting your auth callback route
+  // Intercept navigations to the auth confirm route to detect success and notify clients
   if (event.request.mode === "navigate" && url.pathname.startsWith(AUTH_CALLBACK_PREFIX)) {
     event.respondWith(handleAuthCallbackNavigation(event));
     return;
   }
 
-  // If you also call auth endpoints via fetch/XHR, keep them NetworkOnly as well
-  if (url.pathname.startsWith("/api/auth/") && event.request.method === "GET") {
-    event.respondWith(fetch(event.request)); // no caching
+  // Treat all auth paths as NetworkOnly to avoid caching redirects or HTML
+  if (url.pathname.startsWith("/auth/")) {
+    event.respondWith(fetch(event.request));
   }
 });
 
-// 4) Let server run exchange, then broadcast "login" to all clients if it looks successful
+/* 5 Let the server set cookies and redirect, then broadcast login to all windows */
 async function handleAuthCallbackNavigation(event: FetchEvent): Promise<Response> {
-  const response = await fetch(event.request); // allow redirects; server sets cookies
+  // Always go to network so the server can do the exchange and set cookies
+  const response = await fetch(event.request);
 
+  // After network completes, decide if login looks successful and broadcast to clients
   event.waitUntil((async () => {
     try {
-      const finalURL = new URL(response.url);
+      const finalUrl = new URL(response.url);
       const byHeader =
         response.headers.get(SUCCESS_HEADER)?.toLowerCase() === SUCCESS_HEADER_VALUE;
-
-      const byLocation = response.redirected && finalURL.pathname === SUCCESS_PATH;
+      const byLocation = response.redirected && finalUrl.pathname === SUCCESS_PATH;
       const looksSuccessful = byHeader || byLocation || response.ok;
 
       if (looksSuccessful) {
-        const all = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
-        for (const client of all) client.postMessage({ type: "login" });
+        const clientsList = await self.clients.matchAll({
+          type: "window",
+          includeUncontrolled: true
+        });
+        for (const client of clientsList) {
+          client.postMessage({ type: "login" });
+        }
       }
     } catch {
-      // ignore
+      // ignore errors
     }
   })());
 
+  // Continue normal navigation
   return response;
 }
