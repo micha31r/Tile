@@ -2,8 +2,9 @@
 
 import { cn } from "@/lib/utils";
 import { XIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useHaptic } from "react-haptic";
+import MobileDetect from "mobile-detect";
 
 export function Popup({ 
   title, 
@@ -18,6 +19,12 @@ export function Popup({
   const [backgroundColor, setBackgroundColor] = useState('bg-transparent');
   const [isOpen, setIsOpen] = useState(false);
   const { vibrate } = useHaptic();
+  const [isIOS, setIsIOS] = useState(false);
+
+  useEffect(() => {
+    const md = new MobileDetect(window.navigator.userAgent);
+    setIsIOS(md.is("iPhone") || md.is("iPad") || md.os() === "iOS");
+  }, []);
 
   function toggle() {
     if (!isOpen) {
@@ -60,7 +67,9 @@ export function Popup({
             {/* Seperator */}
             <div className="w-full h-px bg-border/50"></div>
 
-            <div className="py-4">
+            <div className={cn("py-4", {
+              "pb-8": isIOS
+            })}>
               {children}
             </div>
           </div>
