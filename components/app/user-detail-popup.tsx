@@ -1,27 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useContext, useRef } from "react";
 import { Popup } from "./popup";
 import { UserDetailForm } from "./user-detail-form";
-import { createClient } from "@/lib/supabase/client";
-import { getOrCreateProfile, Profile } from "@/lib/data/profile";
+import { ProfileContext } from "./profile-context";
 
 export function UserDetailPopup({ children }: { children?: React.ReactNode }) {
   const popupTriggerRef = useRef<(() => void) | null>(null);
-  const [profile, setProfile] = useState<Profile | null>(null);
-
-  useEffect(() => {
-    (async () => {
-      const supabase = createClient();
-      const { data } = await supabase.auth.getClaims();
-      if (!data?.claims) {
-        return;
-      }
-
-      const profile = await getOrCreateProfile(data.claims.sub);
-      setProfile(profile || null);
-    })();
-  }, []);
+  const { profile } = useContext(ProfileContext);
 
   return (
     <Popup
@@ -33,7 +19,7 @@ export function UserDetailPopup({ children }: { children?: React.ReactNode }) {
     >
       {profile && (
         <div className="space-y-4">
-          <UserDetailForm userId={profile.user_id} initialValues={profile} onSuccess={() => {
+          <UserDetailForm initialValues={profile} onSuccess={() => {
             popupTriggerRef.current?.();
           }} />
         </div>
