@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex flex-1 flex-col gap-8 items-center justify-between">
+    <div className="flex flex-1 flex-col gap-8 items-center justify-between sm:pt-0 pt-4">
       <Logo tileWidth={28} />
 
       <p className="text-center leading-snug text-xl">

@@ -42,7 +42,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-8 items-center justify-between">
+    <div className="flex flex-1 flex-col gap-8 items-center justify-between sm:pt-0 pt-4">
       <Suspense fallback={null}>
         <StatusMessagePopup />
       </Suspense>
