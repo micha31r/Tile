@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { XIcon } from "lucide-react";
 import { useState } from "react";
+import { useHaptic } from "react-haptic";
 
 export function Popup({ 
   title, 
@@ -16,9 +17,11 @@ export function Popup({
   const [translateY, setTranslateY] = useState(0);
   const [backgroundColor, setBackgroundColor] = useState('bg-transparent');
   const [isOpen, setIsOpen] = useState(false);
+  const { vibrate } = useHaptic();
 
   function toggle() {
     if (!isOpen) {
+      vibrate();
       setTranslateY(-100);
       setBackgroundColor('bg-black/20 dark:bg-white/20');
       setIsOpen(true);
@@ -45,8 +48,8 @@ export function Popup({
         <div className="fixed z-50 left-1/2 top-full transition-all duration-500 w-full sm:max-w-96 max-w-md" style={{
           transform: `translate(-50%, ${translateY}%)`
         }}>
-          <div className="bg-background mx-4 mb-8 p-4 pb-0 rounded-3xl pointer-events-auto overflow-clip">
-            <div className="flex flex-row gap-3 justify-between items-center mb-4">
+          <div className="bg-background sm:mx-4 sm:mb-8 p-4 pb-0 rounded-3xl pointer-events-auto overflow-scroll max-h-[calc(100svh-64px)]">
+            <div className="z-10 sticky top-0 shadow-[0_0_0_16px_hsla(var(--background))] bg-background flex flex-row gap-3 justify-between items-center mb-4">
               <h2 className="font-medium flex-1">{title}</h2>
 
               <button onClick={toggle} className="flex items-center justify-center rounded-full w-8 aspect-square bg-secondary text-muted-foreground">
@@ -57,7 +60,7 @@ export function Popup({
             {/* Seperator */}
             <div className="w-full h-px bg-border/50"></div>
 
-            <div className="max-h-96 overflow-y-auto py-4">
+            <div className="py-4">
               {children}
             </div>
           </div>
