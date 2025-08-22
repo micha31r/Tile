@@ -45,6 +45,18 @@ export function getTodayDateString(): string {
   return getDateString(new Date());
 }
 
+export function getTodayRangeAsUTC(): string[] {
+  const start = new Date();
+  start.setHours(0, 0, 0, 0);
+  const startUTC = start.toISOString();
+  
+  const end = new Date();
+  end.setHours(23, 59, 59, 999);
+  const endUTC = end.toISOString();
+
+  return [startUTC, endUTC];
+}
+
 export const hasEnvVars =
   process.env.NEXT_PUBLIC_SUPABASE_URL &&
   process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY;

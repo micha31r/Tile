@@ -2,7 +2,7 @@
 
 import { dangerCreateServerRoleClient } from "../supabase/server-role";
 import { getFriendsWithUser } from "./friend";
-import { getGoalsByDate } from "./goal";
+import { filterGoalsByTimeRange } from "./goal";
 import { Profile } from "./profile";
 
 export interface BroadcastPayload {
@@ -85,14 +85,15 @@ export async function getFriendBroadcastsWithUser(userId: string): Promise<Broad
     }));
 }
 
-export async function createGoalBroadcast(userId: string, date: Date) {
-  const goalsToday = await getGoalsByDate(userId, date);
+export async function createGoalBroadcast(userId: string, startUTC: string, endUTC: string) {
+  const goalsToday = await filterGoalsByTimeRange(userId, startUTC, endUTC);
 
   if (!goalsToday || goalsToday.length === 0) {
-    return false;
+    console.error(`Cannot create broadcast: no goals found for ${userId} between ${startUTC} and ${endUTC}`);
+    return;
   }
 
   await createBroadcast(userId, {
     completed_goals: Array.from(new Set(goalsToday.filter(goal => goal.completed).map(goal => goal.priority)))
-   });
+  });
 }

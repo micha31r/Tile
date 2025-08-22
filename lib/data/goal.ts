@@ -15,18 +15,8 @@ export interface Goal {
   user_id: string;
 }
 
-export async function getGoalsByDate(userId: string, date: Date): Promise<Goal[]> {
+export async function filterGoalsByTimeRange(userId: string, startUTC: string, endUTC: string): Promise<Goal[]> {
   const supabase = await createClient();
-
-  const start = new Date(date);
-  start.setHours(0, 0, 0, 0);
-  const startUTC = start.toISOString();
-
-  const end = new Date(date);
-  end.setHours(23, 59, 59, 999);
-  const endUTC = end.toISOString();
-
-  console.warn(startUTC, endUTC);
 
   const { data, error } = await supabase
     .from('goal')
@@ -45,7 +35,11 @@ export async function getGoalsByDate(userId: string, date: Date): Promise<Goal[]
   return data;
 }
 
-export async function createGoal(goal: Omit<Goal, 'id' | 'created_at' | 'user_id' | 'completed' | 'priority'>): Promise<Goal | null> {
+export async function createGoal(
+  goal: Omit<Goal, 'id' | 'created_at' | 'user_id' | 'completed' | 'priority'>, 
+  startUTC: string, 
+  endUTC: string
+): Promise<Goal | null> {
   const supabase = await createClient();
 
   const { data: { user } } = await supabase.auth.getUser();
@@ -55,7 +49,7 @@ export async function createGoal(goal: Omit<Goal, 'id' | 'created_at' | 'user_id
     return null;
   }
 
-  const goals = await getGoalsByDate(user.id, new Date());
+  const goals = await filterGoalsByTimeRange(user.id, startUTC, endUTC);
 
   if (goals.length >= 4) {
     console.error(`Cannot create more than 4 goals for the same date`);

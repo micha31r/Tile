@@ -9,7 +9,7 @@ import { WarningAlert } from "../warning-alert";
 import { createGoal } from "@/lib/data/goal";
 import { t } from "@/lib/theme";
 import { ProfileContext } from "./profile-context";
-import { cn } from "@/lib/utils";
+import { cn, getTodayRangeAsUTC } from "@/lib/utils";
 
 export function GoalForm({ onSuccess }: { onSuccess?: () => void }) {
   const [error, setError] = useState<string | null>(null);
@@ -32,10 +32,14 @@ export function GoalForm({ onSuccess }: { onSuccess?: () => void }) {
 
     setDisabled(true);
 
+    // Define the range for what counts as today
+    // Known issue: must match with timezone settings, as Postgress will evaluate based on profile.timezone
+    const [startUTC, endUTC] = getTodayRangeAsUTC();
+
     const data = await createGoal({
       name: name.toString(),
       details: details?.toString(),
-    });
+    }, startUTC, endUTC);
 
     if (!data) {
       setError("Failed to create goal");

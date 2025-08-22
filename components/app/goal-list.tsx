@@ -1,6 +1,6 @@
 "use client";
 
-import { getGoalsByDate, Goal } from "@/lib/data/goal";
+import { filterGoalsByTimeRange, Goal } from "@/lib/data/goal";
 import { CheckIcon, InfoIcon } from "lucide-react";
 import { useRealtime } from "../use-realtime";
 import { GoalReflectionPopup } from "./goal-reflection-popup";
@@ -9,6 +9,7 @@ import { WarningAlert } from "../warning-alert";
 import { useContext } from "react";
 import { ProfileContext } from "./profile-context";
 import { t } from "@/lib/theme";
+import { getTodayRangeAsUTC } from "@/lib/utils";
 
 function CompleteIcon() {
   const { profile: { theme } } = useContext(ProfileContext);
@@ -42,12 +43,7 @@ export function GoalItem({ goal, priority }: { goal: Goal, priority: number }) {
 }
 
 export function GoalList({ userId, emptyMessage }: { userId: string, emptyMessage?: string }) {
-  const start = new Date();
-  start.setHours(0, 0, 0, 0);
-  const startUTC = start.toISOString();
-
-  const end = new Date();
-  end.setHours(23, 59, 59, 999);
+  const [startUTC, endUTC] = getTodayRangeAsUTC();
 
   const [goals] = useRealtime<Goal>({
     channelName: 'goal-list',
@@ -55,14 +51,14 @@ export function GoalList({ userId, emptyMessage }: { userId: string, emptyMessag
     table: 'goal',
     filter: `created_at=gte.${startUTC}`,
     getInitialData: async () => {
-      return await getGoalsByDate(userId, new Date());
+      return await filterGoalsByTimeRange(userId, startUTC, endUTC);
     }
   });
 
   // Manually filter for lte client-side
   const todayGoals = (goals as Goal[]).filter(goal => {
     const created = new Date(goal.created_at);
-    return created <= end;
+    return created <= new Date(endUTC);
   });
 
   return (

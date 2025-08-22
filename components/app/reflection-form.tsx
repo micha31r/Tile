@@ -7,7 +7,7 @@ import { useContext, useRef, useState } from "react";
 import { WarningAlert } from "../warning-alert";
 import { Goal, markGoalAsCompleted } from "@/lib/data/goal";
 import { createGoalBroadcast } from "@/lib/data/broadcast";
-import { cn } from "@/lib/utils";
+import { cn, getTodayRangeAsUTC } from "@/lib/utils";
 import { t } from "@/lib/theme";
 import { ProfileContext } from "./profile-context";
 
@@ -29,7 +29,8 @@ export function ReflectionForm({ goal, onSuccess }: { goal: Goal, onSuccess?: ()
     const data = await markGoalAsCompleted(goal.id, reflection?.toString() || null);
 
     // Broadcast changes
-    await createGoalBroadcast(goal.user_id, new Date());
+    const [startUTC, endUTC] = getTodayRangeAsUTC();
+    await createGoalBroadcast(goal.user_id, startUTC, endUTC);
 
     if (!data) {
       setError("Failed to mark goal as completed");

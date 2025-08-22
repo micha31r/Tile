@@ -1,27 +1,18 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { Countdown } from "./countdown";
 import { RecordGoalPopup } from "./record-goal-popup";
-import { getGoalsByDate, Goal } from "@/lib/data/goal";
+import { filterGoalsByTimeRange, Goal } from "@/lib/data/goal";
 import { useRealtime } from "../use-realtime";
-import { createClient } from "@/lib/supabase/client";
 import { useContext, useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn, getTodayRangeAsUTC } from "@/lib/utils";
 import { t } from "@/lib/theme";
 import { ProfileContext } from "./profile-context";
 
 export function GoalReminder() {
-  const { profile: { theme } } = useContext(ProfileContext);
-  const router = useRouter();
+  const { profile: { theme }, userId } = useContext(ProfileContext);
   const [loaded, setLoaded] = useState<boolean>(false);
-
-  const start = new Date();
-  start.setHours(0, 0, 0, 0);
-  const startUTC = start.toISOString();
-
-  const end = new Date();
-  end.setHours(23, 59, 59, 999);
+  const [startUTC, endUTC] = getTodayRangeAsUTC();
 
   const [goals] = useRealtime<Goal>({
     channelName: 'goal-reminder',
@@ -29,16 +20,7 @@ export function GoalReminder() {
     table: 'goal',
     filter: `created_at=gte.${startUTC}`,
     getInitialData: async () => {
-      const supabase = createClient();
-
-      const { data, error } = await supabase.auth.getClaims();
-      if (error || !data?.claims) {
-        router.push("/auth/login");
-        return [];
-      }
-
-      const user = data.claims;
-      const goalData = await getGoalsByDate(user.sub, new Date());
+      const goalData = await filterGoalsByTimeRange(userId, startUTC, endUTC);
       setLoaded(true);
       return goalData;
     }
@@ -47,7 +29,7 @@ export function GoalReminder() {
   // Manually filter for lte client-side
   const todayGoals = (goals as Goal[]).filter(goal => {
     const created = new Date(goal.created_at);
-    return created <= end;
+    return created <= new Date(endUTC);
   });
 
   if (!loaded) {
