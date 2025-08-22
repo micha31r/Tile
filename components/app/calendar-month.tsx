@@ -72,7 +72,7 @@ const setColor = "text-neutral-300 dark:text-neutral-600";
 const partialColor = "bg-neutral-300 dark:bg-neutral-600";
 const allCompletedColor = "bg-slate-700 dark:bg-neutral-300";
 const backgroundColor = "bg-neutral-100 dark:bg-neutral-800";
-const borderColor = "border-neutral-100 dark:border-neutral-800";
+// const borderColor = "border-neutral-100 dark:border-neutral-800";
 
 export function CalendarCell({ 
   entry, 
