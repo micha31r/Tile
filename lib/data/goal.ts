@@ -26,6 +26,8 @@ export async function getGoalsByDate(userId: string, date: Date): Promise<Goal[]
   end.setHours(23, 59, 59, 999);
   const endUTC = end.toISOString();
 
+  console.warn(startUTC, endUTC);
+
   const { data, error } = await supabase
     .from('goal')
     .select('*')
