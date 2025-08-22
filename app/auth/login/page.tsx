@@ -1,17 +1,30 @@
 "use client";
+import { useAuthSync } from "@/components/app/auth/use-auth-sync";
 import { StatusMessagePopup } from "@/components/app/status-message-popup";
 import { Logo } from "@/components/logo";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useHaptic } from "react-haptic";
 
 type ButtonStatus = 'idle' | 'loading' | 'success' | 'error';
 
+function ensureDeviceId(): string {
+  const key = 'auth-sync-device';
+  let id = localStorage.getItem(key);
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem(key, id);
+  }
+  return id;
+}
+
 export default function LoginPage() {
   const [status, setStatus] = useState<ButtonStatus>('idle');
+  const [deviceId, setDeviceId] = useState<string | null>(null);
+  const { status: authSyncStatus } = useAuthSync(deviceId);
   const router = useRouter();
   const { vibrate } = useHaptic();
 
@@ -22,7 +35,7 @@ export default function LoginPage() {
       email: email,
       options: {
         shouldCreateUser: true,
-        emailRedirectTo: `${window.location.origin}/auth/confirm?next=/app`,
+        emailRedirectTo: `${window.location.origin}/auth/confirm?next=${encodeURIComponent("/app")}&device=${deviceId}`,
       },
     });
   }
@@ -61,11 +74,22 @@ export default function LoginPage() {
     }
   }
 
+  useEffect(() => {
+    setDeviceId(ensureDeviceId());
+  }, []);
+
+  useEffect(() => {
+    if (authSyncStatus === "success") {
+      router.push("/app");
+    }
+  }, [router, authSyncStatus]);
+
   return (
     <div className="flex flex-1 flex-col gap-8 items-center justify-between sm:pt-0 pt-4">
       <Suspense fallback={null}>
         <StatusMessagePopup />
       </Suspense>
+      {deviceId}
 
       <div onClick={handleReload} className="hover:scale-95 transition-transform cursor-pointer">
         <Logo tileWidth={28} />
