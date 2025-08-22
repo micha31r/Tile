@@ -97,9 +97,7 @@ export async function removeFriend(currentUserId: string, targetUserId: string):
   const { error } = await supabase
     .from("friend")
     .delete()
-    .or(`user_a_id.eq.${currentUserId},user_b_id.eq.${currentUserId}`)
-    .eq("user_a_id", targetUserId)
-    .eq("user_b_id", currentUserId);
+    .or(`and(user_a_id.eq.${currentUserId},user_b_id.eq.${targetUserId}),and(user_a_id.eq.${targetUserId},user_b_id.eq.${currentUserId})`);
 
   if (error) {
     console.error("Error removing friend:", error);
