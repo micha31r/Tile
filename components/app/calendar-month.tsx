@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useEffect, useRef, useState } from "react";
 import { CalendarCellPopup } from "./calendar-cell-popup";
 import { XIcon } from "lucide-react";
+import { useHaptic } from "react-haptic";
 
 export type Month = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12
 
@@ -210,6 +211,7 @@ export function CalendarMonth({ userId, month, year, showLabel = false }: { user
   const [loaded, setLoaded] = useState(false);
   const [selectedEntry, setSelectedEntry] = useState<DayEntry>({ date: '', goals: [] });
   const popupTriggerRef = useRef<(() => void) | null>(null);
+  const { vibrate } = useHaptic();
 
   const todayDateString = getDateString(new Date());
 
@@ -270,6 +272,7 @@ export function CalendarMonth({ userId, month, year, showLabel = false }: { user
   }, []);
 
   function handleClick(data: DayEntry) {
+    vibrate();
     setSelectedEntry(data);
     popupTriggerRef.current?.();
   }
