@@ -5,12 +5,14 @@ import { DangerAlert } from "../danger-alert";
 import Input from "../input";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { fallbackTheme, t, Theme, themeOptions } from "@/lib/theme";
-import { cn } from "@/lib/utils";
+import { cn, getDisplayName } from "@/lib/utils";
 import { Profile, updateProfile } from "@/lib/data/profile";
 import { ProfileContext } from "./profile-context";
 import { InfoAlert } from "../info-alert";
 import MobileDetect from "mobile-detect";
 import { useHaptic } from "react-haptic";
+import { LogoutButton } from "../logout-button";
+import Avatar from "./avatar";
 
 function ThemeSelector({ name, defaultValue }: { name: string; defaultValue?: Theme }) {
   const [value, setValue] = useState<Theme>(defaultValue || fallbackTheme);
@@ -97,8 +99,8 @@ function Select({ name, defaultValue, options }: { name: string; defaultValue?: 
   );
 }
 
-export function UserDetailForm({ onSuccess, userId, initialValues }: { onSuccess?: () => void; userId: string; initialValues: Partial<Profile> }) {
-  const { profile: { theme } } = useContext(ProfileContext);
+export function UserDetailForm({ onSuccess, initialValues }: { onSuccess?: () => void; initialValues: Partial<Profile> }) {
+  const { profile, userId, email } = useContext(ProfileContext);
   const [error, setError] = useState<string | null>(null);
   const [disabled, setDisabled] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
@@ -152,6 +154,14 @@ export function UserDetailForm({ onSuccess, userId, initialValues }: { onSuccess
 
   return (
     <form ref={formRef} name="profile" onSubmit={handleSubmit} className="space-y-4">
+      <div className="flex gap-3 items-center">
+        <Avatar size={48} firstName={profile?.first_name} lastName={profile?.last_name} email={email} />
+        <span className="break-all line-clamp-1">{getDisplayName(profile?.first_name, profile?.last_name) || email}</span>
+        <LogoutButton className="ml-auto rounded-full bg-secondary text-muted-foreground font-medium p-4 py-2" />
+      </div>
+
+      <div className="w-full h-px bg-border/50"></div>
+
       <ThemeSelector key={rerender} name="theme" defaultValue={initialValues.theme} />
 
       <div className="w-full h-px bg-border/50"></div>
@@ -187,7 +197,7 @@ export function UserDetailForm({ onSuccess, userId, initialValues }: { onSuccess
         <button onClick={handleCancel} className="text-background bg-foreground rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform">
           Cancel
         </button>
-        <button disabled={disabled} type="submit" className={cn("disabled:opacity-80 text-white rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform", t("bg", theme, "f"))}>
+        <button disabled={disabled} type="submit" className={cn("disabled:opacity-80 text-white rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform", t("bg", profile.theme, "f"))}>
           Save changes
         </button>
       </div>

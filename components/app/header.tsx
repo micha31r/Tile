@@ -6,9 +6,16 @@ import { UserDetailPopup } from './user-detail-popup';
 import { ShareProfilePopup } from './share-profile-popup';
 import { useContext } from 'react';
 import { ProfileContext } from './profile-context';
+import { useHaptic } from 'react-haptic';
 
 export function Header() {
   const { profile, email } = useContext(ProfileContext);
+  const { vibrate } = useHaptic();
+
+  function handleReload() {
+    vibrate();
+    window.location.reload();
+  }
 
   return (
     <div className="sticky z-10 top-0 bg-background shadow-[0_-32px_0_48px_hsla(var(--background))] flex w-full justify-between gap-4 items-center">
@@ -18,7 +25,7 @@ export function Header() {
         </UserDetailPopup>
       </div>
 
-      <p onClick={() => window.location.reload()} className="flex-1 font-medium text-center">
+      <p onClick={handleReload} className="flex-1 font-medium text-center">
         <span className="line-clamp-1 break-all">{profile?.first_name ? profile?.first_name : "Home"}</span>
       </p>
 
