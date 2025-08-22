@@ -25,7 +25,7 @@ export function Header() {
         </UserDetailPopup>
       </div>
 
-      <p onClick={handleReload} className="flex-1 font-medium text-center">
+      <p onClick={handleReload} className="flex-1 font-medium text-center cursor-pointer">
         <span className="line-clamp-1 break-all">{profile?.first_name ? profile?.first_name : "Home"}</span>
       </p>
 
