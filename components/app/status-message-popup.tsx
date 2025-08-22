@@ -6,12 +6,14 @@ import { InfoAlert } from "../info-alert";
 import { CheckIcon, InfoIcon } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { DangerAlert } from "../danger-alert";
+import { useHaptic } from "react-haptic";
 
 export function StatusMessagePopup() {
   const popupTriggerRef = useRef<(() => void) | null>(null);
   const searchParams = useSearchParams();
   const successMessage = searchParams.get("success");
   const errorMessage = searchParams.get("error");
+  const { vibrate } = useHaptic();
 
   useEffect(() => {
     if (successMessage || errorMessage) {
@@ -21,6 +23,7 @@ export function StatusMessagePopup() {
   }, [popupTriggerRef.current]);
 
   function closeMessage() {
+    vibrate();
     popupTriggerRef.current?.();
     // Remove search params
     window.history.replaceState({}, '', window.location.pathname);
@@ -49,7 +52,7 @@ export function StatusMessagePopup() {
         )}
 
         <button onClick={closeMessage} className="bg-foreground disabled:opacity-80 text-background rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform">
-          Done
+          Dismiss
         </button>
       </div>
     </Popup>
