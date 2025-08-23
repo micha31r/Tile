@@ -27,18 +27,6 @@ type WebSub = {
   }
 };
 
-function statusCodeFrom(err: unknown): number | undefined {
-  if (err && typeof err === "object") {
-    const o = err as Record<string, unknown>;
-    const maybe =
-      (typeof o.statusCode === "number" ? o.statusCode : undefined) ??
-      (typeof o.code === "number" ? o.code : undefined) ??
-      (typeof o.status === "number" ? o.status : undefined);
-    return maybe;
-  }
-  return undefined;
-}
-
 export default async function sendPushNotification(userId: string, title: string, message: string) {
   const supabase = await createClient();
 
