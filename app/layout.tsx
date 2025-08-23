@@ -22,7 +22,7 @@ export const viewport: Viewport = {
   // PWA
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)",  color: "#000000" }
+    { media: "(prefers-color-scheme: dark)",  color: "#121212" }
   ],
 };
 
