@@ -37,11 +37,13 @@ export function ReflectionForm({ goal, onSuccess }: { goal: Goal, onSuccess?: ()
     await createGoalBroadcast(userId, startUTC, endUTC);
 
     // Send notifications
-    await sendPushNotification(
+    const result = await sendPushNotification(
       userId,
       `${getDisplayName(profile.first_name, profile.last_name) || "Friend activity"}`,
       `You friend has just completed a goal.`
     );
+
+    console.log(`Notifictions: ${result}`);
 
     if (!data) {
       setError("Failed to mark goal as completed");
