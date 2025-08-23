@@ -85,3 +85,18 @@
 *::-webkit-scrollbar {
   display: none;
 }
+
+.home-page-gradient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: linear-gradient(
+    to bottom,
+    hsla(var(--background) / 100%) 5%,
+    rgba(0,0,0,0) 20%,
+    rgba(0,0,0,0) 80%,
+    hsla(var(--background) / 100%) 95%
+  );
+}
