@@ -35,7 +35,7 @@ export function FriendActivities({ userId, emptyMessage }: { userId: string, emp
 
       setTimeout(() => {
         setSelectedUserId(null);
-      }, 10000);
+      }, 20000);
     }
   }, [searchParams]);
 
