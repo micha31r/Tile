@@ -6,7 +6,7 @@ import { StatusMessagePopup } from "@/components/app/status-message-popup";
 import { CalendarClientWrapper } from "@/components/app/calendar-client-wrapper";
 import { FriendActivities } from "@/components/app/friend-activities";
 import { EnablePush } from "@/components/app/enable-push-button";
-import PwaDebug from "@/components/app/pwa-debug";
+// import PwaDebug from "@/components/app/pwa-debug";
 
 export default async function AppHomePage() {
   const supabase = await createClient();
