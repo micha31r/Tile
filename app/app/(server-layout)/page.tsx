@@ -18,7 +18,7 @@ export default async function AppHomePage() {
     <div className="space-y-8">
       {/* Status popup nust be at the top */}
       <StatusMessagePopup />
-      <PwaDebug />
+      {/* <PwaDebug /> */}
       <EnablePush />
       <GoalReminder />
       <GoalList userId={user.sub} emptyMessage="No goals set for today" />
