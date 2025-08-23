@@ -11,6 +11,10 @@ type pushServiceRecord ={
   id: string
 }
 
+const HIDE_KEY = 'enablePushHideUntil';
+
+const HIDE_DURATION = 1000 * 60 * 60 * 24;
+
 export function EnablePush() {
   const { subscribe, subscribed, loading, isSupported } = useNextPush();
   const [pushRecord, setPushRecord] = useState<pushServiceRecord | null>(null);
@@ -83,7 +87,27 @@ export function EnablePush() {
     }
   };
 
+  function hidePrompt() {
+    vibrate();
+    setVisible(false);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(HIDE_KEY, String(Date.now() + HIDE_DURATION));
+    }
+
+    setTimeout(() => setVisible(true), HIDE_DURATION);
+  }
+
   useEffect(() => {
+    // Check localStorage for hide timer
+    const hideUntil = typeof window !== 'undefined' ? localStorage.getItem(HIDE_KEY) : null;
+    const now = Date.now();
+    if (hideUntil && now < Number(hideUntil)) {
+      setVisible(false);
+      // Set timer to re-show after expiry
+      const timeout = setTimeout(() => setVisible(true), Number(hideUntil) - now);
+      return () => clearTimeout(timeout);
+    }
+
     (async () => {
       if (!isSupported) {
         setPushRecordLoading(false);
@@ -112,7 +136,7 @@ export function EnablePush() {
         setVisible(true);
       }
     })();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSupported]);
 
   if (!isSupported || !visible || pushRecordLoading) {
@@ -132,10 +156,10 @@ export function EnablePush() {
       <p className="text-sm">Receive updates when your friends complete their goals to stay extra motivated.</p>
       <div className="grid grid-cols-2 gap-3 !mt-4">
         <button 
-          onClick={() => setVisible(false)}
+          onClick={hidePrompt}
           className="p-2.5 bg-black/10 dark:bg-white/10 rounded-full font-medium hover:scale-95 transition-transform cursor-pointer"
         >
-          Close
+          Later
         </button>
         <button 
           disabled={loading} 
