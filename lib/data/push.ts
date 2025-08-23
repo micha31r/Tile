@@ -62,7 +62,6 @@ export default async function sendPushNotification(userId: string, title: string
     url: `/app?notificationUserId=${userId}`
   };
 
-
   type Outcome = { endpoint: string; ok: true } | { endpoint: string; ok: false; code?: number };
   
   // Send notifications in parallel
