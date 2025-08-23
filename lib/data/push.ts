@@ -1,15 +1,13 @@
 "use server";
 
-import { createServerPush } from "next-push/server";
 import { createClient } from "@/lib/supabase/server";
 import { dangerCreateServerRoleClient } from "../supabase/server-role";
+import webPush from "web-push";
 
-const pushServer = createServerPush(
+webPush.setVapidDetails(
   process.env.VAPID_SUBJECT!,
-  {
-    publicKey: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
-    privateKey: process.env.VAPID_PRIVATE_KEY!
-  }
+  process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
+  process.env.VAPID_PRIVATE_KEY!
 );
 
 type FriendSubscription = {
@@ -50,31 +48,28 @@ export default async function sendPushNotification(userId: string, title: string
     url: `/app?notificationUserId=${userId}`
   };
 
-  type Outcome = { endpoint: string; ok: true } | { endpoint: string; ok: false; error?: string };
+  console.log(webSubs, payload);
+  console.log(process.env.VAPID_SUBJECT)
+
+  type Result = { endpoint: string; statusCode: number };
   
   // Send notifications in parallel
-  const outcomes: Outcome[] = await Promise.all(
-    webSubs.map(async (sub): Promise<Outcome> => {
-      const { success, error } = await pushServer.sendNotification(sub, payload);
-      if (success === true) {
-        return { 
-          endpoint: sub.endpoint, 
-          ok: true 
-        };
-      } else {
-        return { 
-          endpoint: sub.endpoint, 
-          ok: false, 
-          error: error 
-        };
-      }
+  const results: Result[] = await Promise.all(
+    webSubs.map(async (sub): Promise<Result> => {
+      const { statusCode } = await webPush.sendNotification(sub, JSON.stringify(payload), {
+        TTL: 60 
+      });
+      return {
+        endpoint: sub.endpoint,
+        statusCode
+      };
     })
   );
 
   // Remove bad endpoints
-  const badEndpoints = outcomes
-    .filter(o => !o.ok && o.error)
-    .map(o => o.endpoint);
+  const badEndpoints = results
+    .filter(result => result.statusCode === 404 || result.statusCode === 410 )
+    .map(result => result.endpoint);
 
   if (badEndpoints.length) {
     const supabaseServiceRole = await dangerCreateServerRoleClient();
@@ -84,8 +79,8 @@ export default async function sendPushNotification(userId: string, title: string
       .in("endpoint", badEndpoints);
   }
 
-  const sent = outcomes.filter(o => o.ok).length;
-  const failed = outcomes.length - sent;
+  const sent = results.filter(result => result.statusCode === 200).length;
+  const failed = results.length - sent;
 
   return { ok: true, sent, failed, removed: badEndpoints.length };
 }
