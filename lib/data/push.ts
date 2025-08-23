@@ -62,23 +62,30 @@ export default async function sendPushNotification(userId: string, title: string
     url: `/app?notificationUserId=${userId}`
   };
 
-  type Outcome = { endpoint: string; ok: true } | { endpoint: string; ok: false; code?: number };
+  type Outcome = { endpoint: string; ok: true } | { endpoint: string; ok: false; error?: string };
   
   // Send notifications in parallel
   const outcomes: Outcome[] = await Promise.all(
     webSubs.map(async (sub): Promise<Outcome> => {
-      try {
-        await pushServer.sendNotification(sub, payload);
-        return { endpoint: sub.endpoint, ok: true };
-      } catch (e: unknown) {
-        return { endpoint: sub.endpoint, ok: false, code: statusCodeFrom(e) };
+      const { success, error } = await pushServer.sendNotification(sub, payload);
+      if (success === true) {
+        return { 
+          endpoint: sub.endpoint, 
+          ok: true 
+        };
+      } else {
+        return { 
+          endpoint: sub.endpoint, 
+          ok: false, 
+          error: error 
+        };
       }
     })
   );
 
-  // Remove 404/410 endpoints
+  // Remove bad endpoints
   const badEndpoints = outcomes
-    .filter(o => !o.ok && (o.code === 404 || o.code === 410))
+    .filter(o => !o.ok && o.error)
     .map(o => o.endpoint);
 
   if (badEndpoints.length) {
