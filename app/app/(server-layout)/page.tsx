@@ -15,8 +15,9 @@ export default async function AppHomePage() {
 
   return (
     <div className="space-y-8">
-      <EnablePush />
+      {/* Status popup nust be at the top */}
       <StatusMessagePopup />
+      <EnablePush />
       <GoalReminder />
       <GoalList userId={user.sub} emptyMessage="No goals set for today" />
       <CalendarClientWrapper userId={user.sub} />
