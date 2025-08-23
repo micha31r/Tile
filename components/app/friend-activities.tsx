@@ -29,7 +29,7 @@ export function FriendActivities({ userId, emptyMessage }: { userId: string, emp
     channelName: 'friend-activities-list',
     schema: 'public',
     table: 'broadcast',
-    filter: `user_id=eq.${userId}`,
+    // No filter here, rely on RLS to only get broadcast of friends
     getInitialData: async () => {
       const data = await getFriendBroadcastsWithUser(userId);
       setLoaded(true);
