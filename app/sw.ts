@@ -61,16 +61,14 @@ self.addEventListener("push", (event: PushEvent) => {
         : "";
 
   const icon = typeof data.icon === "string" ? data.icon : defaultIcon;
-  const badge = typeof data.badge === "string" ? data.badge : undefined;
-  const tag = typeof data.tag === "string" ? data.tag : "push";
   const url = typeof data.url === "string" ? data.url : "/";
 
   event.waitUntil(
     self.registration.showNotification(title, {
       body,
       icon,
-      badge,
-      tag,
+      badge: icon,
+      // tag,
       data: { url }
     })
   );
