@@ -164,7 +164,7 @@ export function EnablePush() {
         <button 
           disabled={loading} 
           onClick={enable}
-          className="p-3 py-1.5 bg-foreground text-background rounded-full font-medium hover:scale-95 transition-transform cursor-pointer"
+          className="disabled:opacity-80 p-3 py-1.5 bg-foreground text-background rounded-full font-medium hover:scale-95 transition-transform cursor-pointer"
         >
           {notificationEnabled ? 'Notifications enabled' : (loading ? 'Enabling…' : 'Enable')}
         </button>
