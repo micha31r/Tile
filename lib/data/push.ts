@@ -48,9 +48,6 @@ export default async function sendPushNotification(userId: string, title: string
     url: `/app?notificationUserId=${userId}`
   };
 
-  console.log(webSubs, payload);
-  console.log(process.env.VAPID_SUBJECT)
-
   type Result = { endpoint: string; statusCode: number };
   
   // Send notifications in parallel
