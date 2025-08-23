@@ -5,17 +5,21 @@ export function FriendCard({
   email, 
   firstName, 
   lastName,
-  children 
+  selected,
+  children
 }: { 
   email: string; 
   firstName?: string; 
   lastName?: string; 
+  selected?: boolean;
   children?: React.ReactNode 
 }) {
   const displayName = getDisplayName(firstName, lastName) || email;
 
   return (
-    <div className="rounded-3xl bg-secondary p-2 space-y-2">
+    <div className={cn("rounded-3xl bg-secondary p-2 space-y-2", {
+      "animate-[wiggle_1s_ease-in-out_infinite]": selected,
+    })}>
       <div className="flex items-center justify-center aspect-square">
         {children}
       </div>

@@ -7,11 +7,12 @@ import { FriendCard, FriendGallery } from "./friend-gallery";
 import { FriendListPopup } from "./friend-list-popup";
 import { BroadcastWithUser, getFriendBroadcastsWithUser } from "@/lib/data/broadcast";
 import { createClient } from "@/lib/supabase/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRealtime } from "../use-realtime";
 import { InfoAlert } from "../info-alert";
 import { InfoIcon } from "lucide-react";
 import { t } from "@/lib/theme";
+import { useSearchParams } from "next/navigation";
 
 function getTileData(arr: number[]) {
   return { 
@@ -24,6 +25,19 @@ function getTileData(arr: number[]) {
 
 export function FriendActivities({ userId, emptyMessage }: { userId: string, emptyMessage?: string }) {
   const [loaded, setLoaded] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get("notificationUserId")) {
+      setSelectedUserId(searchParams.get("notificationUserId"));
+      window.history.replaceState({}, '', window.location.pathname);
+
+      setTimeout(() => {
+        setSelectedUserId(null);
+      }, 10000);
+    }
+  }, [searchParams]);
 
   const [broadcasts] = useRealtime<BroadcastWithUser>({
     channelName: 'friend-activities-list',
@@ -65,7 +79,7 @@ export function FriendActivities({ userId, emptyMessage }: { userId: string, emp
         {(!loaded || broadcasts.length > 0) && (
           <FriendGallery>
             {(broadcasts as BroadcastWithUser[]).map((broadcast, index) => (
-              <FriendCard key={index} email={broadcast.email} firstName={broadcast.first_name} lastName={broadcast.last_name}>
+              <FriendCard key={index} email={broadcast.email} firstName={broadcast.first_name} lastName={broadcast.last_name} selected={selectedUserId === broadcast.user_id}>
                 <div className={cn(`rounded-lg p-1.5`, t("bg", broadcast.theme, "b"))}>
                   <Tile data={getTileData(broadcast.payload.completed_goals)} backgroundClass={t("bg", broadcast.theme, "b")} foregroundClass={t("bg", broadcast.theme, "f")} maxWidth={64} radiusClass="rounded-md"/>
                 </div>
