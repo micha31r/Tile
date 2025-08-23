@@ -43,7 +43,7 @@ export function ReflectionForm({ goal, onSuccess }: { goal: Goal, onSuccess?: ()
       `You friend has just completed a goal.`
     );
 
-    console.log(`Notifictions: ${result}`);
+    console.log(`Notifictions: ${JSON.stringify(result)}`);
 
     if (!data) {
       setError("Failed to mark goal as completed");
