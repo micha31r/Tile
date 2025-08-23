@@ -17,6 +17,8 @@ export interface Broadcast {
   created_at: Date;
 }
 
+// Known issue:
+// Broadcast and Friend data both contain created_at, therefore can only keep one
 export interface BroadcastWithUser extends Profile, Broadcast {
   email: string;
 }
@@ -78,10 +80,11 @@ export async function getFriendBroadcastsWithUser(userId: string): Promise<Broad
     return [];
   }
 
+  // Note, under current structure of BroadcastsWithUser, must spread broadcast last
   return data
     .map((broadcast: Broadcast) => ({
-      ...broadcast,
       ...friends.find((f) => f.user_id === broadcast.user_id),
+      ...broadcast,
     }));
 }
 

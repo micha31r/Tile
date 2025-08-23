@@ -57,6 +57,17 @@ export function getTodayRangeAsUTC(): string[] {
   return [startUTC, endUTC];
 }
 
+export function getTimeAgoString(date: Date): string {
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffSec = Math.floor(diffMs / 1000);
+  if (diffSec < 60) return `${diffSec} sec${diffSec === 1 ? '' : 's'}`;
+  const diffMin = Math.floor(diffSec / 60);
+  if (diffMin < 60) return `${diffMin} min${diffMin === 1 ? '' : 's'}`;
+  const diffHr = Math.floor(diffMin / 60);
+  return `${diffHr} hr${diffHr === 1 ? '' : 's'}`;
+}
+
 export const hasEnvVars =
   process.env.NEXT_PUBLIC_SUPABASE_URL &&
   process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY;

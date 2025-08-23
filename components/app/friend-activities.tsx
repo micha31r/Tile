@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn, getTimeAgoString } from "@/lib/utils";
 import { Tile } from "../tile/tile";
 import { FriendCard, FriendGallery } from "./friend-gallery";
 import { FriendListPopup } from "./friend-list-popup";
@@ -80,6 +80,7 @@ export function FriendActivities({ userId, emptyMessage }: { userId: string, emp
           <FriendGallery>
             {(broadcasts as BroadcastWithUser[]).map((broadcast, index) => (
               <FriendCard key={index} email={broadcast.email} firstName={broadcast.first_name} lastName={broadcast.last_name} selected={selectedUserId === broadcast.user_id}>
+                <div className="absolute w-max h-max inset-0 px-2 py-1 text-sm text-muted-foreground rounded-full bg-black/10 dark:bg-white/10">{getTimeAgoString(new Date(broadcast.created_at))}</div>
                 <div className={cn(`rounded-lg p-1.5`, t("bg", broadcast.theme, "b"))}>
                   <Tile data={getTileData(broadcast.payload.completed_goals)} backgroundClass={t("bg", broadcast.theme, "b")} foregroundClass={t("bg", broadcast.theme, "f")} maxWidth={64} radiusClass="rounded-md"/>
                 </div>

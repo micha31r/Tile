@@ -20,7 +20,7 @@ export function FriendCard({
     <div className={cn("rounded-3xl bg-secondary p-2 space-y-2", {
       "animate-[wiggle_1s_ease-in-out_infinite]": selected,
     })}>
-      <div className="flex items-center justify-center aspect-square">
+      <div className="relative flex items-center justify-center aspect-square">
         {children}
       </div>
       <div className="flex items-center flex-wrap gap-2">
