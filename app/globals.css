@@ -95,8 +95,8 @@
   background: linear-gradient(
     to bottom,
     hsla(var(--background) / 100%) 5%,
-    rgba(0,0,0,0) 20%,
-    rgba(0,0,0,0) 80%,
+    rgba(0,0,0,0) 30%,
+    rgba(0,0,0,0) 70%,
     hsla(var(--background) / 100%) 95%
   );
 }
