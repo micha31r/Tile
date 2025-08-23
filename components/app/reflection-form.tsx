@@ -7,13 +7,14 @@ import { useContext, useRef, useState } from "react";
 import { WarningAlert } from "../warning-alert";
 import { Goal, markGoalAsCompleted } from "@/lib/data/goal";
 import { createGoalBroadcast } from "@/lib/data/broadcast";
-import { cn, getTodayRangeAsUTC } from "@/lib/utils";
+import { cn, getDisplayName, getTodayRangeAsUTC } from "@/lib/utils";
 import { t } from "@/lib/theme";
 import { ProfileContext } from "./profile-context";
 import { useHaptic } from "react-haptic";
+import sendPushNotification from "@/lib/data/push";
 
 export function ReflectionForm({ goal, onSuccess }: { goal: Goal, onSuccess?: () => void }) {
-  const { profile: { theme } } = useContext(ProfileContext);
+  const { profile, userId } = useContext(ProfileContext);
   const [error, setError] = useState<string | null>(null);
   const [disabled, setDisabled] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
@@ -33,7 +34,14 @@ export function ReflectionForm({ goal, onSuccess }: { goal: Goal, onSuccess?: ()
 
     // Broadcast changes
     const [startUTC, endUTC] = getTodayRangeAsUTC();
-    await createGoalBroadcast(goal.user_id, startUTC, endUTC);
+    await createGoalBroadcast(userId, startUTC, endUTC);
+
+    // Send notifications
+    await sendPushNotification(
+      userId,
+      `${getDisplayName(profile.first_name, profile.last_name) || "Friend activity"}`,
+      `You friend has just completed a goal.`
+    );
 
     if (!data) {
       setError("Failed to mark goal as completed");
@@ -61,7 +69,7 @@ export function ReflectionForm({ goal, onSuccess }: { goal: Goal, onSuccess?: ()
         )}
         <TextArea name="reflection" className="resize-none" placeholder="Any throughts?" rows={3} />
       </div>
-      <button disabled={disabled} type="submit" className={cn("disabled:opacity-80 text-white rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform", t("bg", theme, "f"))}>
+      <button disabled={disabled} type="submit" className={cn("disabled:opacity-80 text-white rounded-full px-6 py-2.5 w-full text-md font-medium hover:scale-95 disabled:hover:scale-100 transition-transform", t("bg", profile.theme, "f"))}>
         Mark as completed
       </button>
     </form>

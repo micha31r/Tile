@@ -5,6 +5,7 @@ import { GoalReminder } from "@/components/app/goal-reminder";
 import { StatusMessagePopup } from "@/components/app/status-message-popup";
 import { CalendarClientWrapper } from "@/components/app/calendar-client-wrapper";
 import { FriendActivities } from "@/components/app/friend-activities";
+import { EnablePush } from "@/components/app/enable-push-button";
 
 export default async function AppHomePage() {
   const supabase = await createClient();
@@ -14,6 +15,7 @@ export default async function AppHomePage() {
 
   return (
     <div className="space-y-8">
+      <EnablePush />
       <StatusMessagePopup />
       <GoalReminder />
       <GoalList userId={user.sub} emptyMessage="No goals set for today" />

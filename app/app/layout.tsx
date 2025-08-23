@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { ProfileContextWrapper } from "@/components/app/profile-context-wrapper";
 import Loading from "../loading";
 import { cn } from "@/lib/utils";
+import { NextPushProvider } from "next-push/client";
 
 export default function AppLayout({
   children,
@@ -36,11 +37,13 @@ export default function AppLayout({
   }
 
   return (
-    <ProfileContextWrapper user={user}>
-      <Loading className={cn("fixed z-30 inset-0 w-full h-[100svh]", {
-        "opacity-0 pointer-events-none": loaded
-      })} />
-      {children}
-    </ProfileContextWrapper>
+    <NextPushProvider>
+      <ProfileContextWrapper user={user}>
+        <Loading className={cn("fixed z-30 inset-0 w-full h-[100svh]", {
+          "opacity-0 pointer-events-none": loaded
+        })} />
+        {children}
+      </ProfileContextWrapper>
+    </NextPushProvider>
   );
 }
