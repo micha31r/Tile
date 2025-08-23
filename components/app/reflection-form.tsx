@@ -39,7 +39,7 @@ export function ReflectionForm({ goal, onSuccess }: { goal: Goal, onSuccess?: ()
     // Send notifications
     const result = await sendPushNotification(
       userId,
-      `${getDisplayName(profile.first_name, profile.last_name) || "Friend activity"}`,
+      `${getDisplayName(profile.first_name, profile.last_name) || "Friend Activity"}`,
       `You friend has just completed a goal.`
     );
 
