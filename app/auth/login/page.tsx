@@ -95,15 +95,22 @@ export default function LoginPage() {
       </div>
 
       <div className="flex flex-col gap-6 w-full">
-        <h3 className="text-center text-xl">Welcome to Tile</h3>
+        {/* <p className="text-center leading-snug text-xl">
+          Distractions are<br/>
+          everywhere.<br/><br/>
+          We&apos;ve all tried filling our days with packed schedules, only to end up drained and burned out.
+          But being productive isn&apos;t about doing more, it&apos;s about getting the right things done.<br/><br/>
+          That&apos;s why we built Tile.<br/><br/>
+          Our philosophy? Keep it simple.<br/>
+          4 goals, daily check-offs, and friends<br/>
+          to keep you motivated.
+          </p> */}
+
         <p className="text-center leading-snug text-xl">
-          Enter your email address to<br /> get a magic link to log in.
-        </p>
-        <p className="text-center leading-snug text-xl">
-          Didn&apos;t receive the email?<br /> Check your spam folder or email<br /> <Link className="text-muted-foreground" href="mailto:${process.env.NEXT_PUBLIC_SUPPORT_EMAIL}">{process.env.NEXT_PUBLIC_SUPPORT_EMAIL}</Link>.
-        </p>
-        <p className="text-center leading-snug text-xl">
-          See you inside 👋
+          Hey, glad you&apos;re here.<br/><br/>
+          Productivity isn&apos;t about doing<br/>more, it&apos;s about focusing on tasks<br/> that matter most.<br/><br/>
+          That&apos;s why we created Tile,<br/> a simple way to help you get things<br/> done. Ready to begin?<br/><br/>
+          To get in touch, email us at<br /> <Link className="text-muted-foreground" href="mailto:${process.env.NEXT_PUBLIC_SUPPORT_EMAIL}">{process.env.NEXT_PUBLIC_SUPPORT_EMAIL}</Link>.
         </p>
       </div>
 
