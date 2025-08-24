@@ -23,6 +23,9 @@ type Friend = {
   };
 };
 
+// Can't believe I have to do this
+const bannedNames = ["adolf"];
+
 function getRandomBool() {
   return Math.random() < 0.5;
 }
@@ -37,7 +40,7 @@ function generateRandomFriends(count = 6) {
 
     // Prevent duplicate names
     const nameKey = `${firstName}-${lastName}`;
-    if (usedNames.has(nameKey)) {
+    if (usedNames.has(nameKey) || bannedNames.includes(firstName.toLowerCase()) || bannedNames.includes(lastName.toLowerCase())) {
       continue;
     }
     usedNames.add(nameKey);
