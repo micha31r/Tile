@@ -122,7 +122,7 @@ export default function Home() {
           </div>
           <div aria-hidden className="grid grid-cols-2 w-full gap-1">
             {friends.map((friend: Friend, index: number) => (
-              <FriendCard key={`dup-${friend.firstName}-${index}`} email={""} firstName={friend.firstName} lastName={friend.lastName}>
+              <FriendCard key={`dup-${friend.firstName}-${index}`} email={""} firstName={friend.firstName}>
                 <div className={cn(`rounded-lg p-1.5`, t("bg", friend.theme, "b"))}>
                   <Tile data={friend.data} backgroundClass={t("bg", friend.theme, "b")} foregroundClass={t("bg", friend.theme, "f")} maxWidth={64} radiusClass="rounded-md"/>
                 </div>
