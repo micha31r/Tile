@@ -67,7 +67,7 @@ export function GoalReminder() {
   }
 
   const timerTarget = new Date();
-  timerTarget.setHours(10, 0, 0, 0);
+  timerTarget.setHours(11, 0, 0, 0);
 
   return (
     <div className={cn("space-y-2 p-4 rounded-3xl", t("bg", theme, "b"))}>
