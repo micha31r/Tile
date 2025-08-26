@@ -5,7 +5,7 @@ import { useHaptic } from "react-haptic";
 
 const supabase = createClient();
 
-async function unregisterPush() {
+export async function unregisterPush() {
   if (!("serviceWorker" in navigator)) return;
 
   const reg = await navigator.serviceWorker.ready;
