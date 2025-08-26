@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Popup } from "./popup";
 import { UserDetailForm } from "./user-detail-form";
 import { ProfileContext } from "./profile-context";
@@ -8,12 +8,20 @@ import { WarningAlert } from "../warning-alert";
 import { TriangleAlertIcon } from "lucide-react";
 import { useHaptic } from "react-haptic";
 import { DeleteAccountPopup } from "./delete-account-popup";
+import MobileDetect from "mobile-detect";
+import { cn } from "@/lib/utils";
 
 export function UserDetailPopup({ children }: { children?: React.ReactNode }) {
   const popupTriggerRef = useRef<(() => void) | null>(null);
   const { profile } = useContext(ProfileContext);
   const deleteAccountPopupTrigger = useRef<(() => void) | null>(null);
+  const [isIOS, setIsIOS] = useState(false);
   const { vibrate } = useHaptic();
+
+  useEffect(() => {
+    const md = new MobileDetect(window.navigator.userAgent);
+    setIsIOS(md.is("iPhone") || md.is("iPad") || md.os() === "iOS");
+  }, []);
 
   function handleOpenDeleteAccountPopup(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
@@ -40,7 +48,9 @@ export function UserDetailPopup({ children }: { children?: React.ReactNode }) {
             popupTriggerRef.current?.();
           }} />
         </div>
-        <div className="space-y-2 mt-4">
+        <div className={cn("space-y-4 mt-4", {
+          "mt-12": isIOS
+        })}>
           <h4 className="font-medium">Delete account</h4>
           <WarningAlert>
             <TriangleAlertIcon />
