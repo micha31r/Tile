@@ -85,7 +85,7 @@ export async function GET(req: Request) {
     return new NextResponse("Unauthorised", { status: 401 });
   }
 
-  // claim recipients atomically within two hours window before ten am local time
+  // claim recipients atomically within two hours window before target local time
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   const { data, error } = await supabase.rpc<Recipient[]>(
