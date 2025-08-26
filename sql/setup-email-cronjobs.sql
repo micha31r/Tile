@@ -34,8 +34,9 @@ BEGIN
     JOIN auth.users u
       ON u.id = p.user_id
     WHERE
-      -- strictly before 10:00, and not earlier than (10 - p_window):00
-      (now() AT TIME ZONE COALESCE(p.timezone, 'UTC'))::time < make_time(v_target_hour, 0, 0)
+      -- Temporarily limit to Australia timezones due to vercel cron job limit
+      COALESCE(p.timezone, '') ILIKE 'Australia/%'
+      AND (now() AT TIME ZONE COALESCE(p.timezone, 'UTC'))::time < make_time(v_target_hour, 0, 0)
       AND (now() AT TIME ZONE COALESCE(p.timezone, 'UTC'))::time >= make_time(v_target_hour - p_window, 0, 0)
   ),
   claimed AS (
