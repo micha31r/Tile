@@ -52,16 +52,16 @@ export function GoalReminder() {
     return (
       <div className="space-y-2 p-4 bg-secondary rounded-3xl">
         <h4 className="font-medium">Snoozing</h4>
-        <p className="text-sm">You can only set goals between 7 am - 10 am. Please come back later.</p>
+        <p className="text-sm">You can only set goals between 7 am - 11 am. Please come back later.</p>
       </div>
     );
   }
 
-  if (hour >= 10) {
+  if (hour >= 11) {
     return (
       <div className="space-y-2 p-4 bg-secondary rounded-3xl">
         <h4 className="font-medium">You are missing {4 - todayGoals.length} goals</h4>
-        <p className="text-sm">To restart your streak, make sure to set 4 goals tomorrow before 10 am.</p>
+        <p className="text-sm">To restart your streak, make sure to set 4 goals tomorrow before 11 am.</p>
       </div>
     );
   }

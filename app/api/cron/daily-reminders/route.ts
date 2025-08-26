@@ -20,7 +20,7 @@ function renderDailyGoalsEmail(ctx: { appName: string; timezone: string; localDa
     <div style="font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; font-size: 16px; line-height: 1.5;">
       <p>Good morning! 👋</p>
       <p>This is your friendly reminder to set your daily goals for ${localDay}.</p>
-      <p>Open <a href="${process.env.NEXT_PUBLIC_DOMAIN}/app">${appName}</a> now and set <strong>four</strong> goals before 10 am.</p>
+      <p>Open <a href="${process.env.NEXT_PUBLIC_DOMAIN}/app">${appName}</a> now and set <strong>four</strong> goals before 11 am.</p>
       <p>Complete all your goals before the end of the day to keep your streak. ✨</p>
       <p>Have a great day!</p>
       <p>Current timezone: ${timezone}</p>

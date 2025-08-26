@@ -21,7 +21,7 @@ SET search_path = public, auth, pg_temp
 AS $$
 DECLARE
   -- Target local hour for notifications
-  v_target_hour int := 10;
+  v_target_hour int := 11;
 BEGIN
   RETURN QUERY
   WITH candidates AS (
