@@ -90,7 +90,7 @@ export async function GET(req: Request) {
   // @ts-expect-error
   const { data, error } = await supabase.rpc<Recipient[]>(
     "claim_profiles_for_daily_email",
-    { p_window: 2 }
+    { p_window: 4 }
   );
 
   if (error) {
