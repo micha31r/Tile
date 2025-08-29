@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS public.daily_email_log (
 );
 
 -- Set up RPC
-CREATE OR REPLACE FUNCTION public.claim_profiles_for_daily_email(p_window int DEFAULT 2)
+CREATE OR REPLACE FUNCTION public.claim_profiles_for_daily_email(p_window int DEFAULT 4)
 RETURNS TABLE (
   user_id uuid,
   email text,
